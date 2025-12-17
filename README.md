@@ -7,7 +7,7 @@ TePS'EG 팀을 위한 Claude Code 플러그인 컬렉션입니다.
 GitLab에서 플러그인 마켓플레이스 추가:
 
 ```bash
-/plugin marketplace add gitlab.tepseg.com:8087/ai/code-pilot
+/plugin marketplace add http://gitlab.tepseg.com:8087/ai/code-pilot.git
 ```
 
 ## 플러그인 목록
