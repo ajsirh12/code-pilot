@@ -1,113 +1,152 @@
 #!/usr/bin/env bun
 
+/**
+ * Auto-close duplicate issues for GitLab
+ *
+ * This script finds issues that have been marked as duplicates (via bot comments)
+ * and automatically closes them after a grace period if no one has objected.
+ *
+ * Environment Variables:
+ *   GITLAB_TOKEN - GitLab personal access token with api scope (required)
+ *   CI_API_V4_URL - GitLab API base URL (default: https://gitlab.com/api/v4)
+ *   CI_PROJECT_ID - GitLab project ID (required)
+ */
+
 declare global {
   var process: {
     env: Record<string, string | undefined>;
   };
 }
 
-interface GitHubIssue {
-  number: number;
+interface GitLabIssue {
+  iid: number;
   title: string;
-  user: { id: number };
+  author: { id: number };
   created_at: string;
+  state: string;
+  labels: string[];
 }
 
-interface GitHubComment {
+interface GitLabNote {
   id: number;
   body: string;
   created_at: string;
-  user: { type: string; id: number };
+  author: { id: number; username: string };
+  system: boolean;
 }
 
-interface GitHubReaction {
+interface GitLabAwardEmoji {
   user: { id: number };
-  content: string;
+  name: string;
 }
 
-async function githubRequest<T>(endpoint: string, token: string, method: string = 'GET', body?: any): Promise<T> {
-  const response = await fetch(`https://api.github.com${endpoint}`, {
+async function gitlabRequest<T>(
+  baseUrl: string,
+  endpoint: string,
+  token: string,
+  method: string = 'GET',
+  body?: any
+): Promise<T> {
+  const response = await fetch(`${baseUrl}${endpoint}`, {
     method,
     headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github.v3+json",
-      "User-Agent": "auto-close-duplicates-script",
-      ...(body && { "Content-Type": "application/json" }),
+      'PRIVATE-TOKEN': token,
+      'Content-Type': 'application/json',
     },
     ...(body && { body: JSON.stringify(body) }),
   });
 
   if (!response.ok) {
+    const errorText = await response.text();
     throw new Error(
-      `GitHub API request failed: ${response.status} ${response.statusText}`
+      `GitLab API request failed: ${response.status} ${response.statusText}\n${errorText}`
     );
   }
 
-  return response.json();
+  // Handle empty responses (like 204 No Content)
+  const text = await response.text();
+  if (!text) return {} as T;
+
+  return JSON.parse(text);
 }
 
-function extractDuplicateIssueNumber(commentBody: string): number | null {
+function extractDuplicateIssueNumber(noteBody: string): number | null {
   // Try to match #123 format first
-  let match = commentBody.match(/#(\d+)/);
+  let match = noteBody.match(/#(\d+)/);
   if (match) {
     return parseInt(match[1], 10);
   }
-  
-  // Try to match GitHub issue URL format: https://github.com/owner/repo/issues/123
-  match = commentBody.match(/github\.com\/[^\/]+\/[^\/]+\/issues\/(\d+)/);
+
+  // Try to match GitLab issue URL format: https://gitlab.example.com/group/project/-/issues/123
+  match = noteBody.match(/gitlab[^\/]*\/[^\/]+\/[^\/]+\/-\/issues\/(\d+)/);
   if (match) {
     return parseInt(match[1], 10);
   }
-  
+
   return null;
 }
 
-
 async function closeIssueAsDuplicate(
-  owner: string,
-  repo: string,
-  issueNumber: number,
-  duplicateOfNumber: number,
+  baseUrl: string,
+  projectId: string,
+  issueIid: number,
+  duplicateOfIid: number,
   token: string
 ): Promise<void> {
-  await githubRequest(
-    `/repos/${owner}/${repo}/issues/${issueNumber}`,
+  // Add duplicate label and close the issue
+  await gitlabRequest(
+    baseUrl,
+    `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}`,
     token,
-    'PATCH',
+    'PUT',
     {
-      state: 'closed',
-      state_reason: 'duplicate',
-      labels: ['duplicate']
+      state_event: 'close',
+      add_labels: 'duplicate'
     }
   );
 
-  await githubRequest(
-    `/repos/${owner}/${repo}/issues/${issueNumber}/comments`,
+  // Add closing comment
+  await gitlabRequest(
+    baseUrl,
+    `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/notes`,
     token,
     'POST',
     {
-      body: `This issue has been automatically closed as a duplicate of #${duplicateOfNumber}.
+      body: `This issue has been automatically closed as a duplicate of #${duplicateOfIid}.
 
 If this is incorrect, please re-open this issue or create a new one.
 
-🤖 Generated with [Claude Code](https://claude.ai/code)`
+🤖 Generated with [Code Pilot](https://gitlab.tepseg.com:8087/ai/code-pilot)`
     }
   );
-
 }
 
 async function autoCloseDuplicates(): Promise<void> {
-  console.log("[DEBUG] Starting auto-close duplicates script");
+  console.log("[DEBUG] Starting auto-close duplicates script (GitLab)");
 
-  const token = process.env.GITHUB_TOKEN;
+  const token = process.env.GITLAB_TOKEN;
   if (!token) {
-    throw new Error("GITHUB_TOKEN environment variable is required");
-  }
-  console.log("[DEBUG] GitHub token found");
+    throw new Error(`GITLAB_TOKEN environment variable is required
 
-  const owner = process.env.GITHUB_REPOSITORY_OWNER || "anthropics";
-  const repo = process.env.GITHUB_REPOSITORY_NAME || "claude-code";
-  console.log(`[DEBUG] Repository: ${owner}/${repo}`);
+Usage:
+  GITLAB_TOKEN=your_token CI_PROJECT_ID=123 bun run scripts/auto-close-duplicates.ts
+
+Environment Variables:
+  GITLAB_TOKEN   - GitLab personal access token with api scope (required)
+  CI_API_V4_URL  - GitLab API base URL (default: https://gitlab.com/api/v4)
+  CI_PROJECT_ID  - GitLab project ID (required)`);
+  }
+  console.log("[DEBUG] GitLab token found");
+
+  const baseUrl = process.env.CI_API_V4_URL || 'https://gitlab.com/api/v4';
+  const projectId = process.env.CI_PROJECT_ID;
+
+  if (!projectId) {
+    throw new Error("CI_PROJECT_ID environment variable is required");
+  }
+
+  console.log(`[DEBUG] GitLab API: ${baseUrl}`);
+  console.log(`[DEBUG] Project ID: ${projectId}`);
 
   const threeDaysAgo = new Date();
   threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
@@ -116,30 +155,31 @@ async function autoCloseDuplicates(): Promise<void> {
   );
 
   console.log("[DEBUG] Fetching open issues created more than 3 days ago...");
-  const allIssues: GitHubIssue[] = [];
+  const allIssues: GitLabIssue[] = [];
   let page = 1;
   const perPage = 100;
-  
+
   while (true) {
-    const pageIssues: GitHubIssue[] = await githubRequest(
-      `/repos/${owner}/${repo}/issues?state=open&per_page=${perPage}&page=${page}`,
+    const pageIssues: GitLabIssue[] = await gitlabRequest(
+      baseUrl,
+      `/projects/${encodeURIComponent(projectId)}/issues?state=opened&per_page=${perPage}&page=${page}&order_by=created_at&sort=asc`,
       token
     );
-    
+
     if (pageIssues.length === 0) break;
-    
+
     // Filter for issues created more than 3 days ago
-    const oldEnoughIssues = pageIssues.filter(issue => 
+    const oldEnoughIssues = pageIssues.filter(issue =>
       new Date(issue.created_at) <= threeDaysAgo
     );
-    
+
     allIssues.push(...oldEnoughIssues);
     page++;
-    
+
     // Safety limit to avoid infinite loops
     if (page > 20) break;
   }
-  
+
   const issues = allIssues;
   console.log(`[DEBUG] Found ${issues.length} open issues`);
 
@@ -149,119 +189,118 @@ async function autoCloseDuplicates(): Promise<void> {
   for (const issue of issues) {
     processedCount++;
     console.log(
-      `[DEBUG] Processing issue #${issue.number} (${processedCount}/${issues.length}): ${issue.title}`
+      `[DEBUG] Processing issue #${issue.iid} (${processedCount}/${issues.length}): ${issue.title}`
     );
 
-    console.log(`[DEBUG] Fetching comments for issue #${issue.number}...`);
-    const comments: GitHubComment[] = await githubRequest(
-      `/repos/${owner}/${repo}/issues/${issue.number}/comments`,
+    console.log(`[DEBUG] Fetching notes for issue #${issue.iid}...`);
+    const notes: GitLabNote[] = await gitlabRequest(
+      baseUrl,
+      `/projects/${encodeURIComponent(projectId)}/issues/${issue.iid}/notes?per_page=100`,
       token
     );
     console.log(
-      `[DEBUG] Issue #${issue.number} has ${comments.length} comments`
+      `[DEBUG] Issue #${issue.iid} has ${notes.length} notes`
     );
 
-    const dupeComments = comments.filter(
-      (comment) =>
-        comment.body.includes("Found") &&
-        comment.body.includes("possible duplicate") &&
-        comment.user.type === "Bot"
+    // Look for duplicate detection comments (from bot or containing specific keywords)
+    const dupeNotes = notes.filter(
+      (note) =>
+        !note.system &&
+        note.body.includes("Found") &&
+        note.body.includes("possible duplicate")
     );
     console.log(
-      `[DEBUG] Issue #${issue.number} has ${dupeComments.length} duplicate detection comments`
+      `[DEBUG] Issue #${issue.iid} has ${dupeNotes.length} duplicate detection notes`
     );
 
-    if (dupeComments.length === 0) {
+    if (dupeNotes.length === 0) {
       console.log(
-        `[DEBUG] Issue #${issue.number} - no duplicate comments found, skipping`
+        `[DEBUG] Issue #${issue.iid} - no duplicate notes found, skipping`
       );
       continue;
     }
 
-    const lastDupeComment = dupeComments[dupeComments.length - 1];
-    const dupeCommentDate = new Date(lastDupeComment.created_at);
+    const lastDupeNote = dupeNotes[dupeNotes.length - 1];
+    const dupeNoteDate = new Date(lastDupeNote.created_at);
     console.log(
-      `[DEBUG] Issue #${
-        issue.number
-      } - most recent duplicate comment from: ${dupeCommentDate.toISOString()}`
+      `[DEBUG] Issue #${issue.iid} - most recent duplicate note from: ${dupeNoteDate.toISOString()}`
     );
 
-    if (dupeCommentDate > threeDaysAgo) {
+    if (dupeNoteDate > threeDaysAgo) {
       console.log(
-        `[DEBUG] Issue #${issue.number} - duplicate comment is too recent, skipping`
+        `[DEBUG] Issue #${issue.iid} - duplicate note is too recent, skipping`
       );
       continue;
     }
     console.log(
-      `[DEBUG] Issue #${
-        issue.number
-      } - duplicate comment is old enough (${Math.floor(
-        (Date.now() - dupeCommentDate.getTime()) / (1000 * 60 * 60 * 24)
+      `[DEBUG] Issue #${issue.iid} - duplicate note is old enough (${Math.floor(
+        (Date.now() - dupeNoteDate.getTime()) / (1000 * 60 * 60 * 24)
       )} days)`
     );
 
-    const commentsAfterDupe = comments.filter(
-      (comment) => new Date(comment.created_at) > dupeCommentDate
+    const notesAfterDupe = notes.filter(
+      (note) => !note.system && new Date(note.created_at) > dupeNoteDate
     );
     console.log(
-      `[DEBUG] Issue #${issue.number} - ${commentsAfterDupe.length} comments after duplicate detection`
+      `[DEBUG] Issue #${issue.iid} - ${notesAfterDupe.length} notes after duplicate detection`
     );
 
-    if (commentsAfterDupe.length > 0) {
+    if (notesAfterDupe.length > 0) {
       console.log(
-        `[DEBUG] Issue #${issue.number} - has activity after duplicate comment, skipping`
+        `[DEBUG] Issue #${issue.iid} - has activity after duplicate note, skipping`
       );
       continue;
     }
 
     console.log(
-      `[DEBUG] Issue #${issue.number} - checking reactions on duplicate comment...`
+      `[DEBUG] Issue #${issue.iid} - checking award emojis on duplicate note...`
     );
-    const reactions: GitHubReaction[] = await githubRequest(
-      `/repos/${owner}/${repo}/issues/comments/${lastDupeComment.id}/reactions`,
+    const awardEmojis: GitLabAwardEmoji[] = await gitlabRequest(
+      baseUrl,
+      `/projects/${encodeURIComponent(projectId)}/issues/${issue.iid}/notes/${lastDupeNote.id}/award_emoji`,
       token
     );
     console.log(
-      `[DEBUG] Issue #${issue.number} - duplicate comment has ${reactions.length} reactions`
+      `[DEBUG] Issue #${issue.iid} - duplicate note has ${awardEmojis.length} award emojis`
     );
 
-    const authorThumbsDown = reactions.some(
-      (reaction) =>
-        reaction.user.id === issue.user.id && reaction.content === "-1"
+    // Check for thumbsdown emoji from the issue author
+    const authorThumbsDown = awardEmojis.some(
+      (emoji) =>
+        emoji.user.id === issue.author.id && emoji.name === 'thumbsdown'
     );
     console.log(
-      `[DEBUG] Issue #${issue.number} - author thumbs down reaction: ${authorThumbsDown}`
+      `[DEBUG] Issue #${issue.iid} - author thumbs down reaction: ${authorThumbsDown}`
     );
 
     if (authorThumbsDown) {
       console.log(
-        `[DEBUG] Issue #${issue.number} - author disagreed with duplicate detection, skipping`
+        `[DEBUG] Issue #${issue.iid} - author disagreed with duplicate detection, skipping`
       );
       continue;
     }
 
-    const duplicateIssueNumber = extractDuplicateIssueNumber(lastDupeComment.body);
-    if (!duplicateIssueNumber) {
+    const duplicateIssueIid = extractDuplicateIssueNumber(lastDupeNote.body);
+    if (!duplicateIssueIid) {
       console.log(
-        `[DEBUG] Issue #${issue.number} - could not extract duplicate issue number from comment, skipping`
+        `[DEBUG] Issue #${issue.iid} - could not extract duplicate issue number from note, skipping`
       );
       continue;
     }
 
     candidateCount++;
-    const issueUrl = `https://github.com/${owner}/${repo}/issues/${issue.number}`;
-    
+
     try {
       console.log(
-        `[INFO] Auto-closing issue #${issue.number} as duplicate of #${duplicateIssueNumber}: ${issueUrl}`
+        `[INFO] Auto-closing issue #${issue.iid} as duplicate of #${duplicateIssueIid}`
       );
-      await closeIssueAsDuplicate(owner, repo, issue.number, duplicateIssueNumber, token);
+      await closeIssueAsDuplicate(baseUrl, projectId, issue.iid, duplicateIssueIid, token);
       console.log(
-        `[SUCCESS] Successfully closed issue #${issue.number} as duplicate of #${duplicateIssueNumber}`
+        `[SUCCESS] Successfully closed issue #${issue.iid} as duplicate of #${duplicateIssueIid}`
       );
     } catch (error) {
       console.error(
-        `[ERROR] Failed to close issue #${issue.number} as duplicate: ${error}`
+        `[ERROR] Failed to close issue #${issue.iid} as duplicate: ${error}`
       );
     }
   }

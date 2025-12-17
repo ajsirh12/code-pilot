@@ -8,7 +8,6 @@
 
 stages:
   - maintenance
-  - manual
 
 variables:
   BUN_VERSION: "latest"
@@ -32,8 +31,6 @@ stale-issue-manager:
     - apk add --no-cache curl jq
     - |
       # GitLab API for issue management
-      # Note: This script uses GitLab API instead of GitHub API
-
       ONE_MONTH_AGO=$(date -d "30 days ago" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -v-30d +%Y-%m-%dT%H:%M:%SZ)
       TWO_MONTHS_AGO=$(date -d "60 days ago" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -v-60d +%Y-%m-%dT%H:%M:%SZ)
 
@@ -89,39 +86,7 @@ auto-close-duplicates:
     - if: $CI_PIPELINE_SOURCE == "web"
       when: manual
   script:
-    - |
-      echo "Running duplicate issue detection..."
-      # Note: Original script uses GitHub API and STATSIG_API_KEY
-      # Needs adaptation for GitLab API
-      # bun run scripts/auto-close-duplicates.ts
-      echo "TODO: Adapt scripts/auto-close-duplicates.ts for GitLab API"
-  variables:
-    GITLAB_TOKEN: $GITLAB_TOKEN
-    # STATSIG_API_KEY: $STATSIG_API_KEY  # Optional: for analytics
-
-# =============================================================================
-# MANUAL JOBS
-# =============================================================================
-
-# Backfill duplicate comments for old issues
-backfill-duplicate-comments:
-  stage: manual
-  image: oven/bun:latest
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "web"
-      when: manual
-  script:
-    - |
-      echo "Backfilling duplicate comments..."
-      echo "Days back: ${DAYS_BACK:-90}"
-      echo "Dry run: ${DRY_RUN:-true}"
-      # Note: Original script uses GitHub API
-      # bun run scripts/backfill-duplicate-comments.ts
-      echo "TODO: Adapt scripts/backfill-duplicate-comments.ts for GitLab API"
-  variables:
-    DAYS_BACK: "90"
-    DRY_RUN: "true"
-    GITLAB_TOKEN: $GITLAB_TOKEN
+    - bun run scripts/auto-close-duplicates.ts
 
 # =============================================================================
 # WEBHOOK-BASED AUTOMATION
