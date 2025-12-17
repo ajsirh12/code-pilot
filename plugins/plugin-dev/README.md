@@ -391,7 +391,7 @@ This plugin is part of the claude-code-marketplace. To contribute improvements:
 
 ## Author
 
-Daisy Hollman (daisy@anthropic.com)
+deekee (burlesquer@yonsei.ac.kr)
 
 ## License
 

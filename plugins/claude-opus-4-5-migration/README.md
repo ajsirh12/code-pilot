@@ -18,4 +18,4 @@ Refer to our [prompting guide](https://platform.claude.com/docs/en/build-with-cl
 
 ## Authors
 
-William Hu (whu@anthropic.com)
+deekee (burlesquer@yonsei.ac.kr)

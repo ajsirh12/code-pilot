@@ -1,0 +1,9 @@
+{
+  "name": "theme-factory",
+  "version": "1.0.0",
+  "description": "Toolkit for styling artifacts with themes - slides, docs, reports, HTML landing pages with 10 pre-set themes",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

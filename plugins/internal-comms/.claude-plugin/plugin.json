@@ -1,0 +1,9 @@
+{
+  "name": "internal-comms",
+  "version": "1.0.0",
+  "description": "Resources to write internal communications using preferred company formats",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

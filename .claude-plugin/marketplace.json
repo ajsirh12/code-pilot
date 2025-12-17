@@ -8,17 +8,6 @@
   },
   "plugins": [
     {
-      "name": "agent-sdk-dev",
-      "description": "Development kit for working with the Claude Agent SDK",
-      "version": "1.0.0",
-      "author": {
-        "name": "deekee",
-        "email": "burlesquer@yonsei.ac.kr"
-      },
-      "source": "./plugins/agent-sdk-dev",
-      "category": "development"
-    },
-    {
       "name": "claude-opus-4-5-migration",
       "description": "Migrate your code and prompts from Sonnet 4.x and Opus 4.1 to Opus 4.5.",
       "version": "1.0.0",
@@ -149,6 +138,149 @@
       },
       "source": "./plugins/security-guidance",
       "category": "security"
+    },
+    {
+      "name": "algorithmic-art",
+      "description": "Creating algorithmic art using p5.js with seeded randomness and interactive parameter exploration",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/algorithmic-art",
+      "category": "creative"
+    },
+    {
+      "name": "brand-guidelines",
+      "description": "Applies TePS'EG official brand colors and typography to artifacts with visual formatting and style guidelines",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/brand-guidelines",
+      "category": "design"
+    },
+    {
+      "name": "canvas-design",
+      "description": "Create beautiful visual art in PNG and PDF documents using design philosophy for posters, art, and static designs",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/canvas-design",
+      "category": "design"
+    },
+    {
+      "name": "doc-coauthoring",
+      "description": "Guide users through structured workflow for co-authoring documentation, proposals, technical specs, and decision docs",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/doc-coauthoring",
+      "category": "productivity"
+    },
+    {
+      "name": "docx",
+      "description": "Comprehensive Word document creation, editing, and analysis with tracked changes, comments, and formatting preservation",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/docx",
+      "category": "documents"
+    },
+    {
+      "name": "internal-comms",
+      "description": "Resources to write internal communications using preferred company formats",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/internal-comms",
+      "category": "productivity"
+    },
+    {
+      "name": "pdf",
+      "description": "Comprehensive PDF manipulation toolkit for extracting text, creating PDFs, merging/splitting documents, and handling forms",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/pdf",
+      "category": "documents"
+    },
+    {
+      "name": "pptx",
+      "description": "Presentation creation, editing, and analysis for PowerPoint files with layouts and content modification",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/pptx",
+      "category": "documents"
+    },
+    {
+      "name": "slack-gif-creator",
+      "description": "Knowledge and utilities for creating animated GIFs optimized for Slack with validation tools and animation concepts",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/slack-gif-creator",
+      "category": "creative"
+    },
+    {
+      "name": "theme-factory",
+      "description": "Toolkit for styling artifacts with themes - slides, docs, reports, HTML landing pages with 10 pre-set themes",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/theme-factory",
+      "category": "design"
+    },
+    {
+      "name": "webapp-testing",
+      "description": "Toolkit for testing local web applications using Playwright with screenshots and browser interaction",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/webapp-testing",
+      "category": "development"
+    },
+    {
+      "name": "web-artifacts-builder",
+      "description": "Suite of tools for creating elaborate HTML artifacts using React, Tailwind CSS, and shadcn/ui",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/web-artifacts-builder",
+      "category": "development"
+    },
+    {
+      "name": "xlsx",
+      "description": "Comprehensive spreadsheet creation, editing, and analysis with formulas, formatting, and visualization",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/xlsx",
+      "category": "documents"
     }
   ]
 }

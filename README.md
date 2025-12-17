@@ -1,65 +1,56 @@
-# Claude Code
+# Code Pilot
 
-![](https://img.shields.io/badge/Node.js-18%2B-brightgreen?style=flat-square) [![npm]](https://www.npmjs.com/package/@anthropic-ai/claude-code)
+TePS'EG 팀을 위한 Claude Code 플러그인 컬렉션입니다.
 
-[npm]: https://img.shields.io/npm/v/@anthropic-ai/claude-code.svg?style=flat-square
+## 설치
 
-Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands. Use it in your terminal, IDE, or tag @claude on Github.
+GitLab에서 플러그인 마켓플레이스 추가:
 
-**Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)**.
-
-<img src="./demo.gif" />
-
-## Get started
-
-1. Install Claude Code:
-
-**MacOS/Linux:**
 ```bash
-curl -fsSL https://claude.ai/install.sh | bash
+/plugin marketplace add gitlab.tepseg.com:8087/ai/code-pilot
 ```
 
-**Homebrew (MacOS):**
-```bash
-brew install --cask claude-code
-```
+## 플러그인 목록
 
-**Windows:**
-```powershell
-irm https://claude.ai/install.ps1 | iex
-```
+자세한 내용은 [plugins 디렉토리](./plugins/README.md)를 참고하세요.
 
-**NPM:**
-```bash
-npm install -g @anthropic-ai/claude-code
-```
+### Development
+- `claude-opus-4-5-migration` - Claude 모델 마이그레이션 도구
+- `code-review` - PR 코드 리뷰 자동화
+- `feature-dev` - 기능 개발 워크플로우
+- `frontend-design` - 프론트엔드 디자인 스킬
+- `plugin-dev` - 플러그인 개발 도구
+- `webapp-testing` - 웹앱 테스팅 (Playwright)
+- `web-artifacts-builder` - React/Tailwind 아티팩트 빌더
 
-NOTE: If installing with NPM, you also need to install [Node.js 18+](https://nodejs.org/en/download/)
+### Productivity
+- `commit-commands` - Git 커밋 워크플로우
+- `hookify` - 커스텀 훅 생성
+- `pr-review-toolkit` - PR 리뷰 에이전트
+- `doc-coauthoring` - 문서 공동 작성
 
-2. Navigate to your project directory and run `claude`.
+### Documents
+- `docx` - Word 문서 생성/편집
+- `pdf` - PDF 생성/편집
+- `pptx` - PowerPoint 생성/편집
+- `xlsx` - Excel 생성/편집
 
-## Plugins
+### Design
+- `brand-guidelines` - TePS'EG 브랜드 가이드라인
+- `canvas-design` - 캔버스 디자인
+- `theme-factory` - 테마 스타일링
 
-This repository includes several Claude Code plugins that extend functionality with custom commands and agents. See the [plugins directory](./plugins/README.md) for detailed documentation on available plugins.
+### Creative
+- `algorithmic-art` - 알고리즘 아트 생성
+- `slack-gif-creator` - Slack GIF 생성
 
-## Reporting Bugs
+### Other
+- `explanatory-output-style` - 설명적 출력 스타일
+- `learning-output-style` - 학습 출력 스타일
+- `ralph-wiggum` - 반복 개발 루프
+- `security-guidance` - 보안 가이드 훅
+- `internal-comms` - 내부 커뮤니케이션
 
-We welcome your feedback. Use the `/bug` command to report issues directly within Claude Code, or file a [GitHub issue](https://github.com/anthropics/claude-code/issues).
+## 관리자
 
-## Connect on Discord
-
-Join the [Claude Developers Discord](https://anthropic.com/discord) to connect with other developers using Claude Code. Get help, share feedback, and discuss your projects with the community.
-
-## Data collection, usage, and retention
-
-When you use Claude Code, we collect feedback, which includes usage data (such as code acceptance or rejections), associated conversation data, and user feedback submitted via the `/bug` command.
-
-### How we use your data
-
-See our [data usage policies](https://docs.anthropic.com/en/docs/claude-code/data-usage).
-
-### Privacy safeguards
-
-We have implemented several safeguards to protect your data, including limited retention periods for sensitive information, restricted access to user session data, and clear policies against using feedback for model training.
-
-For full details, please review our [Commercial Terms of Service](https://www.anthropic.com/legal/commercial-terms) and [Privacy Policy](https://www.anthropic.com/legal/privacy).
+- **deekee** (burlesquer@yonsei.ac.kr)

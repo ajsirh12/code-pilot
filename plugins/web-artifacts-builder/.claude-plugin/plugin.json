@@ -1,0 +1,9 @@
+{
+  "name": "web-artifacts-builder",
+  "version": "1.0.0",
+  "description": "Suite of tools for creating elaborate HTML artifacts using React, Tailwind CSS, and shadcn/ui",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

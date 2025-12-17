@@ -1,0 +1,9 @@
+{
+  "name": "xlsx",
+  "version": "1.0.0",
+  "description": "Comprehensive spreadsheet creation, editing, and analysis with formulas, formatting, and visualization",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

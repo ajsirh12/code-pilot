@@ -1,0 +1,9 @@
+{
+  "name": "slack-gif-creator",
+  "version": "1.0.0",
+  "description": "Knowledge and utilities for creating animated GIFs optimized for Slack with validation tools and animation concepts",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

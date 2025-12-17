@@ -1,0 +1,9 @@
+{
+  "name": "doc-coauthoring",
+  "version": "1.0.0",
+  "description": "Guide users through structured workflow for co-authoring documentation, proposals, technical specs, and decision docs",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

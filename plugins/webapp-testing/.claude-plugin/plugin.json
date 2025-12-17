@@ -1,0 +1,9 @@
+{
+  "name": "webapp-testing",
+  "version": "1.0.0",
+  "description": "Toolkit for testing local web applications using Playwright with screenshots and browser interaction",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

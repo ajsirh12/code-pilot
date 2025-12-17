@@ -1,0 +1,9 @@
+{
+  "name": "pptx",
+  "version": "1.0.0",
+  "description": "Presentation creation, editing, and analysis for PowerPoint files with layouts and content modification",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

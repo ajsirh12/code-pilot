@@ -1,0 +1,9 @@
+{
+  "name": "canvas-design",
+  "version": "1.0.0",
+  "description": "Create beautiful visual art in PNG and PDF documents using design philosophy for posters, art, and static designs",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

@@ -251,7 +251,7 @@ Uses `gh` CLI for:
 
 ## Author
 
-Boris Cherny (boris@anthropic.com)
+deekee (burlesquer@yonsei.ac.kr)
 
 ## Version
 

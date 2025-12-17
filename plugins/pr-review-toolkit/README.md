@@ -306,7 +306,7 @@ MIT
 
 ## Author
 
-Daisy (daisy@anthropic.com)
+deekee (burlesquer@yonsei.ac.kr)
 
 ---
 

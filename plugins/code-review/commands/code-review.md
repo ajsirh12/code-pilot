@@ -85,7 +85,7 @@ Found 3 issues:
 
 1. <brief description of bug> (CLAUDE.md says: "<exact quote from CLAUDE.md>")
 
-<link to file and line with full sha1 + line range for context, eg. https://github.com/anthropics/claude-code/blob/1d54823877c4de72b2316a64032a54afc404e619/README.md#L13-L17>
+<link to file and line with full sha1 + line range for context, eg. #example-linkREADME.md#L13-L17>
 
 2. <brief description of bug> (some/other/CLAUDE.md says: "<exact quote from CLAUDE.md>")
 
@@ -107,7 +107,7 @@ No issues found. Checked for bugs and CLAUDE.md compliance.
 
 ---
 
-- When linking to code, follow the following format precisely, otherwise the Markdown preview won't render correctly: https://github.com/anthropics/claude-code/blob/c21d3c10bc8e898b7ac1a2d745bdc9bc4e423afe/package.json#L10-L15
+- When linking to code, follow the following format precisely, otherwise the Markdown preview won't render correctly: #example-linkpackage.json#L10-L15
   - Requires full git sha
   - You must provide the full sha. Commands like `https://github.com/owner/repo/blob/$(git rev-parse HEAD)/foo/bar` will not work, since your comment will be directly rendered in Markdown.
   - Repo name must match the repo you're code reviewing

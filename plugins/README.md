@@ -12,7 +12,6 @@ Learn more in the [official plugins documentation](https://docs.claude.com/en/do
 
 | Name | Description | Contents |
 |------|-------------|----------|
-| [agent-sdk-dev](./agent-sdk-dev/) | Development kit for working with the Claude Agent SDK | **Command:** `/new-sdk-app` - Interactive setup for new Agent SDK projects<br>**Agents:** `agent-sdk-verifier-py`, `agent-sdk-verifier-ts` - Validate SDK applications against best practices |
 | [claude-opus-4-5-migration](./claude-opus-4-5-migration/) | Migrate code and prompts from Sonnet 4.x and Opus 4.1 to Opus 4.5 | **Skill:** `claude-opus-4-5-migration` - Automated migration of model strings, beta headers, and prompt adjustments |
 | [code-review](./code-review/) | Automated PR code review using multiple specialized agents with confidence-based scoring to filter false positives | **Command:** `/code-review` - Automated PR review workflow<br>**Agents:** 5 parallel Sonnet agents for CLAUDE.md compliance, bug detection, historical context, PR history, and code comments |
 | [commit-commands](./commit-commands/) | Git workflow automation for committing, pushing, and creating pull requests | **Commands:** `/commit`, `/commit-push-pr`, `/clean_gone` - Streamlined git operations |
@@ -32,7 +31,7 @@ These plugins are included in the Claude Code repository. To use them in your ow
 
 1. Install Claude Code globally:
 ```bash
-npm install -g @anthropic-ai/claude-code
+npm install -g claude-code
 ```
 
 2. Navigate to your project and run Claude Code:
