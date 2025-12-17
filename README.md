@@ -13,7 +13,7 @@ GitLab에서 플러그인 마켓플레이스 추가:
 ## 업데이트
 
 ```bash
-/plugin marketplace update code-pilot
+/plugin marketplace update http://gitlab.tepseg.com:8087/ai/code-pilot.git
 ```
 
 ## 플러그인 목록
