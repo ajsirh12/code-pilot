@@ -3,8 +3,8 @@
   "description": "Automated code review for pull requests using multiple specialized agents with confidence-based scoring",
   "version": "1.0.0",
   "author": {
-    "name": "Boris Cherny",
-    "email": "boris@anthropic.com"
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
   }
 }
 

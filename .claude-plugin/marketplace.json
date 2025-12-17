@@ -1,16 +1,20 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "claude-code-plugins",
+  "name": "deekee-plugins",
   "version": "1.0.0",
-  "description": "Bundled plugins for Claude Code including Agent SDK development tools, PR review toolkit, and commit workflows",
+  "description": "Personal Claude Code plugins collection by deekee",
   "owner": {
-    "name": "Anthropic",
-    "email": "support@anthropic.com"
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
   },
   "plugins": [
     {
       "name": "agent-sdk-dev",
       "description": "Development kit for working with the Claude Agent SDK",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
       "source": "./plugins/agent-sdk-dev",
       "category": "development"
     },
@@ -19,8 +23,8 @@
       "description": "Migrate your code and prompts from Sonnet 4.x and Opus 4.1 to Opus 4.5.",
       "version": "1.0.0",
       "author": {
-        "name": "William Hu",
-        "email": "whu@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/claude-opus-4-5-migration",
       "category": "development"
@@ -30,8 +34,8 @@
       "description": "Automated code review for pull requests using multiple specialized agents with confidence-based scoring to filter false positives",
       "version": "1.0.0",
       "author": {
-        "name": "Boris Cherny",
-        "email": "boris@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/code-review",
       "category": "productivity"
@@ -41,8 +45,8 @@
       "description": "Commands for git commit workflows including commit, push, and PR creation",
       "version": "1.0.0",
       "author": {
-        "name": "Anthropic",
-        "email": "support@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/commit-commands",
       "category": "productivity"
@@ -52,8 +56,8 @@
       "description": "Adds educational insights about implementation choices and codebase patterns (mimics the deprecated Explanatory output style)",
       "version": "1.0.0",
       "author": {
-        "name": "Dickson Tsai",
-        "email": "dickson@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/explanatory-output-style",
       "category": "learning"
@@ -63,8 +67,8 @@
       "description": "Comprehensive feature development workflow with specialized agents for codebase exploration, architecture design, and quality review",
       "version": "1.0.0",
       "author": {
-        "name": "Siddharth Bidasaria",
-        "email": "sbidasaria@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/feature-dev",
       "category": "development"
@@ -74,8 +78,8 @@
       "description": "Create distinctive, production-grade frontend interfaces with high design quality. Generates creative, polished code that avoids generic AI aesthetics.",
       "version": "1.0.0",
       "author": {
-        "name": "Prithvi Rajasekaran & Alexander Bricken",
-        "email": "prithvi@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/frontend-design",
       "category": "development"
@@ -85,8 +89,8 @@
       "description": "Easily create custom hooks to prevent unwanted behaviors by analyzing conversation patterns or from explicit instructions. Define rules via simple markdown files.",
       "version": "0.1.0",
       "author": {
-        "name": "Daisy Hollman",
-        "email": "daisy@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/hookify",
       "category": "productivity"
@@ -96,8 +100,8 @@
       "description": "Interactive learning mode that requests meaningful code contributions at decision points (mimics the unshipped Learning output style)",
       "version": "1.0.0",
       "author": {
-        "name": "Boris Cherny",
-        "email": "boris@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/learning-output-style",
       "category": "learning"
@@ -107,8 +111,8 @@
       "description": "Comprehensive toolkit for developing Claude Code plugins. Includes 7 expert skills covering hooks, MCP integration, commands, agents, and best practices. AI-assisted plugin creation and validation.",
       "version": "0.1.0",
       "author": {
-        "name": "Daisy Hollman",
-        "email": "daisy@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/plugin-dev",
       "category": "development"
@@ -118,8 +122,8 @@
       "description": "Comprehensive PR review agents specializing in comments, tests, error handling, type design, code quality, and code simplification",
       "version": "1.0.0",
       "author": {
-        "name": "Anthropic",
-        "email": "support@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/pr-review-toolkit",
       "category": "productivity"
@@ -129,8 +133,8 @@
       "description": "Interactive self-referential AI loops for iterative development. Claude works on the same task repeatedly, seeing its previous work, until completion.",
       "version": "1.0.0",
       "author": {
-        "name": "Daisy Hollman",
-        "email": "daisy@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/ralph-wiggum",
       "category": "development"
@@ -140,8 +144,8 @@
       "description": "Security reminder hook that warns about potential security issues when editing files, including command injection, XSS, and unsafe code patterns",
       "version": "1.0.0",
       "author": {
-        "name": "David Dworken",
-        "email": "dworken@anthropic.com"
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
       },
       "source": "./plugins/security-guidance",
       "category": "security"
