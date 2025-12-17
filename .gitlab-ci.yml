@@ -1,0 +1,152 @@
+# Code Pilot GitLab CI/CD Pipeline
+#
+# Schedule-based jobs can be configured in GitLab:
+# Settings > CI/CD > Pipeline schedules
+#
+# NOTE: Issue event-based automation requires GitLab webhooks
+# See: https://docs.gitlab.com/ee/user/project/integrations/webhooks.html
+
+stages:
+  - maintenance
+  - manual
+
+variables:
+  BUN_VERSION: "latest"
+
+# =============================================================================
+# SCHEDULED JOBS
+# Configure these via GitLab Pipeline Schedules:
+# Settings > CI/CD > Pipeline schedules
+# =============================================================================
+
+# Manage stale issues (30 days warning, 60 days auto-close)
+# Schedule: Daily at 10:00 UTC (2am Pacific)
+stale-issue-manager:
+  stage: maintenance
+  image: node:20-alpine
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULE_TYPE == "stale_issues"
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: manual
+  script:
+    - apk add --no-cache curl jq
+    - |
+      # GitLab API for issue management
+      # Note: This script uses GitLab API instead of GitHub API
+
+      ONE_MONTH_AGO=$(date -d "30 days ago" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -v-30d +%Y-%m-%dT%H:%M:%SZ)
+      TWO_MONTHS_AGO=$(date -d "60 days ago" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -v-60d +%Y-%m-%dT%H:%M:%SZ)
+
+      echo "Checking for stale issues..."
+      echo "One month ago: $ONE_MONTH_AGO"
+      echo "Two months ago: $TWO_MONTHS_AGO"
+
+      # Get open issues sorted by updated_at
+      ISSUES=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+        "$CI_API_V4_URL/projects/$CI_PROJECT_ID/issues?state=opened&order_by=updated_at&sort=asc&per_page=100")
+
+      echo "$ISSUES" | jq -r '.[] | "Issue #\(.iid): \(.title) (updated: \(.updated_at))"'
+
+      # TODO: Implement full stale issue logic
+      # - Check if issue hasn't been updated in 30 days
+      # - Add autoclose label and warning comment
+      # - Close issues that have been stale for 60 days
+
+# Lock closed issues after 7 days
+# Schedule: Daily at 14:00 UTC (8am Pacific)
+lock-closed-issues:
+  stage: maintenance
+  image: node:20-alpine
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULE_TYPE == "lock_issues"
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: manual
+  script:
+    - apk add --no-cache curl jq
+    - |
+      SEVEN_DAYS_AGO=$(date -d "7 days ago" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -v-7d +%Y-%m-%dT%H:%M:%SZ)
+
+      echo "Locking closed issues older than 7 days..."
+
+      # Get closed issues
+      ISSUES=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+        "$CI_API_V4_URL/projects/$CI_PROJECT_ID/issues?state=closed&order_by=updated_at&sort=asc&per_page=100")
+
+      echo "$ISSUES" | jq -r '.[] | select(.discussion_locked != true) | "Issue #\(.iid): \(.title)"'
+
+      # TODO: Implement full locking logic
+      # - Check if issue updated more than 7 days ago
+      # - Add comment before locking
+      # - Lock the discussion
+
+# Auto-close duplicate issues
+# Schedule: Daily at 9:00 UTC
+auto-close-duplicates:
+  stage: maintenance
+  image: oven/bun:latest
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULE_TYPE == "close_duplicates"
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: manual
+  script:
+    - |
+      echo "Running duplicate issue detection..."
+      # Note: Original script uses GitHub API and STATSIG_API_KEY
+      # Needs adaptation for GitLab API
+      # bun run scripts/auto-close-duplicates.ts
+      echo "TODO: Adapt scripts/auto-close-duplicates.ts for GitLab API"
+  variables:
+    GITLAB_TOKEN: $GITLAB_TOKEN
+    # STATSIG_API_KEY: $STATSIG_API_KEY  # Optional: for analytics
+
+# =============================================================================
+# MANUAL JOBS
+# =============================================================================
+
+# Backfill duplicate comments for old issues
+backfill-duplicate-comments:
+  stage: manual
+  image: oven/bun:latest
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: manual
+  script:
+    - |
+      echo "Backfilling duplicate comments..."
+      echo "Days back: ${DAYS_BACK:-90}"
+      echo "Dry run: ${DRY_RUN:-true}"
+      # Note: Original script uses GitHub API
+      # bun run scripts/backfill-duplicate-comments.ts
+      echo "TODO: Adapt scripts/backfill-duplicate-comments.ts for GitLab API"
+  variables:
+    DAYS_BACK: "90"
+    DRY_RUN: "true"
+    GITLAB_TOKEN: $GITLAB_TOKEN
+
+# =============================================================================
+# WEBHOOK-BASED AUTOMATION
+# The following workflows from GitHub Actions require GitLab webhooks:
+#
+# 1. remove-autoclose-label.yml
+#    - Trigger: Issue comment created
+#    - Action: Remove 'autoclose' label when user comments
+#    - GitLab: Use issue webhook + external handler
+#
+# 2. log-issue-events.yml
+#    - Trigger: Issue opened/closed
+#    - Action: Log events to Statsig
+#    - GitLab: Use issue webhook + external handler
+#    - Requires: STATSIG_API_KEY
+#
+# 3. issue-opened-dispatch.yml
+#    - Trigger: Issue opened
+#    - Action: Dispatch event to another repository
+#    - GitLab: Use issue webhook + external handler
+#    - Requires: ISSUE_OPENED_DISPATCH_TARGET_REPO, ISSUE_OPENED_DISPATCH_TOKEN
+#
+# To set up webhooks:
+# 1. Go to Settings > Webhooks
+# 2. Add webhook URL (your handler service)
+# 3. Select triggers: Issues events, Note events
+# 4. Save and test
+# =============================================================================
