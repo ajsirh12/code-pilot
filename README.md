@@ -10,6 +10,12 @@ GitLab에서 플러그인 마켓플레이스 추가:
 /plugin marketplace add http://gitlab.tepseg.com:8087/ai/code-pilot.git
 ```
 
+## 업데이트
+
+```bash
+/plugin marketplace update code-pilot
+```
+
 ## 플러그인 목록
 
 자세한 내용은 [plugins 디렉토리](./plugins/README.md)를 참고하세요.
