@@ -2,12 +2,6 @@
 
 프로젝트 유형별 Claude Code 훅 프리셋 모음입니다.
 
-## 사용 가능한 프리셋
-
-| 프리셋 | 용도 | 설명 |
-|-------|------|------|
-| [anonymous-feedback-preset](./anonymous-feedback-preset/) | 익명 피드백 플랫폼 | 익명성 보호, PII 스캔, 보안 검사 |
-
 ## 훅이란?
 
 Claude Code 훅은 특정 이벤트 발생 시 자동으로 실행되는 스크립트입니다.
