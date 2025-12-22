@@ -1,14 +1,9 @@
 {
   "name": "skill-creator",
-  "description": "Guide for creating effective skills that extend Claude's capabilities with specialized knowledge, workflows, or tool integrations.",
+  "description": "Guide for creating effective skills that extend Claude's capabilities with specialized knowledge, workflows, or tool integrations. (Derived from Anthropic Skills, Apache-2.0)",
   "version": "1.0.0",
   "author": {
     "name": "deekee",
     "email": "burlesquer@yonsei.ac.kr"
-  },
-  "license": "Apache-2.0",
-  "upstream": {
-    "source": "https://github.com/anthropics/skills",
-    "original_author": "Anthropic"
   }
 }
