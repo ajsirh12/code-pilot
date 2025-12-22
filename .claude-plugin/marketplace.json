@@ -281,6 +281,33 @@
       },
       "source": "./plugins/xlsx",
       "category": "documents"
+    },
+    {
+      "name": "gitlab-toolkit",
+      "description": "Intelligent GitLab workflow automation with guided project setup, security hardening, and CI/CD management. Features systematic workflows for issues, MRs, branch protection, and pipeline debugging.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/gitlab-toolkit",
+      "category": "development"
+    },
+    {
+      "name": "skill-creator",
+      "description": "Guide for creating effective skills that extend Claude's capabilities with specialized knowledge, workflows, or tool integrations.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/skill-creator",
+      "category": "development",
+      "license": "Apache-2.0",
+      "upstream": {
+        "source": "https://github.com/anthropics/skills",
+        "original_author": "Anthropic"
+      }
     }
   ]
 }
