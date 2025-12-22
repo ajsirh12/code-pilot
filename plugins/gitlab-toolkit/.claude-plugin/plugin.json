@@ -1,0 +1,9 @@
+{
+  "name": "gitlab-toolkit",
+  "description": "Intelligent GitLab workflow automation with guided project setup, security hardening, and CI/CD management. Features systematic workflows for issues, MRs, branch protection, and pipeline debugging.",
+  "version": "1.0.0",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}
