@@ -62,7 +62,3 @@ python scripts/package_skill.py ./skills/my-skill
 
 - `references/workflows.md` - 순차적/조건부 워크플로우 패턴
 - `references/output-patterns.md` - 템플릿 및 예시 패턴
-
----
-
-*Derived from [Anthropic Skills](https://github.com/anthropics/skills) - Apache 2.0 License*
