@@ -1,20 +1,84 @@
 ---
-allowed-tools: Bash(git checkout --branch:*), Bash(git add:*), Bash(git status:*), Bash(git push:*), Bash(git commit:*), Bash(gh pr create:*)
-description: Commit, push, and open a PR
+allowed-tools: Bash(git:*), Bash(gh:*), Bash(curl:*), AskUserQuestion
+description: Commit, push, and open a PR (supports GitHub and GitLab)
 ---
 
-## Context
+# Commit, Push, and Create PR/MR
 
-- Current git status: !`git status`
-- Current git diff (staged and unstaged changes): !`git diff HEAD`
-- Current branch: !`git branch --show-current`
+## Phase 1: Detect Platform
 
-## Your task
+First, detect the git remote to determine the platform:
 
-Based on the above changes:
+```bash
+git remote get-url origin
+```
 
-1. Create a new branch if on main
-2. Create a single commit with an appropriate message
-3. Push the branch to origin
-4. Create a pull request using `gh pr create`
-5. You have the capability to call multiple tools in a single response. You MUST do all of the above in a single message. Do not use any other tools or do anything else. Do not send any other text or messages besides these tool calls.
+**Platform Detection:**
+- Contains `github.com` → GitHub (use `gh pr create`)
+- Contains `gitlab` → GitLab (use GitLab API)
+- Otherwise → Ask user
+
+## Phase 2: Gather Context
+
+```bash
+git status
+git diff HEAD
+git branch --show-current
+```
+
+## Phase 3: Confirm Platform (if ambiguous)
+
+If platform cannot be auto-detected, ask the user:
+
+```
+Which platform is this repository hosted on?
+
+1. GitHub (will use `gh pr create`)
+2. GitLab (will use GitLab API to create MR)
+```
+
+## Phase 4: Execute Workflow
+
+### Common Steps (both platforms):
+1. Create a new branch if on main/master
+2. Stage changes: `git add .`
+3. Create commit with appropriate message
+4. Push branch to origin: `git push -u origin <branch>`
+
+### GitHub-specific:
+5. Create PR: `gh pr create --fill`
+
+### GitLab-specific:
+5. Create MR using GitLab API:
+```bash
+curl --request POST \
+  --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "source_branch": "<branch>",
+    "target_branch": "main",
+    "title": "<commit message>",
+    "remove_source_branch": true
+  }' \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests"
+```
+
+## Phase 5: Report Result
+
+**GitHub:**
+```
+✅ PR created successfully!
+URL: https://github.com/owner/repo/pull/123
+```
+
+**GitLab:**
+```
+✅ MR created successfully!
+URL: https://gitlab.example.com/group/project/-/merge_requests/45
+```
+
+## Notes
+
+- For GitLab, ensure `GITLAB_URL`, `GITLAB_TOKEN`, and `GITLAB_PROJECT_ID` are set
+- For GitHub, ensure `gh` CLI is authenticated
+- Execute all steps in a single response when possible

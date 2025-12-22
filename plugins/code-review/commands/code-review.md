@@ -1,116 +1,161 @@
 ---
-allowed-tools: Bash(gh issue view:*), Bash(gh search:*), Bash(gh issue list:*), Bash(gh pr comment:*), Bash(gh pr diff:*), Bash(gh pr view:*), Bash(gh pr list:*)
-description: Code review a pull request
+allowed-tools: Bash(git:*), Bash(gh:*), Bash(curl:*), Task, AskUserQuestion, TodoWrite
+description: Code review a pull request (supports GitHub and GitLab)
 ---
 
-Provide a code review for the given pull request.
+# Code Review for PR/MR
 
-To do this, follow these steps precisely:
+## Phase 1: Detect Platform
 
-1. Launch a haiku agent to check if any of the following are true:
-   - The pull request is closed
-   - The pull request is a draft
-   - The pull request does not need code review (e.g. automated PR, trivial change that is obviously correct)
-   - You have already submitted a code review on this pull request
+```bash
+git remote get-url origin
+```
 
-   If any condition is true, stop and do not proceed.
+**Platform Detection:**
+- Contains `github.com` → GitHub (use `gh` CLI)
+- Contains `gitlab` → GitLab (use GitLab API)
+- Otherwise → Ask user
 
-Note: Still review Claude generated PR's.
+## Phase 2: Confirm Platform (if needed)
 
-2. Launch a haiku agent to return a list of file paths (not their contents) for all relevant CLAUDE.md files including:
-   - The root CLAUDE.md file, if it exists
-   - Any CLAUDE.md files in directories containing files modified by the pull request
+If platform cannot be auto-detected:
 
-3. Launch a sonnet agent to view the pull request and return a summary of the changes
+```
+Which platform is this repository hosted on?
 
-4. Launch 4 agents in parallel to independently review the changes. Each agent should return the list of issues, where each issue includes a description and the reason it was flagged (e.g. "CLAUDE.md adherence", "bug"). The agents should do the following:
+1. GitHub (will use `gh` CLI)
+2. GitLab (will use GitLab API)
+```
 
-   Agents 1 + 2: CLAUDE.md compliance sonnet agents
-   Audit changes for CLAUDE.md compliance in parallel. Note: When evaluating CLAUDE.md compliance for a file, you should only consider CLAUDE.md files that share a file path with the file or parents.
+## Phase 3: Get PR/MR Information
 
-   Agent 3: Opus bug agent (parallel subagent with agent 4)
-   Scan for obvious bugs. Focus only on the diff itself without reading extra context. Flag only significant bugs; ignore nitpicks and likely false positives. Do not flag issues that you cannot validate without looking at context outside of the git diff.
+### GitHub:
+```bash
+gh pr view --json number,title,body,isDraft,state,files
+gh pr diff
+```
 
-   Agent 4: Opus bug agent (parallel subagent with agent 3)
-   Look for problems that exist in the introduced code. This could be security issues, incorrect logic, etc. Only look for issues that fall within the changed code.
+### GitLab:
+```bash
+# Get MR details
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests?state=opened&source_branch=$(git branch --show-current)" | \
+  jq '.[0] | {iid, title, description, draft, state}'
 
-   **CRITICAL: We only want HIGH SIGNAL issues.** This means:
-   - Objective bugs that will cause incorrect behavior at runtime
-   - Clear, unambiguous CLAUDE.md violations where you can quote the exact rule being broken
+# Get MR diff
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests/[iid]/changes"
+```
 
-   We do NOT want:
-   - Subjective concerns or "suggestions"
-   - Style preferences not explicitly required by CLAUDE.md
-   - Potential issues that "might" be problems
-   - Anything requiring interpretation or judgment calls
+## Phase 4: Pre-Review Checks
 
-   If you are not certain an issue is real, do not flag it. False positives erode trust and waste reviewer time.
+Launch a haiku agent to check if any of the following are true:
+- The PR/MR is closed
+- The PR/MR is a draft
+- The PR/MR does not need code review (e.g. automated, trivial change)
+- You have already submitted a code review
 
-   In addition to the above, each subagent should be told the PR title and description. This will help provide context regarding the author's intent.
+If any condition is true, stop and do not proceed.
 
-5. For each issue found in the previous step by agents 3 and 4, launch parallel subagents to validate the issue. These subagents should get the PR title and description along with a description of the issue. The agent's job is to review the issue to validate that the stated issue is truly an issue with high confidence. For example, if an issue such as "variable is not defined" was flagged, the subagent's job would be to validate that is actually true in the code. Another example would be CLAUDE.md issues. The agent should validate that the CLAUDE.md rule that was violated is scoped for this file and is actually violated. Use Opus subagents for bugs and logic issues, and sonnet agents for CLAUDE.md violations.
+Note: Still review Claude generated PR/MRs.
 
-6. Filter out any issues that were not validated in step 5. This step will give us our list of high signal issues for our review.
+## Phase 5: Gather Context
 
-7. Finally, output the review.
-   - If the `--comment` argument is provided, post the review as a comment on the pull request using `gh pr comment`
-   - Otherwise (default), output the review directly to the terminal for local viewing
-   When writing your comment, follow these guidelines:
-   a. Keep your output brief
-   b. Avoid emojis
-   c. Link and cite relevant code, files, and URLs for each issue
-   d. When citing CLAUDE.md violations, you MUST quote the exact text from CLAUDE.md that is being violated (e.g., CLAUDE.md says: "Use snake_case for variable names")
+Launch a haiku agent to return a list of file paths for all relevant CLAUDE.md files:
+- The root CLAUDE.md file, if it exists
+- Any CLAUDE.md files in directories containing modified files
 
-Use this list when evaluating issues in Steps 4 and 5 (these are false positives, do NOT flag):
+## Phase 6: Summarize Changes
 
-- Pre-existing issues
-- Something that appears to be a bug but is actually correct
-- Pedantic nitpicks that a senior engineer would not flag
-- Issues that a linter will catch (do not run the linter to verify)
-- General code quality concerns (e.g., lack of test coverage, general security issues) unless explicitly required in CLAUDE.md
-- Issues mentioned in CLAUDE.md but explicitly silenced in the code (e.g., via a lint ignore comment)
+Launch a sonnet agent to view the PR/MR and return a summary of the changes.
 
-Notes:
+## Phase 7: Parallel Review Agents
 
-- Use gh CLI to interact with GitHub (e.g., fetch pull requests, create comments). Do not use web fetch.
-- Create a todo list before starting.
-- You must cite and link each issue (e.g., if referring to a CLAUDE.md, include a link to it).
-- For your final comment, follow the following format precisely (assuming for this example that you found 3 issues):
+Launch 4 agents in parallel to independently review:
 
----
+**Agents 1 + 2: CLAUDE.md compliance (sonnet)**
+- Audit changes for CLAUDE.md compliance
+- Consider only CLAUDE.md files that share path with the file
 
+**Agent 3: Bug detection (opus)**
+- Scan for obvious bugs in the diff
+- Flag only significant bugs; ignore nitpicks
+
+**Agent 4: Code quality (opus)**
+- Look for security issues, incorrect logic
+- Only issues within the changed code
+
+**CRITICAL: HIGH SIGNAL issues only:**
+- Objective bugs causing incorrect runtime behavior
+- Clear, unambiguous CLAUDE.md violations with exact quotes
+
+**DO NOT flag:**
+- Subjective concerns or "suggestions"
+- Style preferences not in CLAUDE.md
+- Potential issues that "might" be problems
+
+## Phase 8: Validate Issues
+
+For each issue found, launch parallel subagents to validate:
+- Opus for bugs and logic issues
+- Sonnet for CLAUDE.md violations
+
+## Phase 9: Output Review
+
+### GitHub (with --comment):
+```bash
+gh pr comment --body "## Code Review
+
+Found X issues:
+..."
+```
+
+### GitLab (with --comment):
+```bash
+curl --request POST \
+  --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  --header "Content-Type: application/json" \
+  --data '{"body": "## Code Review\n\nFound X issues:\n..."}' \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests/[iid]/notes"
+```
+
+### Local output (default):
+Output the review directly to terminal.
+
+## Review Format
+
+```markdown
 ## Code review
 
-Found 3 issues:
+Found X issues:
 
-1. <brief description of bug> (CLAUDE.md says: "<exact quote from CLAUDE.md>")
+1. <brief description> (CLAUDE.md says: "<exact quote>")
+   <link to file and line>
 
-<link to file and line with full sha1 + line range for context, eg. #example-linkREADME.md#L13-L17>
+2. <brief description> (bug due to <code snippet>)
+   <link to file and line>
+```
 
-2. <brief description of bug> (some/other/CLAUDE.md says: "<exact quote from CLAUDE.md>")
+Or if no issues:
 
-<link to file and line with full sha1 + line range for context>
-
-3. <brief description of bug> (bug due to <file and code snippet>)
-
-<link to file and line with full sha1 + line range for context>
-
----
-
-- Or, if you found no issues:
-
----
-
+```markdown
 ## Auto code review
 
 No issues found. Checked for bugs and CLAUDE.md compliance.
+```
 
----
+## False Positives to Avoid
 
-- When linking to code, follow the following format precisely, otherwise the Markdown preview won't render correctly: #example-linkpackage.json#L10-L15
-  - Requires full git sha
-  - You must provide the full sha. Commands like `https://github.com/owner/repo/blob/$(git rev-parse HEAD)/foo/bar` will not work, since your comment will be directly rendered in Markdown.
-  - Repo name must match the repo you're code reviewing
-  - # sign after the file name
-  - Line range format is L[start]-L[end]
-  - Provide at least 1 line of context before and after, centered on the line you are commenting about (eg. if you are commenting about lines 5-6, you should link to `L4-7`)
+- Pre-existing issues
+- Correct code that appears buggy
+- Pedantic nitpicks
+- Issues a linter will catch
+- General code quality not in CLAUDE.md
+- Explicitly silenced issues (lint ignore comments)
+
+## Notes
+
+- Create a todo list before starting
+- Cite and link each issue
+- Use full git SHA in links
+- For GitLab, ensure environment variables are set

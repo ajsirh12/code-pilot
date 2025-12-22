@@ -1,14 +1,25 @@
 ---
-description: "Comprehensive PR review using specialized agents"
+description: "Comprehensive PR/MR review using specialized agents (supports GitHub and GitLab)"
 argument-hint: "[review-aspects]"
-allowed-tools: ["Bash", "Glob", "Grep", "Read", "Task"]
+allowed-tools: ["Bash", "Glob", "Grep", "Read", "Task", "AskUserQuestion"]
 ---
 
-# Comprehensive PR Review
+# Comprehensive PR/MR Review
 
-Run a comprehensive pull request review using multiple specialized agents, each focusing on a different aspect of code quality.
+Run a comprehensive pull request/merge request review using multiple specialized agents, each focusing on a different aspect of code quality.
 
 **Review Aspects (optional):** "$ARGUMENTS"
+
+## Phase 0: Detect Platform
+
+```bash
+git remote get-url origin
+```
+
+**Platform Detection:**
+- Contains `github.com` → GitHub (use `gh` CLI)
+- Contains `gitlab` → GitLab (use GitLab API)
+- Otherwise → Ask user which platform
 
 ## Review Workflow:
 
@@ -29,7 +40,12 @@ Run a comprehensive pull request review using multiple specialized agents, each 
 
 3. **Identify Changed Files**
    - Run `git diff --name-only` to see modified files
-   - Check if PR already exists: `gh pr view`
+   - **GitHub**: Check if PR exists: `gh pr view`
+   - **GitLab**: Check if MR exists via API:
+     ```bash
+     curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+       "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests?state=opened&source_branch=$(git branch --show-current)"
+     ```
    - Identify file types and what reviews apply
 
 4. **Determine Applicable Reviews**
