@@ -35,63 +35,144 @@ Parse the user's request from: $ARGUMENTS
 
 ---
 
-## Workflow: Create Issue
+## Workflow: Create Issue (Interactive)
 
-**Phase 1: Gather Information**
+**Phase 1: Fetch Available Options**
 
-1. If title not provided, **ask user**:
-   ```
-   What should the issue title be?
-   ```
+Fetch labels, milestones, and members in parallel for dynamic selection:
 
-2. **Ask for details** using AskUserQuestion:
-   - Issue type? (Bug, Feature, Enhancement, Documentation)
-   - Priority? (Critical, High, Medium, Low)
-   - Description? (optional)
-   - Assign to milestone? (show available milestones)
+```bash
+# Labels
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/labels?per_page=100" | \
+  jq '[.[] | {name, color, description}]'
 
-**Phase 2: Confirm Creation**
+# Milestones (active only)
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/milestones?state=active" | \
+  jq '[.[] | {id, title, due_date}]'
 
-1. **Show preview to user**:
-   ```
-   I'll create this issue:
+# Members (for assignee)
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/members/all?per_page=100" | \
+  jq '[.[] | {id, username, name}]'
+```
 
-   Title: [title]
-   Type: bug
-   Priority: priority::high
-   Labels: bug, priority::high
-   Milestone: Phase 1
+**Phase 2: Interactive Title & Description**
 
-   Proceed?
-   ```
+```
+📝 이슈 생성
 
-2. **Wait for user approval**
+제목을 입력하세요:
+> [user types title]
 
-**Phase 3: Create Issue**
+설명을 입력하세요 (선택사항, 엔터로 건너뛰기):
+> [user types description or skips]
+```
 
-1. Create the issue:
-   ```bash
-   curl --request POST \
-     --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-     --header "Content-Type: application/json" \
-     --data '{
-       "title": "[title]",
-       "description": "[description]",
-       "labels": "bug,priority::high",
-       "milestone_id": [id]
-     }' \
-     "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/issues"
-   ```
+**Phase 3: Interactive Label Selection**
 
-2. **Report result**:
-   ```
-   ✅ Issue created!
+Display labels as numbered list:
 
-   #123: [title]
-   URL: https://gitlab.tepseg.com/group/project/-/issues/123
-   Labels: bug, priority::high
-   Milestone: Phase 1
-   ```
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏷️ 라벨 선택 (다중 선택 가능)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ #   Label              Description
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1   🔴 bug             버그 수정
+ 2   🟢 feature         새 기능
+ 3   🔵 enhancement     기능 개선
+ 4   📝 docs            문서화
+ 5   🧹 chore           유지보수
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Priority]
+ 6   🔴 priority::critical
+ 7   🟠 priority::high
+ 8   🟡 priority::medium
+ 9   🟢 priority::low
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+번호 선택 (예: 1,7):
+```
+
+**Phase 4: Interactive Milestone Selection**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 마일스톤 선택 (단일)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ #   Milestone         Due Date
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 0   (없음)
+ 1   Phase 1           2025-01-31
+ 2   Phase 2           2025-02-28
+ 3   v1.0.0            2025-03-15
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+번호 선택:
+```
+
+**Phase 5: Interactive Assignee Selection**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 담당자 선택 (선택사항)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 0   (없음)
+ 1   @john.doe         John Doe
+ 2   @jane.smith       Jane Smith
+ 3   @bob.kim          Bob Kim
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+번호 선택 (다중: 1,2):
+```
+
+**Phase 6: Confirm & Create**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 이슈 미리보기
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+제목:      로그인 버그 수정
+설명:      Safari에서 로그인 실패
+라벨:      bug, priority::high
+마일스톤:  Phase 1
+담당자:    @jane.smith
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+생성하시겠습니까? (Y/n)
+```
+
+**Phase 7: Create & Report**
+
+```bash
+curl --request POST \
+  --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "title": "[title]",
+    "description": "[description]",
+    "labels": "bug,priority::high",
+    "milestone_id": [milestone_id],
+    "assignee_ids": [user_ids]
+  }' \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/issues"
+```
+
+Result:
+```
+✅ 이슈가 생성되었습니다!
+
+#123: 로그인 버그 수정
+URL: https://gitlab.tepseg.com/group/project/-/issues/123
+
+라벨:      bug, priority::high
+마일스톤:  Phase 1
+담당자:    @jane.smith
+
+📧 담당자에게 알림이 발송됩니다.
+```
 
 ---
 
@@ -212,48 +293,76 @@ When creating issues, offer to:
 
 ---
 
-## Workflow: Assign Issue
+## Workflow: Assign Issue (Interactive)
 
-**Phase 1: Get Current Assignees**
+**Phase 1: Fetch Data in Parallel**
 
 ```bash
+# Get issue details and project members simultaneously
+# Issue details
 curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
   "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/issues/[iid]" | \
-  jq '{title, assignees: [.assignees[].username]}'
+  jq '{title, assignees: [.assignees[] | {id, username}]}'
+
+# Project members (cache for session)
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/members/all?per_page=100" | \
+  jq '[.[] | {id, username, name, access_level}]'
 ```
 
-**Phase 2: Present Options**
+**Phase 2: Display Numbered Member List**
+
+Present members as a numbered list for easy selection:
 
 ```
 Issue #123: Login fails on Safari
 
-Current assignees:
-- @john (assigned)
+Current assignees: @john
 
-Available actions:
-1. Add assignee
-2. Remove assignee
-3. Replace all assignees
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 프로젝트 멤버 목록
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ #   Username        Name              Role
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1   @john.doe       John Doe          Maintainer ✓ (현재)
+ 2   @jane.smith     Jane Smith        Developer
+ 3   @bob.kim        Bob Kim           Developer
+ 4   @alice.lee      Alice Lee         Reporter
+ 5   @charlie.park   Charlie Park      Developer
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Who should work on this issue?
+선택 방법:
+• 단일: 2
+• 다중: 1,3,5
+• 범위: 2-4
+• 전체: all
+• 해제: none
 ```
 
-**Phase 3: Get Available Members**
+**Phase 3: Get User Selection**
 
-```bash
-curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/members/all?per_page=50" | \
-  jq '.[] | {id, username, name, access_level}'
+Use AskUserQuestion to confirm action type, then process number input:
+
+```
+Actions:
+1. 추가 (기존 유지 + 추가)
+2. 교체 (전체 교체)
+3. 제거 (선택한 사람 제거)
+
+번호를 입력하세요:
 ```
 
-**Phase 4: Update Assignees**
+**Phase 4: Parse Selection & Update**
 
 ```bash
-# Add/update assignees (supports multiple)
+# Parse user input (e.g., "2,3" or "2-4" or "all")
+# Convert to user IDs from the numbered list
+
+# Update assignees
 curl --request PUT \
   --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
   --header "Content-Type: application/json" \
-  --data '{"assignee_ids": [user_id1, user_id2]}' \
+  --data '{"assignee_ids": [parsed_user_ids]}' \
   "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/issues/[iid]"
 ```
 
@@ -262,14 +371,26 @@ curl --request PUT \
 ```
 ✅ Assignees updated for #123
 
-Added: @jane, @alice
-Removed: @john
+변경사항:
+  + @jane.smith (추가)
+  + @bob.kim (추가)
+  - @john.doe (제거)
 
-Current assignees:
-- @jane
-- @alice
+현재 담당자:
+  • @jane.smith
+  • @bob.kim
 
-They will be notified via email.
+📧 이메일 알림이 발송됩니다.
+```
+
+**Selection Parser Logic:**
+
+```
+Input: "2,3"     → IDs: [jane_id, bob_id]
+Input: "2-4"     → IDs: [jane_id, bob_id, alice_id]
+Input: "1,3-5"   → IDs: [john_id, bob_id, alice_id, charlie_id]
+Input: "all"     → All member IDs
+Input: "none"    → Empty array (unassign all)
 ```
 
 ---

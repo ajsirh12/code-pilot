@@ -56,105 +56,178 @@ git log --oneline -10
 
 ---
 
-## Workflow: Create MR
+## Workflow: Create MR (Interactive)
 
 **Phase 1: Pre-flight Checks**
 
-1. Check for uncommitted changes:
-   - If found, **ask user**: "You have uncommitted changes. Commit first?"
-   - If user agrees, help create commit
+```bash
+# Check uncommitted changes
+git status --short
 
-2. Check if branch is pushed:
-   - If not pushed, **ask user**: "Branch not pushed. Push now?"
-   - Push with `-u` flag
+# Check if pushed
+git log --oneline @{u}..HEAD 2>/dev/null
 
-3. Check if MR already exists:
-   ```bash
-   curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-     "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests?source_branch=$(git branch --show-current)&state=opened"
-   ```
-   - If exists, show link and ask what to do
+# Check existing MR
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests?source_branch=$(git branch --show-current)&state=opened"
+```
 
-**Phase 2: Gather MR Details**
+Handle issues:
+- Uncommitted changes → "커밋하시겠습니까?"
+- Not pushed → "푸시하시겠습니까?"
+- MR exists → Show link and offer to open
 
-1. Analyze commits to suggest title:
-   ```bash
-   git log --oneline $(git merge-base HEAD origin/main)..HEAD
-   ```
+**Phase 2: Fetch Options in Parallel**
 
-2. **Ask user for MR details** using AskUserQuestion:
-   - Title? (suggest based on commits/branch name)
-   - Link to issue? (show recent issues)
-   - Description? (offer template)
-   - Labels?
-   - Reviewers?
+```bash
+# Open issues (for linking)
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/issues?state=opened&per_page=20" | \
+  jq '[.[] | {iid, title, labels}]'
 
-3. If issue provided, format description with `Closes #id`
+# Labels
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/labels?per_page=100" | \
+  jq '[.[] | {name, color}]'
 
-**Phase 3: Confirm Creation**
+# Members (for reviewers)
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/members/all?per_page=100" | \
+  jq '[.[] | {id, username, name}]'
 
-1. **Show preview**:
-   ```
-   I'll create this Merge Request:
+# Commits for title suggestion
+git log --oneline $(git merge-base HEAD origin/main)..HEAD
+```
 
-   Title: Fix login bug on Safari
-   Source: fix/login-safari → main
-   Commits: 3
+**Phase 3: Interactive Title & Description**
 
-   Description:
-   ## Summary
-   - Fixed Safari-specific login issue
-   - Added browser detection
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔀 MR 생성
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Branch: feature/login-fix → main
+Commits: 3
 
-   Closes #123
+제목을 입력하세요:
+(추천: feat: fix login bug on Safari)
+>
+```
 
-   Labels: bug, browser-compat
-   Reviewers: @jane
+**Phase 4: Interactive Issue Linking**
 
-   Options:
-   - Delete source branch after merge: Yes
-   - Squash commits: Yes
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔗 이슈 연결 (선택사항)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ #   Issue                              Labels
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 0   (연결 안함)
+ 1   #123 Login fails on Safari         bug, priority::high
+ 2   #120 Improve auth performance       enhancement
+ 3   #118 Update documentation          docs
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-   Proceed?
-   ```
+연결할 이슈 번호 (Closes #):
+```
 
-2. **Wait for user approval**
+**Phase 5: Interactive Label Selection**
 
-**Phase 4: Create MR**
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏷️ 라벨 선택 (다중 가능)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1   🔴 bug
+ 2   🟢 feature
+ 3   🔵 enhancement
+ 4   📝 docs
+ 5   🟠 priority::high
+ 6   🟡 priority::medium
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. Create the MR:
-   ```bash
-   curl --request POST \
-     --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-     --header "Content-Type: application/json" \
-     --data '{
-       "source_branch": "[current-branch]",
-       "target_branch": "main",
-       "title": "[title]",
-       "description": "## Summary\n\n[description]\n\nCloses #123",
-       "labels": "bug",
-       "remove_source_branch": true,
-       "squash": true
-     }' \
-     "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests"
-   ```
+번호 선택 (예: 1,5):
+```
 
-2. **Report result**:
-   ```
-   ✅ Merge Request created!
+**Phase 6: Interactive Reviewer Selection**
 
-   !45: Fix login bug on Safari
-   URL: https://gitlab.tepseg.com/group/project/-/merge_requests/45
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👥 리뷰어 선택 (다중 가능)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 0   (나중에 지정)
+ 1   @jane.smith     Jane Smith
+ 2   @bob.kim        Bob Kim
+ 3   @alice.lee      Alice Lee
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-   Status: Open
-   Pipeline: Running...
-   Linked: Closes #123
+번호 선택 (예: 1,2):
+```
 
-   Next steps:
-   - Wait for pipeline to pass
-   - Get review from @jane
-   - Merge when ready
-   ```
+**Phase 7: Confirm & Create**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 MR 미리보기
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+제목:      feat: fix login bug on Safari
+브랜치:    feature/login-fix → main
+커밋:      3개
+
+설명:
+  ## Summary
+  - Fixed Safari-specific login issue
+
+  Closes #123
+
+라벨:      bug, priority::high
+리뷰어:    @jane.smith, @bob.kim
+
+옵션:
+  ✓ 머지 후 브랜치 삭제
+  ✓ 커밋 스쿼시
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+생성하시겠습니까? (Y/n)
+```
+
+**Phase 8: Create & Report**
+
+```bash
+curl --request POST \
+  --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "source_branch": "[current-branch]",
+    "target_branch": "main",
+    "title": "[title]",
+    "description": "## Summary\n\n[description]\n\nCloses #123",
+    "labels": "bug,priority::high",
+    "reviewer_ids": [reviewer_ids],
+    "remove_source_branch": true,
+    "squash": true
+  }' \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests"
+```
+
+Result:
+```
+✅ MR이 생성되었습니다!
+
+!45: feat: fix login bug on Safari
+URL: https://gitlab.tepseg.com/group/project/-/merge_requests/45
+
+상태:      Open
+파이프라인: Running ⏳
+연결이슈:  Closes #123
+라벨:      bug, priority::high
+리뷰어:    @jane.smith, @bob.kim
+
+다음 단계:
+  1. 파이프라인 완료 대기
+  2. 리뷰어 승인 대기
+  3. 머지
+
+📧 리뷰어에게 알림이 발송됩니다.
+```
 
 ---
 
@@ -265,62 +338,112 @@ git log --oneline -10
 
 ---
 
-## Workflow: Manage Reviewers
+## Workflow: Manage Reviewers (Interactive)
 
-**Phase 1: Get Current Reviewers**
+**Phase 1: Fetch Data in Parallel**
 
 ```bash
+# Get MR details with current reviewers
 curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
   "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests/[iid]" | \
-  jq '{reviewers: [.reviewers[].username], author: .author.username}'
+  jq '{
+    title,
+    author: .author.username,
+    reviewers: [.reviewers[] | {id, username}]
+  }'
+
+# Get project members (exclude author)
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/members/all?per_page=100" | \
+  jq '[.[] | {id, username, name, access_level}]'
 ```
 
-**Phase 2: Present Options**
+**Phase 2: Display Interactive Member List**
 
 ```
 MR !45: Fix login bug on Safari
+Author: @john.doe
 
-Current reviewers:
-- @jane (assigned)
-- @bob (assigned)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👥 리뷰어 선택
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ #   Username        Name              Status
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1   @jane.smith     Jane Smith        ✓ 리뷰어
+ 2   @bob.kim        Bob Kim           ✓ 리뷰어
+ 3   @alice.lee      Alice Lee
+ 4   @charlie.park   Charlie Park
+ 5   @david.choi     David Choi
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Available actions:
-1. Add reviewer
-2. Remove reviewer
-3. Request re-review
-
-What would you like to do?
+선택 방법:
+• 토글: 번호 입력 시 추가/제거 전환
+• 다중: 3,4 (추가)
+• 범위: 3-5 (추가)
+• 전체 해제: none
 ```
 
-**Phase 3: Add/Remove Reviewer**
+**Phase 3: Process Selection**
+
+Use AskUserQuestion for action confirmation:
+
+```
+현재 리뷰어: @jane.smith, @bob.kim
+
+Actions:
+1. 추가할 리뷰어 선택
+2. 제거할 리뷰어 선택
+3. 전체 교체
+
+선택:
+```
+
+Then process number input:
+```
+리뷰어로 추가할 번호를 입력하세요 (예: 3,4):
+> 3,4
+
+선택됨: @alice.lee, @charlie.park
+```
+
+**Phase 4: Update Reviewers**
 
 ```bash
-# Get project members for selection
-curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-  "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/members/all?per_page=50" | \
-  jq '.[] | {username, name, access_level}'
-
-# Update reviewers
+# Combine existing + new reviewer IDs
 curl --request PUT \
   --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
   --header "Content-Type: application/json" \
-  --data '{"reviewer_ids": [user_id1, user_id2]}' \
+  --data '{"reviewer_ids": [jane_id, bob_id, alice_id, charlie_id]}' \
   "$GITLAB_URL/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests/[iid]"
 ```
 
-**Phase 4: Report Result**
+**Phase 5: Report Result**
 
 ```
-✅ Reviewers updated for !45
+✅ 리뷰어가 업데이트되었습니다!
 
-Added: @alice
-Removed: @bob
+MR !45: Fix login bug on Safari
 
-Current reviewers:
-- @jane
-- @alice
+변경사항:
+  + @alice.lee (추가)
+  + @charlie.park (추가)
 
-They will be notified via email.
+현재 리뷰어:
+  • @jane.smith
+  • @bob.kim
+  • @alice.lee
+  • @charlie.park
+
+📧 새 리뷰어에게 알림이 발송됩니다.
+```
+
+**Selection Parser Logic:**
+
+```
+Input: "3,4"     → Add IDs: [alice_id, charlie_id]
+Input: "3-5"     → Add IDs: [alice_id, charlie_id, david_id]
+Input: "1"       → Toggle: Remove jane (already reviewer)
+Input: "none"    → Remove all reviewers
 ```
 
 ---
