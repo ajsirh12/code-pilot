@@ -1,6 +1,6 @@
 ---
 name: gitlab-toolkit
-description: GitLab 워크플로우 자동화 도구. 이슈/MR 관리, CI/CD, 코드리뷰 등 GitLab 작업 시 사용. 트리거: "이슈 만들어", "MR 생성", "파이프라인 확인", "리뷰해줘", "머지해", "릴리즈", "GitLab" 언급 시.
+description: This skill should be used when the user asks to "create GitLab issue", "create MR", "merge request", "check pipeline", "run pipeline", "review MR", "merge", "release", "GitLab project setup", "branch protection", "labels", "milestone", "deploy", "CI/CD", or mentions GitLab-related workflows. Also triggered by Korean phrases like "이슈 만들어", "MR 생성", "파이프라인", "리뷰", "머지", "릴리즈".
 ---
 
 # GitLab Toolkit
@@ -213,13 +213,18 @@ export GITLAB_PROJECT_ID="206"
 
 ---
 
-## Agents
+## Agents (8 Total)
 
 | 에이전트 | 용도 | 트리거 |
 |---------|------|--------|
-| `project-initializer` | 프로젝트 초기 설정 | "새 프로젝트", "설정해줘" |
-| `mr-reviewer` | MR 자동 리뷰 | "리뷰해줘", "코드 확인" |
-| `pipeline-debugger` | 파이프라인 디버깅 | "파이프라인 실패", "왜 안돼" |
+| `project-initializer` | 프로젝트 초기 설정 | "새 프로젝트 설정", "branch protection" |
+| `pipeline-debugger` | 파이프라인 디버깅 | "파이프라인 실패", "CI 에러" |
+| `git-workflow` | Git 커밋, 브랜치 정리 | "커밋해줘", "브랜치 정리" |
+| `issue-manager` | 이슈, 라벨, 마일스톤 | "이슈 만들어", "라벨 설정" |
+| `mr-workflow` | MR 생성/리뷰/머지 | "MR 만들어", "머지해줘" |
+| `code-navigator` | 파일 히스토리, blame | "blame 확인", "태그 생성" |
+| `registry-manager` | 레지스트리, 토큰 관리 | "이미지 정리", "토큰 생성" |
+| `security-auditor` | 보안 감사, 취약점 | "보안 점검", "취약점 확인" |
 
 ---
 

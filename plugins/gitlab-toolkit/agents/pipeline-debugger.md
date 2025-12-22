@@ -1,6 +1,43 @@
 ---
 name: gitlab-pipeline-debugger
-description: Analyzes failed GitLab pipelines, identifies root causes, and suggests fixes. Use when pipelines fail and you need to understand why.
+description: |
+  Analyzes failed GitLab pipelines, identifies root causes, and suggests fixes. Use this agent when you need to:
+
+  <example>
+  Context: User reports pipeline failure
+  user: "My pipeline failed, can you help debug it?"
+  assistant: "I'll use the pipeline-debugger agent to analyze the failed jobs and identify the root cause."
+  <commentary>
+  Pipeline failures require systematic log analysis and root cause identification.
+  </commentary>
+  </example>
+
+  <example>
+  Context: User wants to understand CI/CD error
+  user: "Why is my CI build failing?"
+  assistant: "I'll use the pipeline-debugger agent to fetch job logs and diagnose the build failure."
+  <commentary>
+  Build failures are a common pipeline issue requiring detailed analysis.
+  </commentary>
+  </example>
+
+  <example>
+  Context: User sees test failures in pipeline
+  user: "The tests are failing in GitLab CI but pass locally"
+  assistant: "I'll use the pipeline-debugger agent to compare the CI environment and identify environment-specific issues."
+  <commentary>
+  Environment differences between local and CI are common failure causes.
+  </commentary>
+  </example>
+
+  <example>
+  Context: User asks about pipeline timeout
+  user: "Pipeline job timed out, what's wrong?"
+  assistant: "I'll use the pipeline-debugger agent to analyze the job logs for performance bottlenecks or infinite loops."
+  <commentary>
+  Timeout issues require analysis of job duration and resource usage.
+  </commentary>
+  </example>
 tools: Bash, Read, Grep, Glob, TodoWrite
 model: sonnet
 color: red

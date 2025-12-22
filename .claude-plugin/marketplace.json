@@ -19,28 +19,6 @@
       "category": "development"
     },
     {
-      "name": "code-review",
-      "description": "Automated code review for pull requests using multiple specialized agents with confidence-based scoring to filter false positives",
-      "version": "1.0.0",
-      "author": {
-        "name": "deekee",
-        "email": "burlesquer@yonsei.ac.kr"
-      },
-      "source": "./plugins/code-review",
-      "category": "productivity"
-    },
-    {
-      "name": "commit-commands",
-      "description": "Commands for git commit workflows including commit, push, and PR creation",
-      "version": "1.0.0",
-      "author": {
-        "name": "deekee",
-        "email": "burlesquer@yonsei.ac.kr"
-      },
-      "source": "./plugins/commit-commands",
-      "category": "productivity"
-    },
-    {
       "name": "explanatory-output-style",
       "description": "Adds educational insights about implementation choices and codebase patterns (mimics the deprecated Explanatory output style)",
       "version": "1.0.0",
@@ -107,14 +85,14 @@
       "category": "development"
     },
     {
-      "name": "pr-review-toolkit",
-      "description": "Comprehensive PR review agents specializing in comments, tests, error handling, type design, code quality, and code simplification",
+      "name": "code-quality",
+      "description": "Code quality review agents analyzing local git diff. Specializes in comments, tests, error handling, type design, and code simplification.",
       "version": "1.0.0",
       "author": {
         "name": "deekee",
         "email": "burlesquer@yonsei.ac.kr"
       },
-      "source": "./plugins/pr-review-toolkit",
+      "source": "./plugins/code-quality",
       "category": "productivity"
     },
     {

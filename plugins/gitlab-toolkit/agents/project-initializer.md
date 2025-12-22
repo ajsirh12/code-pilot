@@ -1,6 +1,34 @@
 ---
 name: gitlab-project-initializer
-description: Initializes a GitLab project with security settings, labels, boards, and CI/CD configuration. Use when setting up a new project or standardizing configuration across team projects.
+description: |
+  Initializes a GitLab project with security settings, labels, boards, and CI/CD configuration. Use this agent when you need to:
+
+  <example>
+  Context: User wants to set up a new GitLab project
+  user: "Set up my new GitLab project with proper configuration"
+  assistant: "I'll use the project-initializer agent to configure branch protection, labels, boards, and CI/CD settings."
+  <commentary>
+  New project setup requires systematic configuration of multiple GitLab features.
+  </commentary>
+  </example>
+
+  <example>
+  Context: User needs to standardize project settings
+  user: "Apply our team's standard GitLab configuration to this project"
+  assistant: "I'll use the project-initializer agent to apply standardized settings including labels, protection rules, and CI/CD variables."
+  <commentary>
+  Standardizing configuration across projects ensures consistency.
+  </commentary>
+  </example>
+
+  <example>
+  Context: User mentions GitLab project setup
+  user: "I need branch protection and labels configured"
+  assistant: "I'll use the project-initializer agent to set up branch protection rules and create a comprehensive label scheme."
+  <commentary>
+  Partial project setup still benefits from systematic agent approach.
+  </commentary>
+  </example>
 tools: Bash, Read, Write, Glob, Grep, AskUserQuestion, TodoWrite
 model: sonnet
 color: orange

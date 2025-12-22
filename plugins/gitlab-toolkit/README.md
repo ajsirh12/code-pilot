@@ -48,7 +48,7 @@ GitLab > Settings > Access Tokens:
 ### 3. Verify Setup
 
 ```bash
-./skills/gitlab-api/scripts/check-env.sh
+./skills/gitlab-toolkit/scripts/check-env.sh
 ```
 
 ---
@@ -208,7 +208,14 @@ Next steps:
 
 ---
 
-## Commands (32 Total)
+## Commands (41 Total)
+
+### Git Operations
+
+| Command | Hint | Description |
+|---------|------|-------------|
+| `/gl-commit` | - | Stage and commit with conventional message |
+| `/gl-clean-branches` | - | Clean up [gone] branches and worktrees |
 
 ### Core Management
 
@@ -233,6 +240,15 @@ Next steps:
 | `/gl-runners` | `list\|register\|pause` | Runners |
 | `/gl-environments` | `create\|stop\|list` | Deployment Environments |
 | `/gl-coverage` | `!id\|report\|diff` | Test Coverage Reports |
+
+### Registry & Access
+
+| Command | Hint | Description |
+|---------|------|-------------|
+| `/gl-registry` | `list\|tags\|delete` | Container & Package Registry |
+| `/gl-deploy-keys` | `list\|add\|remove` | SSH Deploy Keys for CI/CD |
+| `/gl-tokens` | `create\|revoke\|list` | Project/Group Access Tokens |
+| `/gl-security` | `vulns\|deps\|audit` | Vulnerabilities & Dependencies |
 
 ### Project Settings
 
@@ -271,71 +287,39 @@ Next steps:
 
 ---
 
-## Agents
+## Agents (8 Total)
 
-### `gitlab-project-initializer`
+### Project & Infrastructure
 
-**Purpose**: Sets up GitLab projects with production-ready configuration
+#### `gitlab-project-initializer`
+Sets up GitLab projects with production-ready configuration including branch protection, labels, boards, and CI/CD settings.
 
-**Focus areas:**
-- Environment verification
-- Branch protection
-- Labels and boards
-- CI/CD configuration
-- Security best practices
+#### `gitlab-pipeline-debugger`
+Analyzes failed pipelines, identifies root causes, and suggests fixes.
 
-**When triggered:**
-- Via `/gitlab-toolkit` command
-- When setting up new projects
-- When standardizing configuration
+#### `gitlab-security-auditor`
+Audits project security including vulnerabilities, dependencies, and settings.
 
-**Output:**
-- Step-by-step setup progress
-- Configuration status (✅/❌)
-- Summary of what was configured
-- Next steps recommendations
+### Git & Repository
 
-### `gitlab-mr-reviewer`
+#### `gitlab-git-workflow`
+Handles Git operations including commits, branch cleanup, and worktree management.
 
-**Purpose**: Reviews MR diffs and provides actionable feedback
+#### `gitlab-code-navigator`
+Navigates repository files, history, and branches. Handles blame, compare, cherry-pick, revert, and tags.
 
-**Focus areas:**
-- Security vulnerabilities
-- Logic issues
-- Code quality
-- Project conventions
+### Issue & MR Management
 
-**When triggered:**
-- Before merging important MRs
-- When reviewing team contributions
-- For pre-merge validation
+#### `gitlab-issue-manager`
+Manages GitLab issues, labels, and milestones.
 
-**Output:**
-- Critical issues (must fix)
-- Important suggestions
-- Minor notes
-- Approval verdict
+#### `gitlab-mr-workflow`
+Manages Merge Requests including creation, review, conflicts, and merging.
 
-### `gitlab-pipeline-debugger`
+### Registry & Access
 
-**Purpose**: Analyzes failed pipelines and suggests fixes
-
-**Focus areas:**
-- Build failures
-- Test failures
-- Deployment issues
-- Infrastructure problems
-
-**When triggered:**
-- When pipelines fail
-- To understand job failures
-- For CI/CD troubleshooting
-
-**Output:**
-- Failed job identification
-- Error analysis with logs
-- Root cause explanation
-- Specific fix commands
+#### `gitlab-registry-manager`
+Manages Container Registry, Package Registry, Deploy Keys, and Access Tokens.
 
 ---
 
@@ -530,7 +514,7 @@ export GITLAB_TOKEN="glpat-xxxxxxxxxxxx"
 export GITLAB_PROJECT_ID="your-project-id"
 ```
 
-Run `./skills/gitlab-api/scripts/check-env.sh` to verify.
+Run `./skills/gitlab-toolkit/scripts/check-env.sh` to verify.
 
 ### 401 Unauthorized
 
@@ -596,13 +580,13 @@ Run `./skills/gitlab-api/scripts/check-env.sh` to verify.
 
 | Skill | Description |
 |-------|-------------|
-| `gitlab-api` | GitLab API reference (auth, patterns, error handling) |
+| `gitlab-toolkit` | GitLab workflow automation (auth, patterns, error handling) |
 
 ### Skill Structure
 
 ```
-skills/gitlab-api/
-├── SKILL.md              # Main (endpoints, Access Levels)
+skills/gitlab-toolkit/
+├── SKILL.md              # Main (workflow decision tree)
 ├── references/           # Detailed docs
 │   ├── api-patterns.md   # API call patterns, jq
 │   ├── error-handling.md # Error codes, responses
@@ -622,7 +606,7 @@ skills/gitlab-api/
 gitlab-toolkit/
 ├── .claude-plugin/
 │   └── plugin.json
-├── commands/                          # 32 Slash Commands
+├── commands/                          # 41 Slash Commands
 │   ├── gitlab-toolkit.md              # Main workflow (7 phases)
 │   │
 │   │ # Core Management
@@ -670,15 +654,20 @@ gitlab-toolkit/
 │   └── auto-merge.md                  # Auto-Merge
 │
 ├── skills/
-│   └── gitlab-api/                    # GitLab API Skill
+│   └── gitlab-toolkit/                # GitLab Toolkit Skill
 │       ├── SKILL.md
 │       ├── references/
 │       ├── examples/
 │       └── scripts/
 ├── agents/
 │   ├── project-initializer.md         # Project setup agent
-│   ├── mr-reviewer.md                 # MR review agent
-│   └── pipeline-debugger.md           # Pipeline debug agent
+│   ├── pipeline-debugger.md           # Pipeline debug agent
+│   ├── git-workflow.md                # Git commit & branch cleanup
+│   ├── issue-manager.md               # Issue, labels, milestones
+│   ├── mr-workflow.md                 # MR lifecycle management
+│   ├── code-navigator.md              # File history, blame, tags
+│   ├── registry-manager.md            # Registry, deploy keys, tokens
+│   └── security-auditor.md            # Security & vulnerability audit
 └── README.md
 ```
 

@@ -22,17 +22,19 @@ GitLab에서 플러그인 마켓플레이스 추가:
 
 ### Development
 - `claude-opus-4-5-migration` - Claude 모델 마이그레이션 도구
-- `code-review` - PR 코드 리뷰 자동화
 - `feature-dev` - 기능 개발 워크플로우
 - `frontend-design` - 프론트엔드 디자인 스킬
 - `plugin-dev` - 플러그인 개발 도구
+- `skill-creator` - 스킬 생성 가이드 (init/validate/package)
 - `webapp-testing` - 웹앱 테스팅 (Playwright)
 - `web-artifacts-builder` - React/Tailwind 아티팩트 빌더
 
+### DevOps
+- `gitlab-toolkit` - GitLab 워크플로우 자동화 (Commit/MR/Pipeline/Registry/Security)
+
 ### Productivity
-- `commit-commands` - Git 커밋 워크플로우
+- `code-quality` - 코드 품질 분석 에이전트 (git diff 기반)
 - `hookify` - 커스텀 훅 생성
-- `pr-review-toolkit` - PR 리뷰 에이전트
 - `doc-coauthoring` - 문서 공동 작성
 
 ### Documents

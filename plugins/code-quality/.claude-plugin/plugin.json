@@ -1,0 +1,9 @@
+{
+  "name": "code-quality",
+  "version": "1.0.0",
+  "description": "Code review agents for GitHub PR and GitLab MR. Analyzes comments, tests, error handling, type design, code quality, and simplification.",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}
