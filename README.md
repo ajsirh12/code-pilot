@@ -21,7 +21,6 @@ GitLab에서 플러그인 마켓플레이스 추가:
 자세한 내용은 [plugins 디렉토리](./plugins/README.md)를 참고하세요.
 
 ### Development
-- `claude-opus-4-5-migration` - Claude 모델 마이그레이션 도구
 - `feature-dev` - 기능 개발 워크플로우
 - `frontend-design` - 프론트엔드 디자인 스킬
 - `plugin-dev` - 플러그인 개발 도구 (스킬 생성 가이드 포함)

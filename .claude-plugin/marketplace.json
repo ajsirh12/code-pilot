@@ -8,17 +8,6 @@
   },
   "plugins": [
     {
-      "name": "claude-opus-4-5-migration",
-      "description": "Migrate your code and prompts from Sonnet 4.x and Opus 4.1 to Opus 4.5.",
-      "version": "1.0.0",
-      "author": {
-        "name": "deekee",
-        "email": "burlesquer@yonsei.ac.kr"
-      },
-      "source": "./plugins/claude-opus-4-5-migration",
-      "category": "development"
-    },
-    {
       "name": "explanatory-output-style",
       "description": "Adds educational insights about implementation choices and codebase patterns (mimics the deprecated Explanatory output style)",
       "version": "1.0.0",
