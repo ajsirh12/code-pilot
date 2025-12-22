@@ -251,7 +251,7 @@
     },
     {
       "name": "gitlab-toolkit",
-      "description": "Intelligent GitLab workflow automation with 41 commands and 8 agents for issues, MRs, pipelines, registry, and security. Features systematic workflows for project setup, CI/CD, and branch protection.",
+      "description": "Intelligent GitLab workflow automation with 42 commands and 8 agents for issues, MRs, pipelines, registry, and security. Features project bootstrap, group/subgroup creation, and member invitation workflows.",
       "version": "1.0.0",
       "author": {
         "name": "deekee",

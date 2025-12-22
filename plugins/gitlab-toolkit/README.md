@@ -208,7 +208,13 @@ Next steps:
 
 ---
 
-## Commands (41 Total)
+## Commands (42 Total)
+
+### Bootstrap & Setup
+
+| Command | Hint | Description |
+|---------|------|-------------|
+| `/gl-bootstrap` | `[group] [subgroup] [project]` | Create groups, subgroups, projects, invite members (detects .git) |
 
 ### Git Operations
 
@@ -324,6 +330,20 @@ Manages Container Registry, Package Registry, Deploy Keys, and Access Tokens.
 ---
 
 ## Usage Examples
+
+### Bootstrap New GitLab Project
+
+```bash
+/gl-bootstrap
+```
+
+**What happens:**
+1. Checks for `.git` directory
+2. If no .git: Guides through group/subgroup/project creation
+3. If .git exists: Offers to connect to existing or create new project
+4. Interactive numbered selection for groups, subgroups, members
+5. Sets up git remote and pushes initial commit
+6. Optionally invites team members
 
 ### Protect main branch (no direct push)
 
@@ -606,8 +626,9 @@ skills/gitlab-toolkit/
 gitlab-toolkit/
 ├── .claude-plugin/
 │   └── plugin.json
-├── commands/                          # 41 Slash Commands
+├── commands/                          # 42 Slash Commands
 │   ├── gitlab-toolkit.md              # Main workflow (7 phases)
+│   ├── bootstrap.md                   # Project bootstrap (groups, subgroups, members)
 │   │
 │   │ # Core Management
 │   ├── issue.md                       # Issue, Assignees, Links, Comments

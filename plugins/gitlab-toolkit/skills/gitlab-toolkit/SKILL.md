@@ -1,6 +1,6 @@
 ---
 name: gitlab-toolkit
-description: This skill should be used when the user asks to "create GitLab issue", "create MR", "merge request", "check pipeline", "run pipeline", "review MR", "merge", "release", "GitLab project setup", "branch protection", "labels", "milestone", "deploy", "CI/CD", or mentions GitLab-related workflows. Also triggered by Korean phrases like "이슈 만들어", "MR 생성", "파이프라인", "리뷰", "머지", "릴리즈".
+description: This skill should be used when the user asks to "create GitLab issue", "create MR", "merge request", "check pipeline", "run pipeline", "review MR", "merge", "release", "GitLab project setup", "branch protection", "labels", "milestone", "deploy", "CI/CD", "create group", "create subgroup", "create repository", "invite members", "bootstrap project", "connect to GitLab", or mentions GitLab-related workflows. Also triggered by Korean phrases like "이슈 만들어", "MR 생성", "파이프라인", "리뷰", "머지", "릴리즈", "그룹 만들어", "프로젝트 만들어", "GitLab 연결", "팀원 초대".
 ---
 
 # GitLab Toolkit
@@ -37,7 +37,9 @@ GitLab 작업을 위한 지능형 워크플로우 자동화 도구.
 
 ### 프로젝트 설정
 - "새 프로젝트 설정" → `/gitlab-toolkit` (7단계 가이드)
-- "멤버 추가" → `/gl-members`
+- "프로젝트 만들어/생성" → `/gl-bootstrap` (그룹/서브그룹/프로젝트 생성)
+- "GitLab 연결" → `/gl-bootstrap` (.git 감지 후 연동)
+- "멤버 초대/추가" → `/gl-members` 또는 `/gl-bootstrap`
 - "브랜치 보호" → `/gl-project`
 - "릴리즈" → `/gl-release`
 
@@ -127,9 +129,35 @@ GitLab 작업을 위한 지능형 워크플로우 자동화 도구.
    → 릴리즈 파이프라인 확인
 ```
 
-### 5. 프로젝트 초기 설정 플로우
+### 5. 프로젝트 부트스트랩 플로우 (NEW)
 
-새 프로젝트 설정 시:
+새 프로젝트를 처음부터 생성할 때:
+
+```
+/gl-bootstrap
+→ .git 감지에 따른 분기:
+
+[.git 없음]
+  1. GITLAB_URL, TOKEN 확인
+  2. Group 선택 (번호 선택)
+  3. Subgroup 선택 (번호 선택)
+  4. Project 이름/설명 입력
+  5. Project 생성
+  6. git init & remote 설정
+  7. 팀원 초대 (검색 후 번호 선택)
+
+[.git 있음, remote 없음]
+  1. 새 GitLab 프로젝트 생성 or 기존 연결
+  2. remote 설정
+  3. push
+
+[.git + GitLab remote]
+  → /gl-project 로 설정 확인
+```
+
+### 6. 프로젝트 초기 설정 플로우
+
+기존 프로젝트 설정 최적화:
 
 ```
 /gitlab-toolkit
@@ -241,6 +269,7 @@ export GITLAB_PROJECT_ID="206"
 
 | 카테고리 | 명령어 |
 |---------|--------|
+| **부트스트랩** | `/gl-bootstrap` (그룹/서브그룹/프로젝트 생성, 팀원 초대) |
 | **이슈** | `/gl-issue`, `/gl-inbox`, `/gl-search` |
 | **MR** | `/gl-mr`, `/gl-draft`, `/gl-auto-merge`, `/gl-conflicts` |
 | **CI/CD** | `/gl-pipeline`, `/gl-variables`, `/gl-runners`, `/gl-environments`, `/gl-coverage` |
