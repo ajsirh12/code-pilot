@@ -28,7 +28,7 @@ GitLab에서 플러그인 마켓플레이스 추가:
 - `web-artifacts-builder` - React/Tailwind 아티팩트 빌더
 
 ### DevOps
-- `gitlab-toolkit` - GitLab 워크플로우 자동화 (42 commands, 8 agents)
+- `gitlab-toolkit` - GitLab 워크플로우 자동화 (46 commands, 8 agents, 1 hook)
 
 ### Productivity
 - `code-quality` - 코드 품질 분석 에이전트 (git diff 기반)

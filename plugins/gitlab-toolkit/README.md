@@ -208,13 +208,17 @@ Next steps:
 
 ---
 
-## Commands (42 Total)
+## Commands (46 Total)
 
 ### Bootstrap & Setup
 
 | Command | Hint | Description |
 |---------|------|-------------|
 | `/gl-bootstrap` | `[group] [subgroup] [project]` | Create groups, subgroups, projects, invite members (detects .git) |
+| `/gl-group` | `create\|list\|members\|settings` | Group/Subgroup management |
+| `/gl-transfer` | `move\|archive\|export\|import` | Transfer project, archive/unarchive |
+| `/gl-templates` | `nodejs\|python\|docker\|k8s` | Generate CI/CD pipeline templates |
+| `/gl-audit` | `access\|tokens\|security` | Access & permission audit |
 
 ### Git Operations
 
@@ -626,9 +630,13 @@ skills/gitlab-toolkit/
 gitlab-toolkit/
 ├── .claude-plugin/
 │   └── plugin.json
-├── commands/                          # 42 Slash Commands
+├── commands/                          # 46 Slash Commands
 │   ├── gitlab-toolkit.md              # Main workflow (7 phases)
 │   ├── bootstrap.md                   # Project bootstrap (groups, subgroups, members)
+│   ├── group.md                       # Group/Subgroup management
+│   ├── transfer.md                    # Project transfer/archive
+│   ├── templates-cicd.md              # CI/CD templates generator
+│   ├── audit.md                       # Access & permission audit
 │   │
 │   │ # Core Management
 │   ├── issue.md                       # Issue, Assignees, Links, Comments
@@ -689,6 +697,10 @@ gitlab-toolkit/
 │   ├── code-navigator.md              # File history, blame, tags
 │   ├── registry-manager.md            # Registry, deploy keys, tokens
 │   └── security-auditor.md            # Security & vulnerability audit
+├── hooks/
+│   ├── hooks.json                     # Hook configuration
+│   └── scripts/
+│       └── detect-gitlab.sh           # SessionStart auto-detection
 └── README.md
 ```
 

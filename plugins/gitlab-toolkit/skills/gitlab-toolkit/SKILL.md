@@ -1,6 +1,6 @@
 ---
 name: gitlab-toolkit
-description: This skill should be used when the user asks to "create GitLab issue", "create MR", "merge request", "check pipeline", "run pipeline", "review MR", "merge", "release", "GitLab project setup", "branch protection", "labels", "milestone", "deploy", "CI/CD", "create group", "create subgroup", "create repository", "invite members", "bootstrap project", "connect to GitLab", or mentions GitLab-related workflows. Also triggered by Korean phrases like "이슈 만들어", "MR 생성", "파이프라인", "리뷰", "머지", "릴리즈", "그룹 만들어", "프로젝트 만들어", "GitLab 연결", "팀원 초대".
+description: This skill should be used when the user asks to "create GitLab issue", "create MR", "merge request", "check pipeline", "run pipeline", "review MR", "merge", "release", "GitLab project setup", "branch protection", "labels", "milestone", "deploy", "CI/CD", "create group", "create subgroup", "create repository", "invite members", "bootstrap project", "connect to GitLab", "transfer project", "archive project", "CI/CD template", "access audit", "permission check", or mentions GitLab-related workflows. Also triggered by Korean phrases like "이슈 만들어", "MR 생성", "파이프라인", "리뷰", "머지", "릴리즈", "그룹 만들어", "프로젝트 만들어", "GitLab 연결", "팀원 초대", "프로젝트 이전", "아카이브", "권한 감사".
 ---
 
 # GitLab Toolkit
@@ -39,9 +39,21 @@ GitLab 작업을 위한 지능형 워크플로우 자동화 도구.
 - "새 프로젝트 설정" → `/gitlab-toolkit` (7단계 가이드)
 - "프로젝트 만들어/생성" → `/gl-bootstrap` (그룹/서브그룹/프로젝트 생성)
 - "GitLab 연결" → `/gl-bootstrap` (.git 감지 후 연동)
-- "멤버 초대/추가" → `/gl-members` 또는 `/gl-bootstrap`
+- "그룹/서브그룹 관리" → `/gl-group`
+- "프로젝트 이전/아카이브" → `/gl-transfer`
+- "멤버 초대/추가" → `/gl-members` 또는 `/gl-group members`
 - "브랜치 보호" → `/gl-project`
 - "릴리즈" → `/gl-release`
+
+### CI/CD 템플릿
+- "CI/CD 템플릿" → `/gl-templates` (프로젝트 타입별 자동 생성)
+- "Node.js 파이프라인" → `/gl-templates nodejs`
+- "Docker 빌드" → `/gl-templates docker`
+
+### 보안 감사
+- "권한 감사/확인" → `/gl-audit`
+- "접근 권한 조회" → `/gl-audit access`
+- "토큰 점검" → `/gl-audit tokens`
 
 ---
 
@@ -269,10 +281,11 @@ export GITLAB_PROJECT_ID="206"
 
 | 카테고리 | 명령어 |
 |---------|--------|
-| **부트스트랩** | `/gl-bootstrap` (그룹/서브그룹/프로젝트 생성, 팀원 초대) |
+| **부트스트랩** | `/gl-bootstrap` (프로젝트 생성), `/gl-group` (그룹 관리) |
 | **이슈** | `/gl-issue`, `/gl-inbox`, `/gl-search` |
 | **MR** | `/gl-mr`, `/gl-draft`, `/gl-auto-merge`, `/gl-conflicts` |
-| **CI/CD** | `/gl-pipeline`, `/gl-variables`, `/gl-runners`, `/gl-environments`, `/gl-coverage` |
+| **CI/CD** | `/gl-pipeline`, `/gl-variables`, `/gl-runners`, `/gl-environments`, `/gl-coverage`, `/gl-templates` |
 | **저장소** | `/gl-files`, `/gl-blame`, `/gl-compare`, `/gl-revert`, `/gl-cherry-pick`, `/gl-tags` |
 | **설정** | `/gl-project`, `/gl-settings`, `/gl-members`, `/gl-webhook`, `/gl-template`, `/gl-notify` |
-| **기타** | `/gl-milestone`, `/gl-labels`, `/gl-release`, `/gl-wiki`, `/gl-snippet`, `/gl-board`, `/gl-stats`, `/gl-activity`, `/gl-fork`, `/gl-cleanup` |
+| **관리** | `/gl-transfer` (이전/아카이브), `/gl-audit` (권한 감사), `/gl-cleanup` |
+| **기타** | `/gl-milestone`, `/gl-labels`, `/gl-release`, `/gl-wiki`, `/gl-snippet`, `/gl-board`, `/gl-stats`, `/gl-activity`, `/gl-fork` |
