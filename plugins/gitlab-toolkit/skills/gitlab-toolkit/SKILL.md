@@ -1,6 +1,6 @@
 ---
 name: gitlab-toolkit
-description: This skill should be used when the user asks to "create GitLab issue", "create MR", "merge request", "check pipeline", "run pipeline", "review MR", "merge", "release", "GitLab project setup", "branch protection", "labels", "milestone", "deploy", "CI/CD", "create group", "create subgroup", "create repository", "invite members", "bootstrap project", "connect to GitLab", "transfer project", "archive project", "CI/CD template", "access audit", "permission check", or mentions GitLab-related workflows. Also triggered by Korean phrases like "이슈 만들어", "MR 생성", "파이프라인", "리뷰", "머지", "릴리즈", "그룹 만들어", "프로젝트 만들어", "GitLab 연결", "팀원 초대", "프로젝트 이전", "아카이브", "권한 감사".
+description: This skill should be used when the user asks to "create GitLab issue", "create MR", "merge request", "check pipeline", "run pipeline", "review MR", "merge", "release", "GitLab project setup", "branch protection", "labels", "milestone", "deploy", "CI/CD", "create group", "create subgroup", "create repository", "invite members", "bootstrap project", "connect to GitLab", "transfer project", "archive project", "CI/CD template", "access audit", "permission check", "wiki", "snippet", "board", "stats", "activity", "fork", "runner", "environment", "coverage", "cleanup", "notify", or mentions GitLab-related workflows. Also triggered by Korean phrases like "이슈 만들어", "MR 생성", "파이프라인", "리뷰", "머지", "릴리즈", "그룹 만들어", "프로젝트 만들어", "GitLab 연결", "팀원 초대", "프로젝트 이전", "아카이브", "권한 감사", "위키", "스니펫", "보드", "통계", "활동", "포크", "러너", "환경", "커버리지", "정리".
 ---
 
 # GitLab Toolkit
@@ -54,6 +54,23 @@ GitLab 작업을 위한 지능형 워크플로우 자동화 도구.
 - "권한 감사/확인" → `/gl-audit`
 - "접근 권한 조회" → `/gl-audit access`
 - "토큰 점검" → `/gl-audit tokens`
+
+### 문서화/협업
+- "위키 작성/관리" → `/gl-wiki`
+- "스니펫 공유" → `/gl-snippet`
+- "이슈 보드" → `/gl-board`
+
+### 프로젝트 분석
+- "통계/현황" → `/gl-stats`
+- "활동 피드" → `/gl-activity`
+- "포크 관리" → `/gl-fork`
+
+### DevOps/운영
+- "Runner 관리" → `/gl-runners`
+- "환경/배포" → `/gl-environments`
+- "테스트 커버리지" → `/gl-coverage`
+- "정리/cleanup" → `/gl-cleanup`
+- "알림 설정" → `/gl-notify`
 
 ---
 
@@ -181,6 +198,108 @@ GitLab 작업을 위한 지능형 워크플로우 자동화 도구.
   5. 이슈/MR 템플릿
   6. CI/CD 변수
   7. 웹훅 설정
+```
+
+### 7. CI/CD 환경 관리 플로우
+
+Runner, 환경, 배포 관리:
+
+```
+1. /gl-runners
+   → Runner 상태 확인, 등록
+
+2. /gl-environments
+   → 환경별 배포 현황
+
+3. /gl-coverage
+   → 테스트 커버리지 확인
+
+4. /gl-cleanup
+   → 오래된 이미지/아티팩트 정리
+```
+
+### 8. 보안 감사 플로우
+
+프로젝트 보안 점검:
+
+```
+1. /gl-audit access
+   → 접근 권한 전체 조회
+
+2. /gl-audit tokens
+   → 활성 토큰 점검
+
+3. /gl-audit security
+   → 보안 설정 점검
+
+4. /gl-audit
+   → 종합 감사 리포트 생성
+```
+
+### 9. 문서화/협업 플로우
+
+팀 문서 및 협업 도구:
+
+```
+1. /gl-wiki
+   → 프로젝트 위키 관리
+
+2. /gl-snippet
+   → 코드 스니펫 공유
+
+3. /gl-board
+   → 이슈 보드 설정
+```
+
+### 10. 프로젝트 분석 플로우
+
+프로젝트 현황 파악:
+
+```
+1. /gl-stats
+   → 이슈, MR, 기여자 통계
+
+2. /gl-activity
+   → 최근 활동 피드
+
+3. /gl-fork
+   → 포크 관리, 업스트림 동기화
+```
+
+### 11. 코드 히스토리 플로우
+
+변경 이력 추적 및 복구:
+
+```
+1. /gl-blame
+   → 라인별 커밋 이력 확인
+
+2. /gl-files
+   → 파일 브라우징/수정
+
+3. /gl-cherry-pick
+   → 특정 커밋 다른 브랜치로
+
+4. /gl-revert
+   → 커밋/MR 되돌리기
+```
+
+### 12. 프로젝트 라이프사이클 플로우
+
+프로젝트 이전/정리:
+
+```
+1. /gl-transfer
+   → 프로젝트 그룹 이전
+
+2. /gl-transfer archive
+   → 프로젝트 아카이브
+
+3. /gl-cleanup
+   → 레지스트리/아티팩트 정리
+
+4. /gl-fork
+   → 포크로 분리/기여
 ```
 
 ---
