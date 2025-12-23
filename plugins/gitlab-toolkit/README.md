@@ -22,6 +22,36 @@ This plugin embeds these practices into intelligent workflows that run automatic
 GITLAB_URL="https://gitlab.tepseg.com"
 ```
 
+## Session Context (Auto-Detection)
+
+When you start a Claude session in a GitLab project, the plugin automatically shows your current work status:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📁 my-project (feature/user-profile, 2 uncommitted)
+📋 내 이슈 (2)
+   → #45 사용자 프로필 리팩토링
+   → #46 API 문서 업데이트
+🔀 내 MR (1)
+   → !23 feat: user profile refactor
+📝 미커밋 (2 files)
+   M src/components/UserProfile.tsx
+   M src/hooks/useUser.ts
+📌 최근: a1b2c3d refactor: split useUser hook
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**Displayed information:**
+- Current branch and git status
+- My assigned issues (opened)
+- My MRs (opened)
+- Uncommitted changes
+- Last commit
+
+This enables seamless session continuity - Claude knows exactly where you left off.
+
+---
+
 ## Setup
 
 ### 1. Environment Variables

@@ -1,35 +1,57 @@
 #!/bin/bash
-# GitLab Auto-Detection Hook
-# Detects .git directory and GitLab remote, sets environment variables
+# GitLab Auto-Detection Hook with Session Context
+# Detects GitLab project and shows current work status
 
 set -euo pipefail
 
 # Read input (required by hook protocol)
 input=$(cat)
 
-# Check if we're in a directory with .git
+# ============================================
+# Phase 1: Git Detection
+# ============================================
+
 if [ ! -d ".git" ]; then
   echo '{"continue": true, "suppressOutput": true}'
   exit 0
+fi
+
+# Get current branch
+BRANCH=$(git branch --show-current 2>/dev/null || echo "detached")
+
+# Get git status summary
+UNCOMMITTED=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+if [ "$UNCOMMITTED" -gt 0 ]; then
+  GIT_STATUS="$UNCOMMITTED uncommitted"
+else
+  GIT_STATUS="clean"
 fi
 
 # Get remote URL
 REMOTE_URL=$(git remote get-url origin 2>/dev/null || echo "")
 
 if [ -z "$REMOTE_URL" ]; then
-  echo '{"continue": true, "suppressOutput": true}'
+  # Git repo but no remote
+  cat <<EOF
+{
+  "continue": true,
+  "suppressOutput": false,
+  "systemMessage": "📁 Git 저장소 ($BRANCH, $GIT_STATUS)\\n\\n원격 저장소가 설정되지 않았습니다.\\n/gl-bootstrap 으로 GitLab 연결 가능"
+}
+EOF
   exit 0
 fi
 
-# Check if it's a GitLab URL (tepseg.com or gitlab.com)
+# Check if it's a GitLab URL
 if [[ ! "$REMOTE_URL" =~ gitlab ]]; then
   echo '{"continue": true, "suppressOutput": true}'
   exit 0
 fi
 
-# Extract project path from URL
-# Handles: git@gitlab.tepseg.com:group/project.git
-#          https://gitlab.tepseg.com/group/project.git
+# ============================================
+# Phase 2: Extract Project Path
+# ============================================
+
 PROJECT_PATH=""
 if [[ "$REMOTE_URL" =~ git@[^:]+:(.+)\.git$ ]]; then
   PROJECT_PATH="${BASH_REMATCH[1]}"
@@ -44,24 +66,29 @@ if [ -z "$PROJECT_PATH" ]; then
   exit 0
 fi
 
-# Check if GITLAB_URL and GITLAB_TOKEN are set
+# ============================================
+# Phase 3: Check Credentials
+# ============================================
+
 if [ -z "${GITLAB_URL:-}" ] || [ -z "${GITLAB_TOKEN:-}" ]; then
-  # Can't query API without credentials
   cat <<EOF
 {
   "continue": true,
   "suppressOutput": false,
-  "systemMessage": "GitLab 저장소 감지됨: $PROJECT_PATH\n\n환경변수가 설정되지 않았습니다:\nexport GITLAB_URL=\"https://gitlab.tepseg.com\"\nexport GITLAB_TOKEN=\"glpat-xxxx\""
+  "systemMessage": "📁 $PROJECT_PATH ($BRANCH, $GIT_STATUS)\\n\\n⚠️ GitLab 환경변수 미설정:\\nexport GITLAB_URL=\\"https://gitlab.tepseg.com\\"\\nexport GITLAB_TOKEN=\\"glpat-xxxx\\""
 }
 EOF
   exit 0
 fi
 
-# URL encode the project path
+# ============================================
+# Phase 4: Query GitLab API
+# ============================================
+
 ENCODED_PATH=$(echo "$PROJECT_PATH" | sed 's/\//%2F/g')
 
-# Query GitLab API for project ID
-PROJECT_INFO=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+# Get project info
+PROJECT_INFO=$(curl -s --max-time 5 --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
   "$GITLAB_URL/api/v4/projects/$ENCODED_PATH" 2>/dev/null || echo "")
 
 if [ -z "$PROJECT_INFO" ] || [[ "$PROJECT_INFO" == *"error"* ]] || [[ "$PROJECT_INFO" == *"message"* ]]; then
@@ -69,13 +96,13 @@ if [ -z "$PROJECT_INFO" ] || [[ "$PROJECT_INFO" == *"error"* ]] || [[ "$PROJECT_
 {
   "continue": true,
   "suppressOutput": false,
-  "systemMessage": "GitLab 저장소 감지됨: $PROJECT_PATH\n\n⚠️ API 조회 실패 - 프로젝트 접근 권한을 확인하세요."
+  "systemMessage": "📁 $PROJECT_PATH ($BRANCH, $GIT_STATUS)\\n\\n⚠️ GitLab API 조회 실패"
 }
 EOF
   exit 0
 fi
 
-# Extract project ID
+# Extract project ID and name
 PROJECT_ID=$(echo "$PROJECT_INFO" | grep -o '"id":[0-9]*' | head -1 | cut -d':' -f2)
 PROJECT_NAME=$(echo "$PROJECT_INFO" | grep -o '"name":"[^"]*"' | head -1 | cut -d'"' -f4)
 
@@ -84,16 +111,107 @@ if [ -z "$PROJECT_ID" ]; then
   exit 0
 fi
 
-# Set environment variable if CLAUDE_ENV_FILE is available
+# Set environment variable
 if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
   echo "export GITLAB_PROJECT_ID=\"$PROJECT_ID\"" >> "$CLAUDE_ENV_FILE"
 fi
 
-# Output success message
+# ============================================
+# Phase 5: Get Current User
+# ============================================
+
+USER_INFO=$(curl -s --max-time 3 --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "$GITLAB_URL/api/v4/user" 2>/dev/null || echo "")
+
+USER_ID=""
+USERNAME=""
+if [ -n "$USER_INFO" ] && [[ "$USER_INFO" != *"error"* ]]; then
+  USER_ID=$(echo "$USER_INFO" | grep -o '"id":[0-9]*' | head -1 | cut -d':' -f2)
+  USERNAME=$(echo "$USER_INFO" | grep -o '"username":"[^"]*"' | head -1 | cut -d'"' -f4)
+fi
+
+# ============================================
+# Phase 6: Get My Issues (In Progress)
+# ============================================
+
+ISSUES_MSG=""
+if [ -n "$USER_ID" ]; then
+  MY_ISSUES=$(curl -s --max-time 3 --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+    "$GITLAB_URL/api/v4/projects/$PROJECT_ID/issues?assignee_id=$USER_ID&state=opened&per_page=3" 2>/dev/null || echo "[]")
+
+  ISSUE_COUNT=$(echo "$MY_ISSUES" | grep -o '"iid"' | wc -l | tr -d ' ')
+
+  if [ "$ISSUE_COUNT" -gt 0 ]; then
+    # Extract issue info (simplified parsing)
+    ISSUES_MSG="\\n📋 내 이슈 ($ISSUE_COUNT)"
+
+    # Parse first 3 issues
+    while IFS= read -r line; do
+      if [ -n "$line" ]; then
+        ISSUES_MSG="$ISSUES_MSG\\n   $line"
+      fi
+    done < <(echo "$MY_ISSUES" | grep -o '"iid":[0-9]*,"title":"[^"]*"' | head -3 | \
+      sed 's/"iid":\([0-9]*\),"title":"\([^"]*\)"/ → #\1 \2/')
+  fi
+fi
+
+# ============================================
+# Phase 7: Get My MRs
+# ============================================
+
+MRS_MSG=""
+if [ -n "$USER_ID" ]; then
+  MY_MRS=$(curl -s --max-time 3 --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+    "$GITLAB_URL/api/v4/projects/$PROJECT_ID/merge_requests?author_id=$USER_ID&state=opened&per_page=3" 2>/dev/null || echo "[]")
+
+  MR_COUNT=$(echo "$MY_MRS" | grep -o '"iid"' | wc -l | tr -d ' ')
+
+  if [ "$MR_COUNT" -gt 0 ]; then
+    MRS_MSG="\\n🔀 내 MR ($MR_COUNT)"
+
+    while IFS= read -r line; do
+      if [ -n "$line" ]; then
+        MRS_MSG="$MRS_MSG\\n   $line"
+      fi
+    done < <(echo "$MY_MRS" | grep -o '"iid":[0-9]*,"title":"[^"]*"' | head -3 | \
+      sed 's/"iid":\([0-9]*\),"title":"\([^"]*\)"/ → !\1 \2/')
+  fi
+fi
+
+# ============================================
+# Phase 8: Get Uncommitted Files
+# ============================================
+
+UNCOMMITTED_MSG=""
+if [ "$UNCOMMITTED" -gt 0 ]; then
+  UNCOMMITTED_MSG="\\n📝 미커밋 ($UNCOMMITTED files)"
+
+  # Get first 3 modified files
+  while IFS= read -r file; do
+    if [ -n "$file" ]; then
+      UNCOMMITTED_MSG="$UNCOMMITTED_MSG\\n   $file"
+    fi
+  done < <(git status --porcelain 2>/dev/null | head -3 | sed 's/^/   /')
+fi
+
+# ============================================
+# Phase 9: Get Last Commit
+# ============================================
+
+LAST_COMMIT=$(git log -1 --format="%h %s" 2>/dev/null | head -c 60 || echo "")
+LAST_COMMIT_MSG=""
+if [ -n "$LAST_COMMIT" ]; then
+  LAST_COMMIT_MSG="\\n📌 최근: $LAST_COMMIT"
+fi
+
+# ============================================
+# Output
+# ============================================
+
 cat <<EOF
 {
   "continue": true,
   "suppressOutput": false,
-  "systemMessage": "✅ GitLab 프로젝트 감지됨\n   이름: $PROJECT_NAME\n   경로: $PROJECT_PATH\n   ID: $PROJECT_ID\n\n   GITLAB_PROJECT_ID=$PROJECT_ID 자동 설정됨"
+  "systemMessage": "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n📁 $PROJECT_NAME ($BRANCH, $GIT_STATUS)$ISSUES_MSG$MRS_MSG$UNCOMMITTED_MSG$LAST_COMMIT_MSG\\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 }
 EOF
