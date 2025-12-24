@@ -19,11 +19,21 @@
 ### 초기화
 
 ```bash
-/init-context           # 타입 선택 후 생성
-/init-context webapp    # 웹앱 템플릿
+/init-context           # 자동 분석 (권장)
+/init-context webapp    # 웹앱 템플릿 강제 사용
 /init-context api       # API 서버 템플릿
 /init-context library   # 라이브러리 템플릿
 ```
+
+### 자동 분석 기능
+
+`/init-context` (인자 없이) 실행 시:
+
+1. 프로젝트 메타데이터 읽기 (package.json, pyproject.toml 등)
+2. 기술 스택 감지 (React, TypeScript, FastAPI 등)
+3. 디렉토리 구조 파악 (src/, components/, pages/ 등)
+4. 사용자에게 "목적"만 질문
+5. CLAUDE.md 자동 생성
 
 ### CLAUDE.md 구조
 

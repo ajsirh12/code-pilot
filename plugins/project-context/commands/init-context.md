@@ -1,20 +1,19 @@
 ---
 name: init-context
-description: Initialize CLAUDE.md with project context template
+description: Initialize CLAUDE.md by analyzing project structure automatically
 allowed-tools: ["Read", "Write", "Bash", "Glob", "AskUserQuestion"]
-argument-hint: "[template-type]"
+argument-hint: "[template-type] or empty for auto-detect"
 ---
 
 # Initialize Project Context
 
-CLAUDE.md 템플릿을 생성하여 프로젝트 컨텍스트 관리 시작.
+프로젝트를 분석하여 CLAUDE.md를 자동 생성.
 
 ## Workflow
 
 ### 1. Check Existing CLAUDE.md
 
 ```bash
-# 기존 파일 확인
 if [ -f "CLAUDE.md" ]; then
   echo "CLAUDE.md already exists"
 fi
@@ -25,81 +24,167 @@ fi
 - 백업 후 생성
 - 취소
 
-### 2. Determine Template Type
+### 2. Determine Mode
 
-인자로 템플릿 타입이 제공되었는지 확인:
-- `base` - 범용 기본
-- `webapp` - 프론트엔드/풀스택
-- `api` - 백엔드 API
-- `library` - 라이브러리/패키지
+**인자가 있으면**: 해당 템플릿 사용 (base, webapp, api, library)
+**인자가 없으면**: 자동 분석 모드 (권장)
 
-인자가 없으면 AskUserQuestion으로 선택 요청.
+### 3. Auto-Detect Project (인자 없을 때)
 
-### 3. Detect Project Info
+#### 3.1 프로젝트 메타데이터 읽기
 
-가능하면 자동 감지:
+우선순위대로 확인:
+```
+package.json      → Node.js 프로젝트
+pyproject.toml    → Python 프로젝트
+Cargo.toml        → Rust 프로젝트
+go.mod            → Go 프로젝트
+pom.xml           → Java/Maven 프로젝트
+build.gradle      → Java/Gradle 프로젝트
+composer.json     → PHP 프로젝트
+Gemfile           → Ruby 프로젝트
+pubspec.yaml      → Dart/Flutter 프로젝트
+```
+
+각 파일에서 추출:
+- 프로젝트 이름
+- 버전
+- 의존성 (주요 프레임워크)
+
+#### 3.2 기술 스택 감지
+
+**package.json 분석 예시**:
+```javascript
+dependencies: {
+  "react" → React
+  "next" → Next.js
+  "express" → Express
+  "nestjs" → NestJS
+  "vue" → Vue.js
+  "svelte" → Svelte
+}
+devDependencies: {
+  "typescript" → TypeScript
+  "vite" → Vite
+  "webpack" → Webpack
+  "jest" → Jest
+  "vitest" → Vitest
+}
+```
+
+**pyproject.toml 분석 예시**:
+```toml
+[project.dependencies]
+fastapi → FastAPI
+django → Django
+flask → Flask
+pytorch → PyTorch
+```
+
+#### 3.3 디렉토리 구조 파악
 
 ```bash
-# package.json에서 이름 추출
-if [ -f "package.json" ]; then
-  PROJECT_NAME=$(grep -o '"name": *"[^"]*"' package.json | cut -d'"' -f4)
-fi
-
-# Git remote에서 프로젝트명 추출
-if [ -d ".git" ]; then
-  REMOTE_URL=$(git remote get-url origin 2>/dev/null)
-fi
+# 주요 디렉토리 확인
+ls -d */ 2>/dev/null | head -10
 ```
 
-### 4. Generate CLAUDE.md
-
-템플릿 파일 읽기:
+공통 패턴 감지:
 ```
-${CLAUDE_PLUGIN_ROOT}/skills/project-context/templates/{type}.md
-```
-
-템플릿의 플레이스홀더를 실제 값으로 대체:
-- `[프로젝트명]` → 감지된 프로젝트명 또는 사용자 입력
-- `[날짜]` → 현재 날짜 (YYYY-MM 형식)
-
-### 5. Write and Confirm
-
-CLAUDE.md 파일 생성 후 내용 표시.
-
-사용자에게 다음 단계 안내:
-- Context 섹션 채우기
-- 첫 Focus 설정
-- 프로젝트 시작!
-
-## Template Locations
-
-```
-${CLAUDE_PLUGIN_ROOT}/skills/project-context/templates/
-├── base.md
-├── webapp.md
-├── api.md
-└── library.md
+src/           → 소스 코드
+app/           → 애플리케이션 코드
+lib/           → 라이브러리 코드
+components/    → UI 컴포넌트
+pages/         → 페이지/라우트
+api/           → API 엔드포인트
+routes/        → 라우팅
+controllers/   → 컨트롤러
+services/      → 서비스 레이어
+models/        → 데이터 모델
+tests/         → 테스트
+docs/          → 문서
+scripts/       → 스크립트
 ```
 
-## Examples
+#### 3.4 Git 정보 확인
 
 ```bash
-/init-context           # 타입 선택 후 생성
-/init-context webapp    # 웹앱 템플릿으로 바로 생성
-/init-context api       # API 템플릿으로 바로 생성
+# 프로젝트명 추출
+git remote get-url origin 2>/dev/null
+
+# 최근 커밋 스타일
+git log -3 --oneline 2>/dev/null
 ```
 
-## Output Format
+### 4. Ask User for Purpose
+
+자동 감지 후 사용자에게 질문:
+
+```
+프로젝트 분석 완료:
+- 스택: [감지된 스택]
+- 구조: [감지된 구조]
+
+프로젝트의 목적을 한 줄로 설명해주세요:
+```
+
+AskUserQuestion 사용하여 목적 입력받기.
+
+### 5. Generate CLAUDE.md
+
+```markdown
+# Project: [프로젝트명]
+
+## Context
+- 목적: [사용자 입력]
+- 스택: [자동 감지]
+- 구조:
+  - [감지된 디렉토리 1]
+  - [감지된 디렉토리 2]
+  - ...
+
+## Status
+- Phase: Build
+- Focus: -
+- Next: -
+- Blocked: -
+
+## Knowledge
+- [현재 날짜]: 프로젝트 컨텍스트 초기화
+```
+
+### 6. Output and Next Steps
 
 생성 완료 후 표시:
 
 ```
-CLAUDE.md created with [type] template.
+CLAUDE.md created successfully.
+
+Detected:
+- Stack: Node.js, React 18, TypeScript, Vite
+- Structure: src/components/, src/pages/, src/hooks/
 
 Next steps:
-1. Fill in the Context section with your project details
+1. Review the Context section
 2. Set your current Focus in Status
 3. Start building!
 
-Tip: Update Status at the end of each session to maintain context.
+Tip: Update Status at the end of each session.
+```
+
+## Template Mode (인자 있을 때)
+
+```bash
+/init-context base      # 기본 템플릿
+/init-context webapp    # 웹앱 템플릿
+/init-context api       # API 서버 템플릿
+/init-context library   # 라이브러리 템플릿
+```
+
+템플릿 위치: `${CLAUDE_PLUGIN_ROOT}/skills/project-context/templates/`
+
+## Examples
+
+```bash
+/init-context           # 자동 분석 (권장)
+/init-context webapp    # 웹앱 템플릿 강제 사용
 ```
