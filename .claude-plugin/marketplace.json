@@ -259,6 +259,50 @@
       },
       "source": "./plugins/gitlab-toolkit",
       "category": "development"
+    },
+    {
+      "name": "project-context",
+      "description": "Manage project context with CLAUDE.md templates. Track project state, phase, and knowledge across sessions with auto-detect for tech stacks.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/project-context",
+      "category": "productivity"
+    },
+    {
+      "name": "dependency-check",
+      "description": "Analyze project dependencies, check for vulnerabilities, and recommend updates. Supports npm, pip, cargo, go, bundler, and more.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/dependency-check",
+      "category": "security"
+    },
+    {
+      "name": "debug-helper",
+      "description": "Debug assistance with error analysis, log parsing, and debugging strategies for JavaScript, Python, Java, Go, and Rust.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/debug-helper",
+      "category": "development"
+    },
+    {
+      "name": "refactoring",
+      "description": "Code refactoring analysis with patterns, SOLID principles, code smells detection, and safe transformation strategies.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/refactoring",
+      "category": "development"
     }
   ]
 }
