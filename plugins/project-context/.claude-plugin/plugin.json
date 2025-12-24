@@ -1,0 +1,9 @@
+{
+  "name": "project-context",
+  "version": "1.0.0",
+  "description": "Manage project context with CLAUDE.md templates. Track project state, phase, and knowledge across sessions.",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}
