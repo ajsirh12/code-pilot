@@ -1,0 +1,9 @@
+{
+  "name": "dependency-check",
+  "version": "1.0.0",
+  "description": "Analyze project dependencies, check for vulnerabilities, and recommend updates",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}
