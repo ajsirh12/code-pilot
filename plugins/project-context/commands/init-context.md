@@ -115,39 +115,10 @@ git remote get-url origin 2>/dev/null
 git log -3 --oneline 2>/dev/null
 ```
 
-#### 3.5 GitLab/GitHub 이슈 조회 (선택적)
-
-Git remote가 GitLab/GitHub인 경우, 열린 이슈 조회:
-
-**GitLab** (GITLAB_URL, GITLAB_TOKEN 필요):
-```bash
-# 프로젝트 ID 확인
-ENCODED_PATH=$(echo "$PROJECT_PATH" | sed 's/\//%2F/g')
-
-# 내게 할당된 이슈 조회
-curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-  "$GITLAB_URL/api/v4/projects/$ENCODED_PATH/issues?assignee_id=@me&state=opened&per_page=10"
-```
-
-**GitHub** (GH_TOKEN 또는 gh CLI):
-```bash
-gh issue list --assignee @me --state open --limit 10
-```
-
-조회된 이슈 목록:
-```
-📋 열린 이슈 (내게 할당됨):
-1. #45 토큰 갱신 로직 구현
-2. #46 세션 만료 처리
-3. #47 OAuth 연동
-4. (없음 - 새로 시작)
-```
-
-### 4. Ask User for Purpose and Focus
+### 4. Ask User for Purpose
 
 자동 감지 후 사용자에게 질문:
 
-**질문 1: 프로젝트 목적**
 ```
 프로젝트 분석 완료:
 - 스택: [감지된 스택]
@@ -156,21 +127,7 @@ gh issue list --assignee @me --state open --limit 10
 프로젝트의 목적을 한 줄로 설명해주세요:
 ```
 
-**질문 2: 현재 Focus (이슈 있을 때)**
-
-이슈가 조회된 경우 AskUserQuestion으로 선택:
-```
-어떤 이슈로 시작할까요?
-
-Options:
-- #45 토큰 갱신 로직 구현
-- #46 세션 만료 처리
-- #47 OAuth 연동
-- (직접 입력)
-- (나중에 설정)
-```
-
-선택한 이슈를 Status.Focus에 자동 설정.
+AskUserQuestion 사용하여 목적 입력받기.
 
 ### 5. Generate CLAUDE.md
 
@@ -187,21 +144,12 @@ Options:
 
 ## Status
 - Phase: Build
-- Focus: [선택한 이슈 또는 -]
-- Next: [다음 이슈 또는 -]
+- Focus: -
+- Next: -
 - Blocked: -
 
 ## Knowledge
 - [현재 날짜]: 프로젝트 컨텍스트 초기화
-```
-
-**이슈 선택 시 예시**:
-```markdown
-## Status
-- Phase: Build
-- Focus: #45 토큰 갱신 로직 구현
-- Next: #46 세션 만료 처리
-- Blocked: -
 ```
 
 ### 6. Output and Next Steps

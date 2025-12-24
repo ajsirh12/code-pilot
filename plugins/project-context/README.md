@@ -32,23 +32,8 @@
 1. 프로젝트 메타데이터 읽기 (package.json, pyproject.toml 등)
 2. 기술 스택 감지 (React, TypeScript, FastAPI 등)
 3. 디렉토리 구조 파악 (src/, components/, pages/ 등)
-4. **GitLab/GitHub 이슈 조회** (내게 할당된 이슈)
-5. 사용자에게 "목적" + "시작할 이슈" 질문
-6. CLAUDE.md 자동 생성 (Focus에 이슈 연결)
-
-### GitLab/GitHub 이슈 연동
-
-GitLab 또는 GitHub 프로젝트인 경우:
-- 내게 할당된 열린 이슈 자동 조회
-- 시작할 이슈 선택
-- Status.Focus에 이슈 번호 자동 설정
-
-```markdown
-## Status
-- Phase: Build
-- Focus: #45 토큰 갱신 로직 구현
-- Next: #46 세션 만료 처리
-```
+4. 사용자에게 "목적"만 질문
+5. CLAUDE.md 자동 생성
 
 ### CLAUDE.md 구조
 
