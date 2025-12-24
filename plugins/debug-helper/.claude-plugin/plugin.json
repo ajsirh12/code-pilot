@@ -1,0 +1,9 @@
+{
+  "name": "debug-helper",
+  "version": "1.0.0",
+  "description": "Debug assistance with error analysis, log parsing, and debugging strategies",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}
