@@ -1,0 +1,9 @@
+{
+  "name": "refactoring",
+  "version": "1.0.0",
+  "description": "Code refactoring assistance with patterns, strategies, and safe transformation techniques",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}
