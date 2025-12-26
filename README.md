@@ -26,14 +26,24 @@ GitLab에서 플러그인 마켓플레이스 추가:
 - `plugin-dev` - 플러그인 개발 도구 (스킬 생성 가이드 포함)
 - `webapp-testing` - 웹앱 테스팅 (Playwright)
 - `web-artifacts-builder` - React/Tailwind 아티팩트 빌더
+- `refactoring` - 코드 리팩토링 (패턴, 전략, 안전한 변환)
+- `debug-helper` - 디버그 도우미 (에러 분석, 로그 파싱)
+- `dependency-check` - 의존성 검사 (취약점 체크, 업데이트 추천)
 
 ### DevOps
 - `gitlab-toolkit` - GitLab 워크플로우 자동화 (46 commands, 8 agents, 1 hook)
+- `mobile-dev` - 모바일 앱 개발 (빌드 자동화, 스토어 배포)
 
 ### Productivity
 - `code-quality` - 코드 품질 분석 에이전트 (git diff 기반)
 - `hookify` - 커스텀 훅 생성
 - `doc-coauthoring` - 문서 공동 작성
+- `project-context` - 프로젝트 컨텍스트 (CLAUDE.md 템플릿 관리)
+
+### Architecture
+- `api-designer` - API 아키텍트 (OpenAPI, 엔드포인트 설계, 문서화)
+- `db-architect` - DBA (스키마 분석, 쿼리 최적화, 마이그레이션)
+- `perf-analyzer` - 성능 분석 (프로파일링, 벤치마크, 병목 탐지)
 
 ### Documents
 - `docx` - Word 문서 생성/편집
