@@ -1,0 +1,9 @@
+{
+  "name": "db-architect",
+  "version": "0.1.0",
+  "description": "DBA 역할의 데이터베이스 전문가 플러그인 - 스키마 분석, 쿼리 최적화, 마이그레이션 생성",
+  "author": {
+    "name": "deekee"
+  },
+  "keywords": ["database", "sql", "optimization", "migration", "dba", "schema"]
+}

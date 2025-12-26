@@ -1,0 +1,9 @@
+{
+  "name": "perf-analyzer",
+  "version": "0.1.0",
+  "description": "성능 엔지니어 역할의 플러그인 - 프로파일링, 벤치마크, 병목 탐지",
+  "author": {
+    "name": "deekee"
+  },
+  "keywords": ["performance", "profiling", "benchmark", "optimization", "bottleneck"]
+}

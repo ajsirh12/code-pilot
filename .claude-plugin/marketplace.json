@@ -303,6 +303,50 @@
       },
       "source": "./plugins/refactoring",
       "category": "development"
+    },
+    {
+      "name": "db-architect",
+      "description": "DBA 역할의 데이터베이스 전문가 플러그인. 스키마 분석, 쿼리 최적화 제안, 마이그레이션 생성, N+1 쿼리 탐지, 인덱스 권장 기능 제공.",
+      "version": "0.1.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/db-architect",
+      "category": "development"
+    },
+    {
+      "name": "perf-analyzer",
+      "description": "성능 엔지니어 역할의 플러그인. CPU/메모리 프로파일링, 벤치마크 작성/실행, 코드 병목 패턴 탐지 기능 제공.",
+      "version": "0.1.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/perf-analyzer",
+      "category": "development"
+    },
+    {
+      "name": "api-designer",
+      "description": "API 아키텍트 역할의 플러그인. OpenAPI/Swagger 스펙 생성, RESTful 엔드포인트 설계, API 문서 자동화, Mock 서버 생성 기능 제공.",
+      "version": "0.1.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/api-designer",
+      "category": "development"
+    },
+    {
+      "name": "mobile-dev",
+      "description": "모바일 전문가 역할의 플러그인. iOS/Android 빌드 자동화, App Store/Play Store 메타데이터 관리, 앱 서명 설정, 베타 배포 기능 제공.",
+      "version": "0.1.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/mobile-dev",
+      "category": "development"
     }
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "name": "api-designer",
+  "version": "0.1.0",
+  "description": "API 아키텍트 역할의 플러그인 - OpenAPI 생성, 엔드포인트 설계, API 문서 자동화",
+  "author": {
+    "name": "deekee"
+  },
+  "keywords": ["api", "openapi", "swagger", "rest", "graphql", "documentation"]
+}

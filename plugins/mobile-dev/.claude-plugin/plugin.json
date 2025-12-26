@@ -1,0 +1,9 @@
+{
+  "name": "mobile-dev",
+  "version": "0.1.0",
+  "description": "모바일 전문가 역할의 플러그인 - 빌드 자동화, 스토어 메타데이터 관리, 배포 자동화",
+  "author": {
+    "name": "deekee"
+  },
+  "keywords": ["mobile", "ios", "android", "fastlane", "app-store", "play-store", "react-native", "flutter"]
+}
