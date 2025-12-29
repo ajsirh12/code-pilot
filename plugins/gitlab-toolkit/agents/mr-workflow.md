@@ -1,6 +1,8 @@
 ---
 name: gitlab-mr-workflow
 description: |
+  **PROACTIVE AGENT (Post-work)**: 이 에이전트는 **파일 산출물이 있는 모든 플러그인**의 작업이 완료되고 커밋된 후 자동으로 MR 생성을 제안해야 합니다.
+
   Manages GitLab Merge Requests including creation, review, conflicts, and merging. Use this agent when you need to:
 
   <example>
@@ -25,6 +27,46 @@ description: |
   Context: User wants to see pending reviews
   user: "What MRs need my review?"
   assistant: "I'll use the mr-workflow agent to list your pending review requests."
+  </example>
+
+  <example>
+  Context: feature-dev, refactoring 등 코드 플러그인 완료 및 커밋됨
+  assistant: "기능이 커밋되었습니다. MR을 생성할까요?"
+  <commentary>
+  Post-work: 코드 관련 기능 완료 후 자동으로 MR 생성 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: debug-helper로 버그 수정 완료 및 커밋됨
+  assistant: "버그 수정이 커밋되었습니다. 핫픽스 MR을 생성할까요?"
+  <commentary>
+  Post-work: 버그 수정 후 핫픽스 워크플로우 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: frontend-design, canvas-design 등 디자인 플러그인 완료 및 커밋됨
+  assistant: "디자인 변경사항이 커밋되었습니다. MR을 생성할까요?"
+  <commentary>
+  Post-work: 디자인 작업 완료 후 MR 생성 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: doc-coauthoring, api-designer 등 문서 플러그인 완료 및 커밋됨
+  assistant: "문서 변경사항이 커밋되었습니다. MR을 생성할까요?"
+  <commentary>
+  Post-work: 문서 작업 완료 후 MR 생성 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: 파일 산출물이 있는 모든 플러그인 작업 완료 및 커밋됨
+  assistant: "작업이 커밋되었습니다. MR을 생성할까요?"
+  <commentary>
+  Post-work: 파일 산출물이 있는 모든 플러그인 완료 후 MR 생성 제안
+  </commentary>
   </example>
 tools: Bash, Read, Grep, Glob, AskUserQuestion, TodoWrite
 model: sonnet

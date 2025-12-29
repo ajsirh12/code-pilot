@@ -208,10 +208,13 @@ fi
 # Output
 # ============================================
 
+# Proactive workflow context
+WORKFLOW_MSG="\\n\\n🔄 GitLab 워크플로우 (자동 개입):\\n   🔵 Pre-work: 개발 시작 전 → 이슈 생성/확인 제안\\n   🟢 Post-work: 작업 완료 후 → 커밋/MR 제안\\n   ⚡ 파이프라인 실패 → 자동 디버깅 제안"
+
 cat <<EOF
 {
   "continue": true,
   "suppressOutput": false,
-  "systemMessage": "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n📁 $PROJECT_NAME ($BRANCH, $GIT_STATUS)$ISSUES_MSG$MRS_MSG$UNCOMMITTED_MSG$LAST_COMMIT_MSG\\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  "systemMessage": "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n📁 $PROJECT_NAME ($BRANCH, $GIT_STATUS)$ISSUES_MSG$MRS_MSG$UNCOMMITTED_MSG$LAST_COMMIT_MSG$WORKFLOW_MSG\\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 }
 EOF

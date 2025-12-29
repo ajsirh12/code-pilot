@@ -1,6 +1,8 @@
 ---
 name: gitlab-code-navigator
 description: |
+  **PROACTIVE AGENT (Pre-work/Post-work)**: 이 에이전트는 버그 수정 전 원인 파악, MR 생성 전 변경사항 확인, 핫픽스 후 다른 브랜치 적용을 자동으로 제안해야 합니다.
+
   Navigates and manages repository files, history, and branches. Use this agent when you need to:
 
   <example>
@@ -25,6 +27,38 @@ description: |
   Context: User wants to manage tags
   user: "Create a tag for this release"
   assistant: "I'll use the code-navigator agent to create and push the tag."
+  </example>
+
+  <example>
+  Context: debug-helper로 버그 수정 시작 전
+  assistant: "버그 원인 파악을 위해 blame을 확인할까요?"
+  <commentary>
+  Pre-work: 버그 수정 전 원인 파악을 위한 blame 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: /gl-mr create 시작 전
+  assistant: "MR 생성 전에 변경사항을 compare로 확인할까요?"
+  <commentary>
+  Pre-work: MR 생성 전 변경사항 비교 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: 핫픽스 커밋 완료 후 (main 브랜치에서)
+  assistant: "이 수정을 다른 브랜치(develop, release)에도 cherry-pick 할까요?"
+  <commentary>
+  Post-work: 핫픽스 후 다른 브랜치에 cherry-pick 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: /gl-release 완료 후
+  assistant: "릴리즈 태그를 생성할까요?"
+  <commentary>
+  Post-work: 릴리즈 후 태그 생성 제안
+  </commentary>
   </example>
 tools: Bash, Read, Grep, Glob, TodoWrite
 model: sonnet

@@ -1,11 +1,264 @@
 ---
 name: gitlab-toolkit
-description: This skill should be used when the user asks to "create GitLab issue", "create MR", "merge request", "check pipeline", "run pipeline", "review MR", "merge", "release", "GitLab project setup", "branch protection", "labels", "milestone", "deploy", "CI/CD", "create group", "create subgroup", "create repository", "invite members", "bootstrap project", "connect to GitLab", "transfer project", "archive project", "CI/CD template", "access audit", "permission check", "wiki", "snippet", "board", "stats", "activity", "fork", "runner", "environment", "coverage", "cleanup", "notify", or mentions GitLab-related workflows. Also triggered by Korean phrases like "이슈 만들어", "MR 생성", "파이프라인", "리뷰", "머지", "릴리즈", "그룹 만들어", "프로젝트 만들어", "GitLab 연결", "팀원 초대", "프로젝트 이전", "아카이브", "권한 감사", "위키", "스니펫", "보드", "통계", "활동", "포크", "러너", "환경", "커버리지", "정리".
+description: |
+  This skill should be used when the user asks to "create GitLab issue", "create MR", "merge request", "check pipeline", "run pipeline", "review MR", "merge", "release", "GitLab project setup", "branch protection", "labels", "milestone", "deploy", "CI/CD", "create group", "create subgroup", "create repository", "invite members", "bootstrap project", "connect to GitLab", "transfer project", "archive project", "CI/CD template", "access audit", "permission check", "wiki", "snippet", "board", "stats", "activity", "fork", "runner", "environment", "coverage", "cleanup", "notify", or mentions GitLab-related workflows. Also triggered by Korean phrases like "이슈 만들어", "MR 생성", "파이프라인", "리뷰", "머지", "릴리즈", "그룹 만들어", "프로젝트 만들어", "GitLab 연결", "팀원 초대", "프로젝트 이전", "아카이브", "권한 감사", "위키", "스니펫", "보드", "통계", "활동", "포크", "러너", "환경", "커버리지", "정리".
+
+  **PROACTIVE WORKFLOW**: 이 스킬은 다른 플러그인 작업의 **시작 전(Pre-work)**과 **완료 후(Post-work)** 모두에서 자동으로 개입해야 합니다.
+
+  - **Pre-work**: 기능 개발, 버그 수정, 리팩토링 등의 작업 시작 전에 이슈 생성/확인 및 브랜치 설정을 제안합니다.
+  - **Post-work**: 코드 수정 완료 후 커밋/MR 워크플로우를 제안합니다.
 ---
 
 # GitLab Toolkit
 
 GitLab 작업을 위한 지능형 워크플로우 자동화 도구.
+
+---
+
+## ⚡ Proactive Workflow Integration
+
+**중요**: 이 스킬은 사용자의 명시적 요청뿐만 아니라, 다른 플러그인 작업의 **시작 전(Pre-work)**과 **완료 후(Post-work)** 모두에서 자동으로 개입해야 합니다.
+
+---
+
+### 🔵 Pre-work: 작업 시작 전 개입
+
+**파일 산출물이 있는 작업**을 시작하기 **전에** gitlab-toolkit이 먼저 개입하여 이슈 생성/확인 및 브랜치 설정을 제안합니다.
+
+#### 코드/개발 관련
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **feature-dev 시작 전** | "기능 추가해줘", "구현해줘" | "관련 이슈가 있나요?" → `/gl-issue create` → 브랜치 생성 |
+| **debug-helper 시작 전** | "버그 수정해줘", "에러 고쳐줘" | "버그 이슈를 확인/생성할까요?" → `/gl-issue create --label bug` |
+| **refactoring 시작 전** | "리팩토링 해줘", "정리해줘" | "리팩토링 이슈를 생성할까요?" → `/gl-issue create --label refactor` |
+| **dependency-check 시작 전** | "의존성 업데이트" | "업데이트 이슈를 생성할까요?" → `/gl-issue create --label dependencies` |
+
+#### 디자인/UI 관련
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **frontend-design 시작 전** | "UI 만들어줘", "컴포넌트 디자인" | "디자인 이슈를 생성할까요?" → `/gl-issue create --label design` |
+| **canvas-design 시작 전** | "포스터 만들어줘", "디자인 작업" | "디자인 작업 이슈를 생성할까요?" |
+
+#### 문서 관련
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **doc-coauthoring 시작 전** | "문서 작성해줘", "README 업데이트" | "문서 이슈를 생성할까요?" → `/gl-issue create --label docs` |
+| **api-designer 시작 전** | "API 문서 작성", "스펙 정리" | "API 문서 이슈를 생성할까요?" → `/gl-issue create --label docs` |
+
+#### GitLab 내부 산출물 (반복 워크플로우)
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **/gl-mr 시작 전** | "MR 만들어줘" | "관련 이슈를 연결할까요?" → `Closes #이슈번호` |
+| **/gl-wiki 시작 전** | "위키 작성해줘", "문서화해줘" | "관련 이슈를 연결할까요?" → `/gl-search` |
+| **/gl-snippet 시작 전** | "스니펫 만들어줘", "코드 공유" | "관련 이슈가 있나요?" |
+| **/gl-release 시작 전** | "릴리즈 만들어줘", "버전 배포" | "보안 감사 먼저 실행" → `security-auditor` 에이전트 |
+| **/gl-tags 시작 전** | "태그 만들어줘" | "릴리즈와 연결할까요?" |
+| **프로덕션 배포 전** | "배포해줘", "deploy" | "보안 점검 먼저 실행할까요?" → `security-auditor` 에이전트 |
+
+#### 코드 탐색/분석 (code-navigator)
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **debug-helper 시작 전** | "버그 고쳐줘" | "blame으로 원인 파악할까요?" → `code-navigator` 에이전트 |
+| **/gl-mr create 시작 전** | "MR 만들어줘" | "변경사항을 compare로 확인할까요?" → `code-navigator` 에이전트 |
+
+#### 레지스트리/배포 (registry-manager)
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **/gl-environments deploy 시작 전** | "배포해줘" | "배포할 이미지 태그를 확인할까요?" → `registry-manager` 에이전트 |
+| **/gl-cleanup 시작 전** | "정리해줘" | "삭제할 이미지 목록을 확인할까요?" → `registry-manager` 에이전트 |
+
+#### 기타
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **code-quality 리뷰 시작 전** | "코드 리뷰해줘" | "리뷰 대기 목록 확인" → `/gl-inbox` |
+| **기타 산출물 플러그인** | 파일 생성/수정 예상 | "관련 이슈를 생성할까요?" |
+
+#### Pre-work 워크플로우 체인
+
+```
+사용자: "로그인 기능 추가해줘"
+        ↓
+[1단계] gitlab-toolkit 개입 (Pre-work)
+        ↓
+    "관련 이슈가 있나요?"
+        ├─ 있음 → 기존 이슈 연결 (#123)
+        └─ 없음 → "이슈를 먼저 생성할까요?"
+                    ↓
+                /gl-issue create "로그인 기능 추가"
+                    ↓
+                "브랜치를 생성할까요?"
+                    ↓
+                git checkout -b feature/123-login
+                    ↓
+[2단계] feature-dev 작업 시작
+        ↓
+[3단계] gitlab-toolkit 개입 (Post-work)
+        ↓
+    커밋 → MR 생성
+```
+
+#### Pre-work 자동 제안 패턴
+
+개발 작업 요청이 감지되면 다음과 같이 제안:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 개발 작업 시작 전 확인
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+요청: "로그인 기능 추가"
+
+📋 관련 이슈 검색 중...
+   → #123 로그인 기능 구현 (opened)
+   → #125 인증 모듈 리팩토링 (opened)
+
+🔄 다음 단계:
+   1. 기존 이슈 연결 (#123)
+   2. 새 이슈 생성
+   3. 이슈 없이 진행
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+---
+
+### 🟢 Post-work: 작업 완료 후 개입
+
+**파일 산출물이 생성/수정된 후** gitlab-toolkit이 커밋/MR 워크플로우를 제안합니다.
+
+#### 일반 규칙
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **Edit/Write 도구 사용 후** | 파일 수정 완료 | "변경사항을 커밋할까요?" → `/gl-commit` |
+| **Task 에이전트 완료 후** | 산출물 생성 완료 | "변경사항을 커밋할까요?" → `/gl-commit` |
+
+#### 코드/개발 관련
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **feature-dev 완료 후** | 기능 구현 완료 | "MR을 생성할까요?" → `/gl-mr create` |
+| **refactoring 완료 후** | 리팩토링 완료 | "변경사항을 커밋할까요?" → `/gl-commit` |
+| **debug-helper 완료 후** | 버그 수정 완료 | "핫픽스 MR을 생성할까요?" → `/gl-mr create` |
+| **dependency-check 완료 후** | 의존성 업데이트 완료 | "변경사항을 커밋할까요?" → `/gl-commit` |
+| **code-quality 리뷰 통과** | 리뷰 완료 | "MR을 업데이트할까요?" |
+
+#### 디자인/UI 관련
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **frontend-design 완료 후** | UI 컴포넌트 생성 완료 | "디자인 변경사항을 커밋할까요?" → `/gl-commit` |
+| **canvas-design 완료 후** | 디자인 파일 생성 완료 | "디자인 파일을 커밋할까요?" → `/gl-commit` |
+| **algorithmic-art 완료 후** | 아트 산출물 생성 완료 | "산출물을 커밋할까요?" → `/gl-commit` |
+
+#### 문서 관련
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **doc-coauthoring 완료 후** | 문서 작성 완료 | "문서 변경사항을 커밋할까요?" → `/gl-commit` |
+| **api-designer 완료 후** | API 문서 생성 완료 | "API 문서를 커밋할까요?" → `/gl-commit` |
+
+#### GitLab 내부 산출물 (반복 워크플로우)
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **/gl-issue 완료 후** | 이슈 생성 완료 | "브랜치를 생성할까요?" → `git checkout -b feature/#issue` |
+| **/gl-mr 완료 후** | MR 생성 완료 | "자동 머지를 설정할까요?" → `/gl-auto-merge` |
+| **/gl-wiki 완료 후** | 위키 페이지 생성 완료 | "관련 이슈를 업데이트할까요?" → 이슈에 위키 링크 추가 |
+| **/gl-snippet 완료 후** | 스니펫 생성 완료 | "관련 이슈에 스니펫 링크를 추가할까요?" |
+| **/gl-tags 완료 후** | 태그 생성 완료 | "릴리즈를 생성할까요?" → `/gl-release create` |
+| **/gl-release 완료 후** | 릴리즈 생성 완료 | "마일스톤을 닫을까요?" → `/gl-milestone close` |
+| **/gl-milestone 완료 후** | 마일스톤 생성 완료 | "이슈를 마일스톤에 할당할까요?" |
+
+#### 파이프라인 모니터링
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **/gl-commit 후 파이프라인 실패** | CI 빌드 실패 | "파이프라인 디버깅을 도와드릴까요?" → `pipeline-debugger` 에이전트 |
+| **/gl-mr 후 파이프라인 실패** | MR 파이프라인 실패 | "실패 원인을 분석해드릴까요?" → `pipeline-debugger` 에이전트 |
+| **push 후 파이프라인 실패** | CI 실패 감지 | "파이프라인 로그를 분석할까요?" → `pipeline-debugger` 에이전트 |
+
+#### 코드 탐색/분석 (code-navigator)
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **핫픽스 커밋 완료 후** | main 브랜치에서 버그 수정 | "다른 브랜치에도 cherry-pick 할까요?" → `code-navigator` 에이전트 |
+| **/gl-release 완료 후** | 릴리즈 생성 완료 | "릴리즈 태그를 생성할까요?" → `code-navigator` 에이전트 |
+
+#### 레지스트리/배포 (registry-manager)
+| 트리거 | 감지 방법 | 제안 액션 |
+|--------|----------|----------|
+| **Docker 빌드 완료 후** | 파이프라인 빌드 성공 | "이미지 태그를 확인할까요?" → `registry-manager` 에이전트 |
+| **/gl-release 완료 후** | 릴리즈 생성 완료 | "오래된 이미지를 정리할까요?" → `registry-manager` 에이전트 |
+
+#### 범용 규칙
+**파일 산출물이 있는 모든 플러그인**이 작업을 완료하면:
+1. `git status` 확인
+2. 변경사항이 있으면 커밋 제안
+3. 기능 완료 시 MR 생성 제안
+
+### 자동 제안 패턴
+
+코드 변경이 감지되면 다음과 같이 제안:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 변경된 파일이 있습니다:
+   M src/components/Auth.tsx
+   M src/hooks/useAuth.ts
+   A src/utils/validation.ts
+
+🔄 다음 단계:
+   1. /gl-commit     - 변경사항 커밋
+   2. /gl-mr create  - MR 생성 (커밋 후)
+   3. 계속 작업      - 나중에 커밋
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### 연동되는 플러그인
+
+- **feature-dev**: 기능 개발 완료 → MR 생성 제안
+- **refactoring**: 리팩토링 완료 → 커밋 제안
+- **code-quality**: 리뷰 완료 → 커밋/MR 업데이트 제안
+- **debug-helper**: 버그 수정 완료 → 핫픽스 커밋 제안
+- **dependency-check**: 의존성 업데이트 → 커밋 제안
+- **frontend-design**: UI 작업 완료 → 커밋 제안
+- **canvas-design**: 디자인 완료 → 커밋 제안
+- **doc-coauthoring**: 문서 작성 완료 → 커밋 제안
+- **api-designer**: API 문서 완료 → 커밋 제안
+
+### 워크플로우 체인
+
+```
+다른 플러그인 작업 완료
+        ↓
+git status 확인 (자동)
+        ↓
+변경사항 있음?
+    ├─ Yes → 커밋 제안 (/gl-commit)
+    │           ↓
+    │       MR 필요?
+    │           ├─ Yes → MR 생성 (/gl-mr create)
+    │           └─ No → 완료
+    └─ No → 완료
+```
+
+---
+
+### 🔧 One-time Setup (초기 설정)
+
+다음 명령어들은 **프로젝트 초기 설정** 시 1회만 실행되며, Pre-work/Post-work 워크플로우가 필요하지 않습니다.
+
+| 명령어 | 용도 | 실행 시점 |
+|--------|------|----------|
+| `/gl-bootstrap` | 프로젝트/그룹 생성 | 프로젝트 시작 시 1회 |
+| `/gl-group` | 그룹/서브그룹 생성 | 조직 구성 시 1회 |
+| `/gl-labels` | 라벨 스킴 설정 | 프로젝트 초기화 시 1회 |
+| `/gl-board` | 이슈 보드 설정 | 프로젝트 초기화 시 1회 |
+| `/gl-template` | 이슈/MR 템플릿 | 프로젝트 초기화 시 1회 |
+| `/gl-templates` | CI/CD 템플릿 생성 | CI/CD 설정 시 1회 |
+| `/gl-webhook` | 웹훅 설정 | 통합 설정 시 1회 |
+| `/gl-variables` | CI/CD 변수 설정 | CI/CD 설정 시 1회 |
+| `/gl-environments` | 환경 설정 | 배포 설정 시 1회 |
+| `/gl-runners` | 러너 등록 | CI/CD 설정 시 1회 |
+| `/gl-deploy-keys` | 배포 키 설정 | 배포 설정 시 1회 |
+| `/gl-tokens` | 토큰 생성 | 필요 시 |
+| `/gl-members` | 멤버 초대 | 팀 구성 시 |
+
+**참고**: 이 명령어들은 `/gitlab-toolkit` 가이드 워크플로우에서 순차적으로 안내됩니다.
+
+---
 
 ## Workflow Decision Tree
 
@@ -372,18 +625,18 @@ export GITLAB_PROJECT_ID="206"
 
 ---
 
-## Agents (8 Total)
+## Agents (8 Total) - 모두 PROACTIVE
 
-| 에이전트 | 용도 | 트리거 |
-|---------|------|--------|
-| `project-initializer` | 프로젝트 초기 설정 | "새 프로젝트 설정", "branch protection" |
-| `pipeline-debugger` | 파이프라인 디버깅 | "파이프라인 실패", "CI 에러" |
-| `git-workflow` | Git 커밋, 브랜치 정리 | "커밋해줘", "브랜치 정리" |
-| `issue-manager` | 이슈, 라벨, 마일스톤 | "이슈 만들어", "라벨 설정" |
-| `mr-workflow` | MR 생성/리뷰/머지 | "MR 만들어", "머지해줘" |
-| `code-navigator` | 파일 히스토리, blame | "blame 확인", "태그 생성" |
-| `registry-manager` | 레지스트리, 토큰 관리 | "이미지 정리", "토큰 생성" |
-| `security-auditor` | 보안 감사, 취약점 | "보안 점검", "취약점 확인" |
+| 에이전트 | 용도 | Proactive | 트리거 |
+|---------|------|-----------|--------|
+| `project-initializer` | 프로젝트 초기 설정 | 🔵 Pre-work | 새 프로젝트 작업 시작 전 |
+| `issue-manager` | 이슈, 라벨, 마일스톤 | 🔵 Pre-work | 개발 작업 시작 전 |
+| `security-auditor` | 보안 감사, 취약점 | 🔵 Pre-work | 릴리즈/배포 전 |
+| `code-navigator` | 파일 히스토리, blame | 🔵🟢 양방향 | 버그 수정 전 blame, 핫픽스 후 cherry-pick |
+| `registry-manager` | 레지스트리, 토큰 관리 | 🔵🟢 양방향 | 배포 전 이미지 확인, 릴리즈 후 정리 |
+| `git-workflow` | Git 커밋, 브랜치 정리 | 🟢 Post-work | 파일 수정 완료 후 |
+| `mr-workflow` | MR 생성/리뷰/머지 | 🟢 Post-work | 커밋 완료 후 |
+| `pipeline-debugger` | 파이프라인 디버깅 | 🟢 Post-work | 파이프라인 실패 시 |
 
 ---
 

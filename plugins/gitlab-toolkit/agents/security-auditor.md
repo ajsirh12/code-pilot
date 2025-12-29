@@ -1,6 +1,8 @@
 ---
 name: gitlab-security-auditor
 description: |
+  **PROACTIVE AGENT (Pre-work)**: 이 에이전트는 **릴리즈 생성 전**에 자동으로 보안 감사를 제안해야 합니다.
+
   Audits GitLab project security including vulnerabilities, dependencies, and settings. Use this agent when you need to:
 
   <example>
@@ -25,6 +27,24 @@ description: |
   Context: User needs security compliance check
   user: "Is our project following security best practices?"
   assistant: "I'll use the security-auditor agent to perform a security audit."
+  </example>
+
+  <example>
+  Context: /gl-release 시작 전
+  user: "릴리즈 만들어줘"
+  assistant: "릴리즈 생성 전에 보안 감사를 먼저 실행할까요? 취약점이 없는지 확인하는 것이 좋습니다."
+  <commentary>
+  Pre-work: 릴리즈 생성 전에 보안 감사 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: 프로덕션 배포 전
+  user: "프로덕션에 배포해줘"
+  assistant: "배포 전에 보안 점검을 실행할까요?"
+  <commentary>
+  Pre-work: 프로덕션 배포 전에 보안 감사 제안
+  </commentary>
   </example>
 tools: Bash, Read, Grep, Glob, TodoWrite
 model: sonnet

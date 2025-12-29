@@ -1,6 +1,8 @@
 ---
 name: gitlab-issue-manager
 description: |
+  **PROACTIVE AGENT (Pre-work)**: 이 에이전트는 **파일 산출물이 있는 모든 플러그인**이 작업을 시작하기 **전에** 자동으로 이슈 생성/확인을 제안해야 합니다.
+
   Manages GitLab issues, labels, and milestones. Use this agent when you need to:
 
   <example>
@@ -25,6 +27,60 @@ description: |
   Context: User wants to view assigned issues
   user: "What issues are assigned to me?"
   assistant: "I'll use the issue-manager agent to list your assigned issues."
+  </example>
+
+  <example>
+  Context: 사용자가 기능 개발을 요청함 (feature-dev 시작 전)
+  user: "로그인 기능 추가해줘"
+  assistant: "기능 개발을 시작하기 전에, 관련 이슈가 있는지 확인할까요? 없으면 이슈를 먼저 생성하는 것이 좋습니다."
+  <commentary>
+  Pre-work: 코드 관련 플러그인 작업 시작 전에 이슈 생성/확인 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: 사용자가 버그 수정을 요청함 (debug-helper 시작 전)
+  user: "로그인 에러 고쳐줘"
+  assistant: "버그 수정을 시작하기 전에, 버그 이슈를 확인/생성할까요? 이슈 번호로 브랜치를 만들면 추적이 쉽습니다."
+  <commentary>
+  Pre-work: 버그 수정 전에 버그 이슈 확인/생성 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: 사용자가 리팩토링을 요청함 (refactoring 시작 전)
+  user: "이 코드 리팩토링 해줘"
+  assistant: "리팩토링을 시작하기 전에, 리팩토링 이슈를 생성할까요? 변경 사항을 추적하기 좋습니다."
+  <commentary>
+  Pre-work: 리팩토링 전에 이슈 생성 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: 사용자가 디자인 작업을 요청함 (frontend-design, canvas-design 시작 전)
+  user: "UI 컴포넌트 만들어줘" / "포스터 디자인해줘"
+  assistant: "디자인 작업을 시작하기 전에, 디자인 이슈를 생성할까요?"
+  <commentary>
+  Pre-work: 디자인 관련 플러그인 작업 시작 전에 이슈 생성/확인 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: 사용자가 문서 작업을 요청함 (doc-coauthoring, api-designer 시작 전)
+  user: "README 업데이트해줘" / "API 문서 작성해줘"
+  assistant: "문서 작업을 시작하기 전에, 문서 이슈를 생성할까요?"
+  <commentary>
+  Pre-work: 문서 관련 플러그인 작업 시작 전에 이슈 생성/확인 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: 파일 산출물이 있는 모든 작업 시작 전
+  user: "XXX 작업 해줘"
+  assistant: "작업을 시작하기 전에, 관련 이슈를 확인/생성할까요? 작업 추적에 도움이 됩니다."
+  <commentary>
+  Pre-work: 파일 산출물이 있는 모든 플러그인 작업 시작 전에 이슈 생성/확인 제안
+  </commentary>
   </example>
 tools: Bash, Read, Grep, Glob, AskUserQuestion, TodoWrite
 model: sonnet

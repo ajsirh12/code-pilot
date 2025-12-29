@@ -1,6 +1,8 @@
 ---
 name: gitlab-registry-manager
 description: |
+  **PROACTIVE AGENT (Pre-work/Post-work)**: 이 에이전트는 배포 전 이미지 확인, Docker 빌드 후 푸시, 릴리즈 후 이미지 정리를 자동으로 제안해야 합니다.
+
   Manages GitLab Container Registry, Package Registry, Deploy Keys, and Access Tokens. Use this agent when you need to:
 
   <example>
@@ -25,6 +27,38 @@ description: |
   Context: User needs to clean up old images
   user: "Delete old container images to free space"
   assistant: "I'll use the registry-manager agent to identify and remove old images."
+  </example>
+
+  <example>
+  Context: 배포 시작 전 (/gl-environments deploy)
+  assistant: "배포할 이미지 태그를 확인할까요?"
+  <commentary>
+  Pre-work: 배포 전 이미지 태그 확인 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: Docker 빌드 파이프라인 완료 후
+  assistant: "빌드된 이미지를 레지스트리에 푸시했습니다. 태그를 확인할까요?"
+  <commentary>
+  Post-work: 빌드 완료 후 이미지 확인 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: /gl-release 완료 후
+  assistant: "오래된 이미지를 정리할까요? 스토리지를 확보할 수 있습니다."
+  <commentary>
+  Post-work: 릴리즈 후 오래된 이미지 정리 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: /gl-cleanup 시작 전
+  assistant: "삭제할 이미지 목록을 먼저 확인할까요?"
+  <commentary>
+  Pre-work: 정리 전 이미지 목록 확인 제안
+  </commentary>
   </example>
 tools: Bash, Read, Grep, Glob, AskUserQuestion, TodoWrite
 model: sonnet

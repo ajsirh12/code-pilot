@@ -1,6 +1,8 @@
 ---
 name: gitlab-git-workflow
 description: |
+  **PROACTIVE AGENT (Post-work)**: 이 에이전트는 **파일 산출물이 있는 모든 플러그인**이나 도구가 작업을 완료한 후 자동으로 커밋을 제안해야 합니다.
+
   Handles Git operations including commits, branch cleanup, and worktree management. Use this agent when you need to:
 
   <example>
@@ -19,6 +21,38 @@ description: |
   Context: User wants to manage worktrees
   user: "List my worktrees and remove unused ones"
   assistant: "I'll use the git-workflow agent to manage your git worktrees."
+  </example>
+
+  <example>
+  Context: feature-dev, refactoring, debug-helper 등 코드 플러그인 완료
+  assistant: "기능 구현이 완료되었습니다. 변경사항을 커밋할까요?"
+  <commentary>
+  Post-work: 코드 관련 플러그인 작업 완료 후 자동으로 커밋 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: frontend-design, canvas-design, algorithmic-art 등 디자인 플러그인 완료
+  assistant: "디자인 작업이 완료되었습니다. 변경사항을 커밋할까요?"
+  <commentary>
+  Post-work: 디자인 관련 플러그인 작업 완료 후 자동으로 커밋 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: doc-coauthoring, api-designer 등 문서 플러그인 완료
+  assistant: "문서 작성이 완료되었습니다. 변경사항을 커밋할까요?"
+  <commentary>
+  Post-work: 문서 관련 플러그인 작업 완료 후 자동으로 커밋 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: Edit/Write 도구로 파일 수정 완료 (모든 유형)
+  assistant: "파일 수정이 완료되었습니다. git status를 확인하고 커밋을 진행할까요?"
+  <commentary>
+  Post-work: 파일 산출물이 있는 모든 작업 완료 후 자동으로 git 워크플로우 제안
+  </commentary>
   </example>
 tools: Bash, Read, Grep, Glob, TodoWrite
 model: sonnet

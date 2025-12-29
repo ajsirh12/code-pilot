@@ -1,6 +1,8 @@
 ---
 name: gitlab-project-initializer
 description: |
+  **PROACTIVE AGENT (Pre-work)**: 이 에이전트는 **파일 산출물이 있는 모든 플러그인**이 새 프로젝트에서 작업을 시작하기 **전에** 자동으로 GitLab 프로젝트 설정을 제안해야 합니다.
+
   Initializes GitLab projects with security settings, creates groups/subgroups/repos, and invites members. Use this agent for:
 
   <example>

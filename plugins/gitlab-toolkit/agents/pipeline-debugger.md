@@ -1,6 +1,8 @@
 ---
 name: gitlab-pipeline-debugger
 description: |
+  **PROACTIVE AGENT (Post-work)**: 이 에이전트는 커밋/MR 후 **파이프라인이 실패**하면 자동으로 디버깅을 제안해야 합니다.
+
   Analyzes failed GitLab pipelines, identifies root causes, and suggests fixes. Use this agent when you need to:
 
   <example>
@@ -36,6 +38,22 @@ description: |
   assistant: "I'll use the pipeline-debugger agent to analyze the job logs for performance bottlenecks or infinite loops."
   <commentary>
   Timeout issues require analysis of job duration and resource usage.
+  </commentary>
+  </example>
+
+  <example>
+  Context: /gl-commit 또는 /gl-mr 후 파이프라인 실패 감지
+  assistant: "파이프라인이 실패했습니다. 원인을 분석해드릴까요?"
+  <commentary>
+  Post-work: 커밋/MR 후 파이프라인 실패 시 자동으로 디버깅 제안
+  </commentary>
+  </example>
+
+  <example>
+  Context: MR 생성 후 CI 빌드 실패
+  assistant: "MR의 파이프라인이 실패했습니다. 로그를 분석해드릴까요?"
+  <commentary>
+  Post-work: MR 파이프라인 실패 시 자동으로 디버깅 제안
   </commentary>
   </example>
 tools: Bash, Read, Grep, Glob, TodoWrite
