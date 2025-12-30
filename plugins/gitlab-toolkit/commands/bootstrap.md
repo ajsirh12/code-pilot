@@ -8,6 +8,22 @@ allowed-tools: Bash(git:*), Bash(curl:*), Bash(test:*), Bash(ls:*), Bash(mkdir:*
 
 프로젝트를 GitLab과 연동하기 위한 부트스트랩 워크플로우. `.git` 디렉토리 유무를 감지하여 적절한 워크플로우를 제안한다.
 
+## ⚠️ CRITICAL RULES - 반드시 준수
+
+**절대 건너뛰지 말 것**:
+1. **그룹 선택 (Step 2.1-2.2)**: 반드시 사용 가능한 그룹을 조회하고 사용자에게 선택하게 할 것
+2. **서브그룹 선택 (Step 2.3)**: 서브그룹 목록을 보여주고 선택하게 할 것
+3. **멤버 초대 (Step 2.8)**: 프로젝트 생성 후 반드시 팀원 초대 여부를 물어볼 것
+
+**금지 사항**:
+- ❌ 개인 네임스페이스에 직접 프로젝트 생성 (예: `deekee/project-name`)
+- ❌ 그룹 조회 없이 프로젝트 생성
+- ❌ 멤버 초대 단계 생략
+
+**올바른 프로젝트 경로**: `그룹/서브그룹/프로젝트명` (예: `ai/products/my-app`)
+
+---
+
 ## Core Principles
 
 - **자동 감지**: .git 디렉토리 존재 여부로 현재 상태 파악
@@ -53,6 +69,24 @@ echo "GITLAB_PROJECT_ID: ${GITLAB_PROJECT_ID:-NOT SET}"
 
 ## Phase 2: New Project Workflow (No .git)
 
+**⚠️ 이 Phase 시작 시 반드시 TodoWrite로 다음 체크리스트 생성**:
+
+```
+□ Step 2.1: 사용 가능한 그룹 조회
+□ Step 2.2: 그룹 선택 (사용자 입력 대기)
+□ Step 2.3: 서브그룹 선택 (사용자 입력 대기)
+□ Step 2.4: 프로젝트 이름 입력 (사용자 입력 대기)
+□ Step 2.5: 프로젝트 생성 (API 호출)
+□ Step 2.6: 로컬 Git 초기화
+□ Step 2.7: 환경변수 설정
+□ Step 2.8: 멤버 초대 여부 확인 (사용자 입력 대기)
+□ Step 2.9: 완료 요약 출력
+```
+
+**각 Step을 진행할 때마다 TodoWrite로 상태 업데이트 (in_progress → completed)**
+
+---
+
 **Step 2.1: Fetch Available Groups**
 
 ```bash
@@ -63,7 +97,8 @@ curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
 
 **Step 2.2: Interactive Group Selection**
 
-Display numbered list:
+**Case A: 사용 가능한 그룹이 있는 경우**
+
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📁 사용 가능한 Groups
@@ -79,7 +114,34 @@ Display numbered list:
 선택: [번호] 또는 'new' (새 그룹 생성)
 ```
 
-**Step 2.3: Subgroup Selection (if exists)**
+- 번호 선택 → Step 2.3으로 이동
+- 'new' 선택 → **"Workflow: Create New Group"** 섹션 실행 → 그룹 생성 후 Step 2.3으로
+
+**Case B: 사용 가능한 그룹이 없는 경우**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📁 사용 가능한 Groups
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️  사용 가능한 그룹이 없습니다.
+
+새 그룹을 생성할까요? [Y/n]: _
+```
+
+- 'Y' 선택 → **"Workflow: Create New Group"** 섹션 실행
+- 'n' 선택 → 다음 메시지 표시 후 부트스트랩 종료:
+  ```
+  ⚠️ 프로젝트를 생성할 그룹이 없습니다.
+
+  다음 방법으로 그룹을 확보하세요:
+  • 그룹 생성: /gl-group create
+  • 관리자에게 기존 그룹 초대 요청
+  • GitLab 웹에서 직접 생성: $GITLAB_URL/groups/new
+
+  그룹 확보 후 /gl-bootstrap 을 다시 실행하세요.
+  ```
+
+**Step 2.3: Subgroup Selection**
 
 ```bash
 # 선택한 그룹의 서브그룹 조회
@@ -89,7 +151,8 @@ curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
   jq -r '.[] | "\(.id)|\(.path)|\(.name)"'
 ```
 
-Display:
+**Case A: 서브그룹이 있는 경우**
+
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📂 Subgroups in "ai"
@@ -104,6 +167,28 @@ Display:
 
 선택: [번호] 또는 'new' (새 서브그룹 생성)
 ```
+
+- 0 선택 → 그룹 직속에 프로젝트 생성 (Step 2.4로)
+- 번호 선택 → 해당 서브그룹 선택 (Step 2.4로)
+- 'new' 선택 → **"Workflow: Create New Subgroup"** 섹션 실행 → 서브그룹 생성 후 Step 2.4로
+
+**Case B: 서브그룹이 없는 경우**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📂 Subgroups in "ai"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+서브그룹이 없습니다.
+
+옵션:
+ 1. 📁 ai 그룹 직속에 프로젝트 생성
+ 2. 📂 새 서브그룹 생성 후 프로젝트 생성
+
+선택: [번호]
+```
+
+- 1 선택 → Step 2.4로 이동
+- 2 선택 → **"Workflow: Create New Subgroup"** 섹션 실행 → Step 2.4로
 
 **Step 2.4: Project Name Input**
 
@@ -123,8 +208,14 @@ Display:
 
 **Step 2.5: Create Project**
 
+**⚠️ CRITICAL: namespace_id 필수 확인**
+- `namespace_id`는 반드시 Step 2.2/2.3에서 선택한 그룹/서브그룹의 ID여야 함
+- **절대로 namespace_id 없이 호출하지 말 것** (개인 네임스페이스에 생성됨)
+- **절대로 사용자의 개인 ID를 namespace_id로 사용하지 말 것**
+
 ```bash
-NAMESPACE_ID="<group_or_subgroup_id>"
+# NAMESPACE_ID는 반드시 그룹 또는 서브그룹 ID (사용자 ID 아님!)
+NAMESPACE_ID="<group_or_subgroup_id>"  # 예: 15 (ai 그룹), 28 (ai/products 서브그룹)
 PROJECT_NAME="<user_input>"
 DESCRIPTION="<user_input>"
 VISIBILITY="private"
@@ -143,6 +234,10 @@ curl --request POST \
   "$GITLAB_URL/api/v4/projects"
 ```
 
+**검증**: 생성된 프로젝트의 `path_with_namespace`가 `그룹/서브그룹/프로젝트명` 형태인지 확인
+- ✅ 올바름: `ai/products/my-app`
+- ❌ 잘못됨: `deekee/my-app` (개인 네임스페이스)
+
 **Step 2.6: Initialize Local Git**
 
 ```bash
@@ -156,15 +251,71 @@ git push -u origin main
 
 **Step 2.7: Set Environment**
 
+```bash
+# 환경변수 설정
+export GITLAB_PROJECT_ID="<new_id>"
+```
+
+**Step 2.8: Invite Members (Optional but Recommended)**
+
+프로젝트 생성 직후, 팀원 초대 여부를 물어본다:
+
 ```
 ✅ 프로젝트 생성 완료!
 
-export GITLAB_PROJECT_ID="<new_id>"
+📦 $PROJECT_NAME
+   경로: $GROUP_PATH/$PROJECT_NAME
+   ID: $PROJECT_ID
 
-다음 단계:
-1. /gl-members invite - 팀원 초대
-2. /gl-project protect - 브랜치 보호 설정
-3. /gl-labels - 라벨 생성
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👥 팀원을 초대할까요?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1. ✅ 예, 지금 초대하기
+ 2. ⏭️ 나중에 하기 (/gl-members)
+
+선택: [번호]
+```
+
+**If "예" selected → Execute "Workflow: Invite Members (Interactive)" section below**
+
+사용자가 "예"를 선택하면:
+1. 멤버 검색 (이름/이메일로 검색)
+2. 번호로 선택 (다중 선택 지원: 1,3 또는 1-3)
+3. 권한 레벨 선택 (Developer 권장)
+4. 초대 실행
+5. 추가 초대 여부 확인 → 반복 또는 완료
+
+**Step 2.9: Bootstrap Complete**
+
+모든 단계 완료 후 최종 요약 출력 (Output Summary 섹션 참조)
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎉 GitLab 프로젝트 부트스트랩 완료!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 프로젝트: $PROJECT_NAME
+   경로: $FULL_PATH
+   ID: $PROJECT_ID
+   URL: $GITLAB_URL/$FULL_PATH
+
+🔗 Git Remote:
+   origin → git@gitlab.tepseg.com:$FULL_PATH.git
+
+👥 팀원: (초대한 경우 목록 표시)
+   • @user1 (Developer)
+   • @user2 (Maintainer)
+
+📋 환경변수:
+   export GITLAB_PROJECT_ID="$PROJECT_ID"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+다음 단계 추천:
+1. /gl-project protect - 브랜치 보호 설정
+2. /gl-labels - 라벨 생성
+3. /gl-templates - CI/CD 템플릿 생성
+4. /gitlab-toolkit - 전체 초기화 가이드
 ```
 
 ---
@@ -364,6 +515,10 @@ curl --request POST \
 
 ## Workflow: Invite Members (Interactive)
 
+> **호출 위치**: Phase 2 Step 2.8 (팀원 초대)
+> **반환 위치**: Phase 2 Step 2.9 (완료 요약)
+> **독립 실행**: `/gl-members invite` 로도 별도 실행 가능
+
 **Step 1: Fetch available users to invite**
 
 ```bash
@@ -418,7 +573,7 @@ for USER_ID in $SELECTED_USERS; do
 done
 ```
 
-**Step 5: Confirmation**
+**Step 5: Confirmation & Continue**
 
 ```
 ✅ 멤버 초대 완료!
@@ -429,6 +584,21 @@ done
 
 초대 이메일이 발송되었습니다.
 ```
+
+**Step 6: Additional Invites (Loop)**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+추가로 초대할 멤버가 있나요?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1. ✅ 예, 더 초대하기
+ 2. ✅ 완료
+
+선택: [번호]
+```
+
+- "예" 선택 → Step 1로 돌아가서 반복 (추가 멤버 검색)
+- "완료" 선택 → 워크플로우 종료, 호출 지점(Step 2.8)으로 반환 후 Step 2.9로 진행
 
 ---
 
@@ -443,7 +613,7 @@ done
 
 ## Output Summary
 
-모든 단계 완료 후:
+모든 단계 완료 후 (Phase 2 Step 2.9 참조):
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -459,7 +629,7 @@ done
 🔗 Git Remote:
    origin → git@gitlab.tepseg.com:ai/products/my-awesome-app.git
 
-👥 팀원:
+👥 팀원: (초대한 경우 표시)
    • @kim.developer (Developer)
    • @park.manager (Maintainer)
 
@@ -471,5 +641,24 @@ done
 다음 단계 추천:
 1. /gl-project protect - 브랜치 보호 설정
 2. /gl-labels - 라벨 생성
-3. /gitlab-toolkit - 전체 초기화 가이드
+3. /gl-templates - CI/CD 템플릿 생성
+4. /gitlab-toolkit - 전체 초기화 가이드
 ```
+
+**Note**: 팀원 초대는 Step 2.8에서 이미 완료되었으므로 별도 안내 불필요
+
+---
+
+## Changelog
+
+### v1.1.0 (2024-12-30)
+
+**Added:**
+- Step 2.8: 팀원 초대 통합 - 프로젝트 생성 직후 멤버 초대 워크플로우 실행
+- Step 2.9: 완료 요약 - 프로젝트/팀원 정보 및 다음 단계 안내
+- Workflow: Invite Members Step 6 - 추가 초대 반복 루프
+
+**Improved:**
+- Step 2.2: 그룹이 없는 경우 (Case B) 처리 및 구체적 안내 메시지
+- Step 2.3: 서브그룹이 없는 경우 (Case B) 처리 및 옵션 제공
+- 전체 워크플로우 흐름 명확화

@@ -44,6 +44,31 @@ You are helping a developer set up and manage their GitLab project. Follow a sys
    ```
 5. Get project info and confirm with user
 
+**환경변수 누락 시 분기 처리**:
+
+| 누락된 변수 | 액션 |
+|------------|------|
+| GITLAB_URL / GITLAB_TOKEN | 사용자에게 설정 요청 후 대기 |
+| GITLAB_PROJECT_ID만 누락 | **반드시 아래 질문 수행** |
+
+**GITLAB_PROJECT_ID가 없을 때 반드시 물어볼 것**:
+```
+GitLab 프로젝트 ID가 설정되지 않았습니다.
+
+옵션:
+1. 🆕 새 프로젝트 생성 (그룹/서브그룹 선택 포함)
+2. 🔗 기존 프로젝트 연결
+3. ❌ 취소
+
+선택: [번호]
+```
+
+- **옵션 1 선택 시**: 즉시 `/gl-bootstrap` 워크플로우로 전환. 절대로 개인 네임스페이스에 직접 생성하지 말 것!
+- **옵션 2 선택 시**: 프로젝트 검색 후 GITLAB_PROJECT_ID 설정
+- **옵션 3 선택 시**: 종료
+
+**CRITICAL**: 새 프로젝트 생성이 필요한 경우, 이 명령어에서 직접 프로젝트를 생성하지 말고 반드시 `/gl-bootstrap` 워크플로우의 Phase 2를 따라야 합니다. 이는 그룹 선택, 서브그룹 선택, 멤버 초대 단계를 포함합니다.
+
 **DO NOT PROCEED if environment is not configured.**
 
 ---
