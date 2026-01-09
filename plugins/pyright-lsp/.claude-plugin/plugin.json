@@ -1,0 +1,9 @@
+{
+  "name": "pyright-lsp",
+  "version": "1.0.0",
+  "description": "Python language server (Pyright) for Claude Code, providing static type checking and code intelligence",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

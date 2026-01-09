@@ -1,0 +1,9 @@
+{
+  "name": "clangd-lsp",
+  "version": "1.0.0",
+  "description": "C/C++ language server (clangd) for Claude Code, providing code intelligence, diagnostics, and formatting",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

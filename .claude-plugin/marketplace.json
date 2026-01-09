@@ -358,6 +358,182 @@
       },
       "source": "./plugins/mcp-builder",
       "category": "development"
+    },
+    {
+      "name": "agent-sdk-dev",
+      "description": "Claude Agent SDK development toolkit with commands for creating new SDK apps and agents for verifying implementations.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/agent-sdk-dev",
+      "category": "development"
+    },
+    {
+      "name": "code-review",
+      "description": "Automated code review for pull requests using multiple specialized agents with confidence-based scoring.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/code-review",
+      "category": "productivity"
+    },
+    {
+      "name": "code-simplifier",
+      "description": "Agent that simplifies and refines code for clarity, consistency, and maintainability while preserving functionality.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/code-simplifier",
+      "category": "productivity"
+    },
+    {
+      "name": "commit-commands",
+      "description": "Streamline your git workflow with simple commands for committing, pushing, and creating pull requests.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/commit-commands",
+      "category": "productivity"
+    },
+    {
+      "name": "pr-review-toolkit",
+      "description": "Comprehensive PR review agents specializing in comments, tests, error handling, type design, code quality, and code simplification.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/pr-review-toolkit",
+      "category": "productivity"
+    },
+    {
+      "name": "clangd-lsp",
+      "description": "C/C++ language server (clangd) for Claude Code, providing code intelligence, diagnostics, and formatting.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/clangd-lsp",
+      "category": "lsp"
+    },
+    {
+      "name": "csharp-lsp",
+      "description": "C# language server for Claude Code, providing code intelligence and diagnostics.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/csharp-lsp",
+      "category": "lsp"
+    },
+    {
+      "name": "gopls-lsp",
+      "description": "Go language server for Claude Code, providing code intelligence, refactoring, and analysis.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/gopls-lsp",
+      "category": "lsp"
+    },
+    {
+      "name": "jdtls-lsp",
+      "description": "Java language server (Eclipse JDT.LS) for Claude Code, providing code intelligence and refactoring.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/jdtls-lsp",
+      "category": "lsp"
+    },
+    {
+      "name": "kotlin-lsp",
+      "description": "Kotlin language server for Claude Code, providing code intelligence, refactoring, and analysis.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/kotlin-lsp",
+      "category": "lsp"
+    },
+    {
+      "name": "lua-lsp",
+      "description": "Lua language server for Claude Code, providing code intelligence and diagnostics.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/lua-lsp",
+      "category": "lsp"
+    },
+    {
+      "name": "php-lsp",
+      "description": "PHP language server (Intelephense) for Claude Code, providing code intelligence and diagnostics.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/php-lsp",
+      "category": "lsp"
+    },
+    {
+      "name": "pyright-lsp",
+      "description": "Python language server (Pyright) for Claude Code, providing static type checking and code intelligence.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/pyright-lsp",
+      "category": "lsp"
+    },
+    {
+      "name": "rust-analyzer-lsp",
+      "description": "Rust language server for Claude Code, providing code intelligence and analysis.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/rust-analyzer-lsp",
+      "category": "lsp"
+    },
+    {
+      "name": "swift-lsp",
+      "description": "Swift language server (SourceKit-LSP) for Claude Code, providing code intelligence for Swift projects.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/swift-lsp",
+      "category": "lsp"
+    },
+    {
+      "name": "typescript-lsp",
+      "description": "TypeScript/JavaScript language server for Claude Code, providing code intelligence, go-to-definition, and error checking.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/typescript-lsp",
+      "category": "lsp"
     }
   ]
 }

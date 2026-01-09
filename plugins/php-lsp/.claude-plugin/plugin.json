@@ -1,0 +1,9 @@
+{
+  "name": "php-lsp",
+  "version": "1.0.0",
+  "description": "PHP language server (Intelephense) for Claude Code, providing code intelligence and diagnostics",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

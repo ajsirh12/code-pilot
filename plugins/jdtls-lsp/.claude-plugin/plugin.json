@@ -1,0 +1,9 @@
+{
+  "name": "jdtls-lsp",
+  "version": "1.0.0",
+  "description": "Java language server (Eclipse JDT.LS) for Claude Code, providing code intelligence and refactoring",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

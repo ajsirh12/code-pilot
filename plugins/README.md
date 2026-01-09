@@ -31,6 +31,22 @@ Learn more in the [official plugins documentation](https://docs.claude.com/en/do
 | [mobile-dev](./mobile-dev/) | 모바일 전문가 역할의 플러그인 - iOS/Android 빌드 자동화, 스토어 메타데이터 관리 | **Commands:** `/build-app`, `/manage-metadata`, `/setup-signing`, `/deploy-beta`<br>**Agent:** `mobile-specialist`<br>**Skill:** `mobile-patterns` |
 | [mcp-builder](./mcp-builder/) | MCP 서버 개발 가이드 - Python (FastMCP) 또는 Node/TypeScript (MCP SDK)로 MCP 서버 구축 | **Skill:** `mcp-builder` - MCP 서버 설계, 구현, 평가 가이드<br>**References:** MCP 베스트 프랙티스, Python/Node 서버 구현 예제<br>**Scripts:** 연결 테스트, 평가 도구 |
 | [security-guidance](./security-guidance/) | Security reminder hook that warns about potential security issues when editing files | **Hook:** PreToolUse - Monitors 9 security patterns including command injection, XSS, eval usage, dangerous HTML, and unsafe code patterns |
+| [agent-sdk-dev](./agent-sdk-dev/) | Claude Agent SDK development toolkit | **Commands:** `/new-sdk-app` - Create new SDK app<br>**Agents:** `agent-sdk-verifier-py`, `agent-sdk-verifier-ts` - Verify SDK implementations |
+| [code-review](./code-review/) | Automated code review for pull requests using specialized agents | **Command:** `/code-review` - Run automated PR review with confidence-based scoring |
+| [code-simplifier](./code-simplifier/) | Simplifies and refines code for clarity and maintainability | **Agent:** `code-simplifier` - Simplify code while preserving functionality |
+| [commit-commands](./commit-commands/) | Streamline git workflow with simple commands | **Commands:** `/commit`, `/commit-push-pr`, `/clean_gone` - Git workflow automation |
+| [pr-review-toolkit](./pr-review-toolkit/) | Comprehensive PR review with specialized agents | **Command:** `/review-pr`<br>**Agents:** `code-reviewer`, `code-simplifier`, `comment-analyzer`, `pr-test-analyzer`, `silent-failure-hunter`, `type-design-analyzer` |
+| [clangd-lsp](./clangd-lsp/) | C/C++ language server (clangd) for code intelligence | LSP integration for `.c`, `.h`, `.cpp`, `.hpp` files |
+| [csharp-lsp](./csharp-lsp/) | C# language server for code intelligence | LSP integration for `.cs` files |
+| [gopls-lsp](./gopls-lsp/) | Go language server for code intelligence | LSP integration for `.go` files |
+| [jdtls-lsp](./jdtls-lsp/) | Java language server (Eclipse JDT.LS) | LSP integration for `.java` files |
+| [kotlin-lsp](./kotlin-lsp/) | Kotlin language server for code intelligence | LSP integration for `.kt`, `.kts` files |
+| [lua-lsp](./lua-lsp/) | Lua language server for code intelligence | LSP integration for `.lua` files |
+| [php-lsp](./php-lsp/) | PHP language server (Intelephense) | LSP integration for `.php` files |
+| [pyright-lsp](./pyright-lsp/) | Python language server (Pyright) for type checking | LSP integration for `.py`, `.pyi` files |
+| [rust-analyzer-lsp](./rust-analyzer-lsp/) | Rust language server for code intelligence | LSP integration for `.rs` files |
+| [swift-lsp](./swift-lsp/) | Swift language server (SourceKit-LSP) | LSP integration for `.swift` files |
+| [typescript-lsp](./typescript-lsp/) | TypeScript/JavaScript language server | LSP integration for `.ts`, `.tsx`, `.js`, `.jsx` files |
 
 ## Installation
 

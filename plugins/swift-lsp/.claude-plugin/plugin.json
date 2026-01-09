@@ -1,0 +1,9 @@
+{
+  "name": "swift-lsp",
+  "version": "1.0.0",
+  "description": "Swift language server (SourceKit-LSP) for Claude Code, providing code intelligence for Swift projects",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}
