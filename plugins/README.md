@@ -35,7 +35,6 @@ Learn more in the [official plugins documentation](https://docs.claude.com/en/do
 | [code-review](./code-review/) | Automated code review for pull requests using specialized agents | **Command:** `/code-review` - Run automated PR review with confidence-based scoring |
 | [code-simplifier](./code-simplifier/) | Simplifies and refines code for clarity and maintainability | **Agent:** `code-simplifier` - Simplify code while preserving functionality |
 | [commit-commands](./commit-commands/) | Streamline git workflow with simple commands | **Commands:** `/commit`, `/commit-push-pr`, `/clean_gone` - Git workflow automation |
-| [pr-review-toolkit](./pr-review-toolkit/) | Comprehensive PR review with specialized agents | **Command:** `/review-pr`<br>**Agents:** `code-reviewer`, `code-simplifier`, `comment-analyzer`, `pr-test-analyzer`, `silent-failure-hunter`, `type-design-analyzer` |
 | [clangd-lsp](./clangd-lsp/) | C/C++ language server (clangd) for code intelligence | LSP integration for `.c`, `.h`, `.cpp`, `.hpp` files |
 | [csharp-lsp](./csharp-lsp/) | C# language server for code intelligence | LSP integration for `.cs` files |
 | [gopls-lsp](./gopls-lsp/) | Go language server for code intelligence | LSP integration for `.go` files |

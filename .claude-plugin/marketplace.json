@@ -404,17 +404,6 @@
       "category": "productivity"
     },
     {
-      "name": "pr-review-toolkit",
-      "description": "Comprehensive PR review agents specializing in comments, tests, error handling, type design, code quality, and code simplification.",
-      "version": "1.0.0",
-      "author": {
-        "name": "deekee",
-        "email": "burlesquer@yonsei.ac.kr"
-      },
-      "source": "./plugins/pr-review-toolkit",
-      "category": "productivity"
-    },
-    {
       "name": "clangd-lsp",
       "description": "C/C++ language server (clangd) for Claude Code, providing code intelligence, diagnostics, and formatting.",
       "version": "1.0.0",
