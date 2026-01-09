@@ -24,6 +24,8 @@ GitLab에서 플러그인 마켓플레이스 추가:
 - `feature-dev` - 기능 개발 워크플로우
 - `frontend-design` - 프론트엔드 디자인 스킬
 - `plugin-dev` - 플러그인 개발 도구 (스킬 생성 가이드 포함)
+- `mcp-builder` - MCP 서버 개발 가이드 (Python/Node)
+- `agent-sdk-dev` - Agent SDK 개발 툴킷
 - `webapp-testing` - 웹앱 테스팅 (Playwright)
 - `web-artifacts-builder` - React/Tailwind 아티팩트 빌더
 - `refactoring` - 코드 리팩토링 (패턴, 전략, 안전한 변환)
@@ -36,6 +38,9 @@ GitLab에서 플러그인 마켓플레이스 추가:
 
 ### Productivity
 - `code-quality` - 코드 품질 분석 에이전트 (git diff 기반)
+- `code-review` - 자동 PR 코드 리뷰 (GitHub)
+- `code-simplifier` - 코드 단순화 에이전트
+- `commit-commands` - Git 워크플로우 (커밋, PR)
 - `hookify` - 커스텀 훅 생성
 - `doc-coauthoring` - 문서 공동 작성
 - `project-context` - 프로젝트 컨텍스트 (CLAUDE.md 템플릿 관리)
@@ -66,6 +71,19 @@ GitLab에서 플러그인 마켓플레이스 추가:
 - `ralph-wiggum` - 반복 개발 루프
 - `security-guidance` - 보안 가이드 훅
 - `internal-comms` - 내부 커뮤니케이션
+
+### LSP (Language Server Protocol)
+- `typescript-lsp` - TypeScript/JavaScript
+- `pyright-lsp` - Python
+- `gopls-lsp` - Go
+- `rust-analyzer-lsp` - Rust
+- `clangd-lsp` - C/C++
+- `jdtls-lsp` - Java
+- `kotlin-lsp` - Kotlin
+- `csharp-lsp` - C#
+- `swift-lsp` - Swift
+- `php-lsp` - PHP
+- `lua-lsp` - Lua
 
 ## 관리자
 
