@@ -1,0 +1,9 @@
+{
+  "name": "mcp-builder",
+  "version": "1.0.0",
+  "description": "Guide for creating high-quality MCP (Model Context Protocol) servers with Python (FastMCP) or Node/TypeScript (MCP SDK)",
+  "author": {
+    "name": "deekee",
+    "email": "burlesquer@yonsei.ac.kr"
+  }
+}

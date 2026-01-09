@@ -347,6 +347,17 @@
       },
       "source": "./plugins/mobile-dev",
       "category": "development"
+    },
+    {
+      "name": "mcp-builder",
+      "description": "MCP 서버 개발 가이드. Python (FastMCP) 또는 Node/TypeScript (MCP SDK)로 고품질 MCP 서버를 구축하는 방법 제공. 설계, 구현, 평가 도구 포함.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/mcp-builder",
+      "category": "development"
     }
   ]
 }

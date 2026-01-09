@@ -29,7 +29,8 @@ Learn more in the [official plugins documentation](https://docs.claude.com/en/do
 | [perf-analyzer](./perf-analyzer/) | 성능 엔지니어 역할의 플러그인 - 프로파일링, 벤치마크, 병목 탐지 | **Commands:** `/profile`, `/benchmark`, `/find-bottlenecks`<br>**Agent:** `performance-analyzer`<br>**Skill:** `profiling-patterns` |
 | [api-designer](./api-designer/) | API 아키텍트 역할의 플러그인 - OpenAPI 생성, 엔드포인트 설계, API 문서 자동화 | **Commands:** `/generate-openapi`, `/design-endpoint`, `/generate-docs`, `/generate-mock`<br>**Agent:** `api-architect`<br>**Skill:** `api-patterns` |
 | [mobile-dev](./mobile-dev/) | 모바일 전문가 역할의 플러그인 - iOS/Android 빌드 자동화, 스토어 메타데이터 관리 | **Commands:** `/build-app`, `/manage-metadata`, `/setup-signing`, `/deploy-beta`<br>**Agent:** `mobile-specialist`<br>**Skill:** `mobile-patterns` |
-| [security-guidance](./security-guidance/) | Security reminder hook that warns about potential security issues when editing files | **Hook:** PreToolUse - Monitors 9 security patterns including command injection, XSS, eval usage, dangerous HTML, pickle deserialization, and os.system calls |
+| [mcp-builder](./mcp-builder/) | MCP 서버 개발 가이드 - Python (FastMCP) 또는 Node/TypeScript (MCP SDK)로 MCP 서버 구축 | **Skill:** `mcp-builder` - MCP 서버 설계, 구현, 평가 가이드<br>**References:** MCP 베스트 프랙티스, Python/Node 서버 구현 예제<br>**Scripts:** 연결 테스트, 평가 도구 |
+| [security-guidance](./security-guidance/) | Security reminder hook that warns about potential security issues when editing files | **Hook:** PreToolUse - Monitors 9 security patterns including command injection, XSS, eval usage, dangerous HTML, and unsafe code patterns |
 
 ## Installation
 
