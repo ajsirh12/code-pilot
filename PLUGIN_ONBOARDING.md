@@ -18,7 +18,8 @@
 4. [플러그인 설치하기](#4-플러그인-설치하기)
 5. [플러그인 관리하기](#5-플러그인-관리하기)
 6. [플러그인 만들기](#6-플러그인-만들기)
-7. [트러블슈팅](#7-트러블슈팅)
+7. [실습: 로컬 마켓플레이스 만들기](#실습-로컬-마켓플레이스-만들기)
+8. [트러블슈팅](#8-트러블슈팅)
 
 ---
 
@@ -564,141 +565,6 @@ marketplace/
 }
 ```
 
-### 실습: 로컬 마켓플레이스 만들기
-
-직접 마켓플레이스를 만들고 간단한 플러그인을 등록해봅시다.
-
-#### Step 1: plugin-dev 설치
-
-```bash
-/plugin install plugin-dev@deekee-plugins --scope user
-```
-
-#### Step 2: 플러그인 생성
-
-`/plugin-dev:create-plugin` 명령어를 사용합니다:
-
-```
-/plugin-dev:create-plugin 인사하는 플러그인 만들어줘
-```
-
-Claude가 질문하면 답변하세요:
-- 목적: "사용자에게 인사하는 간단한 플러그인"
-- 컴포넌트: "command만 필요"
-- 명령어: "hello, 이름을 인자로 받아서 인사"
-
-완료되면 플러그인 폴더가 생성됩니다 (예: `greeting-plugin/`, `hello-plugin/` 등 대화 내용에 따라 이름이 결정됨).
-
-#### Step 3: 플러그인 테스트 (--plugin-dir)
-
-마켓플레이스에 등록하기 전에 `--plugin-dir` 옵션으로 플러그인을 직접 테스트합니다.
-
-```bash
-# 새 터미널에서 플러그인을 로드하여 Claude Code 실행
-claude --plugin-dir /path/to/{플러그인명}
-
-# Windows 예시
-claude --plugin-dir C:\Users\deekee\project\greeting-plugin
-
-# macOS/Linux 예시
-claude --plugin-dir ~/projects/greeting-plugin
-```
-
-**테스트 방법:**
-
-1. 명령어가 등록되었는지 확인:
-   ```
-   /{플러그인명}:hello 테스트
-   ```
-
-2. 정상 작동하면 다음 단계로 진행
-3. 문제가 있으면 플러그인 파일 수정 후 Claude Code 재시작
-
-> **Tip:** `--plugin-dir`는 설치 없이 플러그인을 즉시 로드하므로 개발 중 빠른 테스트에 유용합니다. 변경사항을 반영하려면 Claude Code를 재시작하세요.
-
-#### Step 4: 마켓플레이스 구성
-
-생성된 플러그인을 마켓플레이스로 묶습니다. (아래 예시에서 `{플러그인명}`은 실제 생성된 폴더명으로 대체)
-
-```bash
-# 마켓플레이스 폴더 생성
-mkdir -p my-marketplace/.claude-plugin
-
-# 플러그인을 마켓플레이스로 이동
-mv {플러그인명} my-marketplace/
-```
-
-`my-marketplace/.claude-plugin/marketplace.json` 작성:
-```json
-{
-  "name": "my-marketplace",
-  "version": "1.0.0",
-  "description": "내 첫 번째 마켓플레이스",
-  "owner": {
-    "name": "your-name",
-    "email": "your-email@example.com"
-  },
-  "plugins": [
-    {
-      "name": "{플러그인명}",
-      "description": "인사하는 플러그인",
-      "version": "1.0.0",
-      "source": "./{플러그인명}"
-    }
-  ]
-}
-```
-
-#### Step 5: 최종 구조 확인
-
-```
-my-marketplace/
-├── .claude-plugin/
-│   └── marketplace.json
-└── {플러그인명}/
-    ├── .claude-plugin/
-    │   └── plugin.json
-    └── commands/
-        └── *.md
-```
-
-#### Step 6: 마켓플레이스 등록 및 플러그인 설치
-
-> **권장:** `/plugin` 명령어로 대화형 UI를 사용하면 더 쉽게 등록하고 설치할 수 있습니다.
-
-**방법 1: 대화형 UI (권장)**
-
-```bash
-/plugin
-```
-→ "Manage marketplaces" → "Add marketplace" → 경로 입력 (`./my-marketplace`)
-→ "Install plugin" → 마켓플레이스 선택 → 플러그인 선택 → Scope 선택
-
-**방법 2: 명령어 사용**
-
-```bash
-# 마켓플레이스 등록 (상대 경로 또는 절대 경로)
-/plugin marketplace add ./my-marketplace
-
-# 플러그인 설치
-/plugin install {플러그인명}@my-marketplace --scope local
-```
-
-**사용:**
-```bash
-# 명령어 이름은 플러그인에 따라 다름
-/{플러그인명}:{명령어} 홍길동
-```
-
-#### 결과
-
-```
-> /{플러그인명}:hello 홍길동
-안녕하세요, 홍길동님!
-```
-
-> **Tip:** 플러그인 구조를 직접 이해하고 싶다면 [3. 플러그인 구조](#3-플러그인-구조)를 참고하여 수동으로 파일을 만들어볼 수도 있습니다.
-
 ---
 
 ## 4. 플러그인 설치하기
@@ -1094,7 +960,144 @@ claude --plugin-dir /path/to/my-plugin
 
 ---
 
-## 7. 트러블슈팅
+## 실습: 로컬 마켓플레이스 만들기
+
+직접 마켓플레이스를 만들고 간단한 플러그인을 등록해봅시다.
+
+### Step 1: plugin-dev 설치
+
+```bash
+/plugin install plugin-dev@deekee-plugins --scope user
+```
+
+### Step 2: 플러그인 생성
+
+`/plugin-dev:create-plugin` 명령어를 사용합니다:
+
+```
+/plugin-dev:create-plugin 인사하는 플러그인 만들어줘
+```
+
+Claude가 질문하면 답변하세요:
+- 목적: "사용자에게 인사하는 간단한 플러그인"
+- 컴포넌트: "command만 필요"
+- 명령어: "hello, 이름을 인자로 받아서 인사"
+
+완료되면 플러그인 폴더가 생성됩니다 (예: `greeting-plugin/`, `hello-plugin/` 등 대화 내용에 따라 이름이 결정됨).
+
+### Step 3: 플러그인 테스트 (--plugin-dir)
+
+마켓플레이스에 등록하기 전에 `--plugin-dir` 옵션으로 플러그인을 직접 테스트합니다.
+
+```bash
+# 새 터미널에서 플러그인을 로드하여 Claude Code 실행
+claude --plugin-dir /path/to/{플러그인명}
+
+# Windows 예시
+claude --plugin-dir C:\Users\deekee\project\greeting-plugin
+
+# macOS/Linux 예시
+claude --plugin-dir ~/projects/greeting-plugin
+```
+
+**테스트 방법:**
+
+1. 명령어가 등록되었는지 확인:
+   ```
+   /{플러그인명}:hello 테스트
+   ```
+
+2. 정상 작동하면 다음 단계로 진행
+3. 문제가 있으면 플러그인 파일 수정 후 Claude Code 재시작
+
+> **Tip:** `--plugin-dir`는 설치 없이 플러그인을 즉시 로드하므로 개발 중 빠른 테스트에 유용합니다. 변경사항을 반영하려면 Claude Code를 재시작하세요.
+
+### Step 4: 마켓플레이스 구성
+
+생성된 플러그인을 마켓플레이스로 묶습니다. (아래 예시에서 `{플러그인명}`은 실제 생성된 폴더명으로 대체)
+
+```bash
+# 마켓플레이스 폴더 생성
+mkdir -p my-marketplace/.claude-plugin
+
+# 플러그인을 마켓플레이스로 이동
+mv {플러그인명} my-marketplace/
+```
+
+`my-marketplace/.claude-plugin/marketplace.json` 작성:
+```json
+{
+  "name": "my-marketplace",
+  "version": "1.0.0",
+  "description": "내 첫 번째 마켓플레이스",
+  "owner": {
+    "name": "your-name",
+    "email": "your-email@example.com"
+  },
+  "plugins": [
+    {
+      "name": "{플러그인명}",
+      "description": "인사하는 플러그인",
+      "version": "1.0.0",
+      "source": "./{플러그인명}"
+    }
+  ]
+}
+```
+
+### Step 5: 최종 구조 확인
+
+```
+my-marketplace/
+├── .claude-plugin/
+│   └── marketplace.json
+└── {플러그인명}/
+    ├── .claude-plugin/
+    │   └── plugin.json
+    └── commands/
+        └── *.md
+```
+
+### Step 6: 마켓플레이스 등록 및 플러그인 설치
+
+> **권장:** `/plugin` 명령어로 대화형 UI를 사용하면 더 쉽게 등록하고 설치할 수 있습니다.
+
+**방법 1: 대화형 UI (권장)**
+
+```bash
+/plugin
+```
+→ "Manage marketplaces" → "Add marketplace" → 경로 입력 (`./my-marketplace`)
+→ "Install plugin" → 마켓플레이스 선택 → 플러그인 선택 → Scope 선택
+
+**방법 2: 명령어 사용**
+
+```bash
+# 마켓플레이스 등록 (상대 경로 또는 절대 경로)
+/plugin marketplace add ./my-marketplace
+
+# 플러그인 설치
+/plugin install {플러그인명}@my-marketplace --scope local
+```
+
+**사용:**
+```bash
+# 명령어 이름은 플러그인에 따라 다름
+/{플러그인명}:{명령어} 홍길동
+```
+
+### 결과
+
+```
+> /{플러그인명}:hello 홍길동
+안녕하세요, 홍길동님!
+```
+
+> **Tip:** 플러그인 구조를 직접 이해하고 싶다면 [3. 플러그인 구조](#3-플러그인-구조)를 참고하여 수동으로 파일을 만들어볼 수도 있습니다.
+
+---
+
+## 8. 트러블슈팅
 
 ### 자주 발생하는 문제
 
