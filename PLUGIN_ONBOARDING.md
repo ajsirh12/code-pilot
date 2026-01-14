@@ -88,6 +88,8 @@
 대표적인 마켓플레이스:
 - `deekee-plugins`: 이 프로젝트에서 사용하는 마켓플레이스
 
+> **Note:** `deekee-plugins` 마켓플레이스 설치 및 접근 권한은 박성준(deekee)에게 문의하세요.
+
 ---
 
 ## 2. 용어 정리
@@ -574,10 +576,10 @@ marketplace/
 
 #### Step 2: 플러그인 생성
 
-자연어로 요청하면 됩니다:
+`/plugin-dev:create-plugin` 명령어를 사용합니다:
 
 ```
-인사하는 플러그인 만들어줘
+/plugin-dev:create-plugin 인사하는 플러그인 만들어줘
 ```
 
 Claude가 질문하면 답변하세요:
@@ -662,14 +664,29 @@ my-marketplace/
 
 #### Step 6: 마켓플레이스 등록 및 플러그인 설치
 
+> **권장:** `/plugin` 명령어로 대화형 UI를 사용하면 더 쉽게 등록하고 설치할 수 있습니다.
+
+**방법 1: 대화형 UI (권장)**
+
+```bash
+/plugin
+```
+→ "Manage marketplaces" → "Add marketplace" → 경로 입력 (`./my-marketplace`)
+→ "Install plugin" → 마켓플레이스 선택 → 플러그인 선택 → Scope 선택
+
+**방법 2: 명령어 사용**
+
 ```bash
 # 마켓플레이스 등록 (상대 경로 또는 절대 경로)
 /plugin marketplace add ./my-marketplace
 
 # 플러그인 설치
 /plugin install {플러그인명}@my-marketplace --scope local
+```
 
-# 사용 (명령어 이름은 플러그인에 따라 다름)
+**사용:**
+```bash
+# 명령어 이름은 플러그인에 따라 다름
 /{플러그인명}:{명령어} 홍길동
 ```
 
