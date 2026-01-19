@@ -1,12 +1,10 @@
-# Claude Code Plugins
+# Code Pilot Plugins
 
-This directory contains some official Claude Code plugins that extend functionality through custom commands, agents, and workflows. These are examples of what's possible with the Claude Code plugin system—many more plugins are available through community marketplaces.
+TePS'EG 팀을 위한 Claude Code 플러그인 컬렉션입니다. 커스텀 명령어, 에이전트, 워크플로우를 통해 기능을 확장합니다.
 
-## What are Claude Code Plugins?
+## Claude Code 플러그인이란?
 
-Claude Code plugins are extensions that enhance Claude Code with custom slash commands, specialized agents, hooks, and MCP servers. Plugins can be shared across projects and teams, providing consistent tooling and workflows.
-
-Learn more in the [official plugins documentation](https://docs.claude.com/en/docs/claude-code/plugins).
+Claude Code 플러그인은 커스텀 슬래시 명령어, 전문 에이전트, 훅, MCP 서버로 Claude Code를 확장하는 확장 기능입니다. 프로젝트와 팀 간에 공유하여 일관된 도구와 워크플로우를 제공합니다.
 
 ## Plugins in This Directory
 
@@ -46,28 +44,28 @@ Learn more in the [official plugins documentation](https://docs.claude.com/en/do
 | [rust-analyzer-lsp](./rust-analyzer-lsp/) | Rust language server for code intelligence | LSP integration for `.rs` files |
 | [swift-lsp](./swift-lsp/) | Swift language server (SourceKit-LSP) | LSP integration for `.swift` files |
 | [typescript-lsp](./typescript-lsp/) | TypeScript/JavaScript language server | LSP integration for `.ts`, `.tsx`, `.js`, `.jsx` files |
+| [playwright](./playwright/) | Browser automation and E2E testing MCP server by Microsoft | MCP server for web interaction, screenshots, form filling, automated testing |
 
-## Installation
+## 설치
 
-These plugins are included in the Claude Code repository. To use them in your own projects:
+이 플러그인들은 Code Pilot 마켓플레이스에 포함되어 있습니다.
 
-1. Install Claude Code globally:
+1. 마켓플레이스 추가:
 ```bash
-npm install -g claude-code
+/plugin marketplace add http://gitlab.tepseg.com:8087/ai/code-pilot.git
 ```
 
-2. Navigate to your project and run Claude Code:
+2. 플러그인 설치:
 ```bash
-claude
+/plugin
+# 원하는 플러그인 선택하여 설치
 ```
 
-3. Use the `/plugin` command to install plugins from marketplaces, or configure them in your project's `.claude/settings.json`.
+3. 또는 프로젝트의 `.claude/settings.json`에서 직접 설정할 수 있습니다.
 
-For detailed plugin installation and configuration, see the [official documentation](https://docs.claude.com/en/docs/claude-code/plugins).
+## 플러그인 구조
 
-## Plugin Structure
-
-Each plugin follows the standard Claude Code plugin structure:
+각 플러그인은 표준 Claude Code 플러그인 구조를 따릅니다:
 
 ```
 plugin-name/
@@ -81,18 +79,16 @@ plugin-name/
 └── README.md                # Plugin documentation
 ```
 
-## Contributing
+## 기여 가이드
 
-When adding new plugins to this directory:
+새 플러그인을 추가할 때:
 
-1. Follow the standard plugin structure
-2. Include a comprehensive README.md
-3. Add plugin metadata in `.claude-plugin/plugin.json`
-4. Document all commands and agents
-5. Provide usage examples
+1. 표준 플러그인 구조를 따르세요
+2. 상세한 README.md를 포함하세요
+3. `.claude-plugin/plugin.json`에 플러그인 메타데이터를 추가하세요
+4. 모든 명령어와 에이전트를 문서화하세요
+5. 사용 예시를 제공하세요
 
-## Learn More
+## 관리자
 
-- [Claude Code Documentation](https://docs.claude.com/en/docs/claude-code/overview)
-- [Plugin System Documentation](https://docs.claude.com/en/docs/claude-code/plugins)
-- [Agent SDK Documentation](https://docs.claude.com/en/api/agent-sdk/overview)
+- **deekee** (burlesquer@yonsei.ac.kr)

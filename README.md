@@ -27,6 +27,7 @@ GitLab에서 플러그인 마켓플레이스 추가:
 - `mcp-builder` - MCP 서버 개발 가이드 (Python/Node)
 - `agent-sdk-dev` - Agent SDK 개발 툴킷
 - `webapp-testing` - 웹앱 테스팅 (Playwright)
+- `playwright` - 브라우저 자동화 및 E2E 테스팅 MCP 서버 (Microsoft)
 - `web-artifacts-builder` - React/Tailwind 아티팩트 빌더
 - `refactoring` - 코드 리팩토링 (패턴, 전략, 안전한 변환)
 - `debug-helper` - 디버그 도우미 (에러 분석, 로그 파싱)
