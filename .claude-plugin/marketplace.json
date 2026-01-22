@@ -19,6 +19,17 @@
       "category": "learning"
     },
     {
+      "name": "tdd",
+      "description": "Test-Driven Development methodology guide. Provides TDD principles, red-green-refactor cycle, testing anti-patterns, and test-first development practices.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/tdd",
+      "category": "development"
+    },
+    {
       "name": "feature-dev",
       "description": "Comprehensive feature development workflow with specialized agents for codebase exploration, architecture design, and quality review",
       "version": "1.0.0",
