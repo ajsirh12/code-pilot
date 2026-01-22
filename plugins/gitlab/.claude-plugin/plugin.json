@@ -1,9 +1,9 @@
 {
   "name": "gitlab",
   "description": "GitLab MCP server for issue management, merge requests, pipelines, wikis, and milestones. Provides full GitLab API integration via @zereight/mcp-gitlab.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
-    "name": "deekee",
-    "email": "burlesquer@yonsei.ac.kr"
+    "name": "hansol",
+    "email": "gksthf4013@gmail.com"
   }
 }
