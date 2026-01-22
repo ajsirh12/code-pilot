@@ -250,17 +250,6 @@
       "category": "documents"
     },
     {
-      "name": "gitlab-toolkit",
-      "description": "Intelligent GitLab workflow automation with 46 commands and 8 agents. Features auto-detection hook, group management, project transfer/archive, CI/CD templates, and access audit.",
-      "version": "1.0.0",
-      "author": {
-        "name": "deekee",
-        "email": "burlesquer@yonsei.ac.kr"
-      },
-      "source": "./plugins/gitlab-toolkit",
-      "category": "development"
-    },
-    {
       "name": "project-context",
       "description": "Manage project context with CLAUDE.md templates. Track project state, phase, and knowledge across sessions with auto-detect for tech stacks.",
       "version": "1.0.0",
@@ -533,6 +522,17 @@
       },
       "source": "./plugins/playwright",
       "category": "testing"
+    },
+    {
+      "name": "gitlab",
+      "description": "GitLab MCP server for issue management, merge requests, pipelines, wikis, and milestones. Provides full GitLab API integration via @zereight/mcp-gitlab.",
+      "version": "1.0.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/gitlab",
+      "category": "development"
     }
   ]
 }

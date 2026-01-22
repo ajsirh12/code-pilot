@@ -74,7 +74,6 @@
 |---------|------|
 | `plugin-dev` | 플러그인 개발 툴킷 |
 | `code-quality` | 코드 품질 리뷰 에이전트 |
-| `gitlab-toolkit` | GitLab 워크플로우 자동화 |
 | `commit-commands` | Git 커밋/PR 간소화 |
 | `debug-helper` | 에러 분석 및 디버깅 도우미 |
 
@@ -666,7 +665,6 @@ marketplace/
 ├────────────────────────────────────────────┤
 │ > plugin-dev         플러그인 개발 툴킷     │
 │   code-quality       코드 품질 리뷰         │
-│   gitlab-toolkit     GitLab 워크플로우      │
 │   commit-commands    Git 커밋 간소화        │
 └────────────────────────────────────────────┘
 ```
@@ -771,7 +769,7 @@ marketplace/
 │ ✓ code-quality@deekee-plugins        Enabled          │
 │                                                        │
 │ [Project]                                              │
-│ ✓ gitlab-toolkit@deekee-plugins      Enabled          │
+│ ✓ commit-commands@deekee-plugins     Enabled          │
 │                                                        │
 │ [Local]                                                │
 │ ○ debug-helper@deekee-plugins        Disabled         │

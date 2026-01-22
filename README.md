@@ -34,7 +34,7 @@ GitLab에서 플러그인 마켓플레이스 추가:
 - `dependency-check` - 의존성 검사 (취약점 체크, 업데이트 추천)
 
 ### DevOps
-- `gitlab-toolkit` - GitLab 워크플로우 자동화 (46 commands, 8 agents, 1 hook)
+- `gitlab` - GitLab MCP 서버 (이슈, MR, 파이프라인, 위키, 마일스톤)
 - `mobile-dev` - 모바일 앱 개발 (빌드 자동화, 스토어 배포)
 
 ### Productivity

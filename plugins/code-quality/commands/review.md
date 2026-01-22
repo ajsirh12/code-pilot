@@ -139,5 +139,4 @@ After agents complete, summarize:
 
 - Analyzes `git diff` (local changes only)
 - Does NOT interact with remote MR/PR
-- Use `gitlab-toolkit` for MR management
 - Use `commit-commands` for PR/MR creation

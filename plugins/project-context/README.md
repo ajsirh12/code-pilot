@@ -69,4 +69,3 @@
 | project-context | 상태/컨텍스트 관리 |
 | hookify | 코드 규칙 강제 |
 | feature-dev | 기능 개발 워크플로우 |
-| gitlab-toolkit | GitLab 작업 자동화 |
