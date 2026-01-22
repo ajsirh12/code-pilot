@@ -10,18 +10,23 @@ GitLab MCP server for comprehensive GitLab API integration.
 
 ## Setup
 
-Set your GitLab Personal Access Token as an environment variable:
+Set environment variables:
 
 ```bash
 # Linux/macOS
 export GITLAB_PERSONAL_ACCESS_TOKEN="your-token-here"
+export GITLAB_API_URL="https://gitlab.example.com/api/v4"  # Optional, defaults to TePS'EG GitLab
 
 # Windows (PowerShell)
 $env:GITLAB_PERSONAL_ACCESS_TOKEN="your-token-here"
+$env:GITLAB_API_URL="https://gitlab.example.com/api/v4"  # Optional
 
 # Windows (CMD)
 set GITLAB_PERSONAL_ACCESS_TOKEN=your-token-here
+set GITLAB_API_URL=https://gitlab.example.com/api/v4
 ```
+
+**Note:** `GITLAB_API_URL` is optional. If not set, defaults to `http://gitlab.tepseg.com:8087/api/v4`.
 
 ## Features
 
@@ -34,15 +39,16 @@ set GITLAB_PERSONAL_ACCESS_TOKEN=your-token-here
 
 ## Configuration
 
-The plugin is pre-configured for TePS'EG GitLab instance:
+Default configuration (can be overridden via environment variables):
 
-| Setting | Value |
-|---------|-------|
-| API URL | `http://gitlab.tepseg.com:8087/api/v4` |
-| Read Only Mode | `false` |
-| Wiki Support | `true` |
-| Milestone Support | `true` |
-| Pipeline Support | `true` |
+| Setting | Default | Environment Variable |
+|---------|---------|---------------------|
+| API URL | `http://gitlab.tepseg.com:8087/api/v4` | `GITLAB_API_URL` |
+| Personal Access Token | - | `GITLAB_PERSONAL_ACCESS_TOKEN` (required) |
+| Read Only Mode | `false` | - |
+| Wiki Support | `true` | - |
+| Milestone Support | `true` | - |
+| Pipeline Support | `true` | - |
 
 ## Available Tools
 

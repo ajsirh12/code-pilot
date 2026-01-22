@@ -4,7 +4,7 @@
     "args": ["-y", "@zereight/mcp-gitlab"],
     "env": {
       "GITLAB_PERSONAL_ACCESS_TOKEN": "${GITLAB_PERSONAL_ACCESS_TOKEN}",
-      "GITLAB_API_URL": "http://gitlab.tepseg.com:8087/api/v4",
+      "GITLAB_API_URL": "${GITLAB_API_URL:-http://gitlab.tepseg.com:8087/api/v4}",
       "GITLAB_READ_ONLY_MODE": "false",
       "USE_GITLAB_WIKI": "true",
       "USE_MILESTONE": "true",
