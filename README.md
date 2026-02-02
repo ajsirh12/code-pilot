@@ -96,6 +96,10 @@ GitLab에서 플러그인 마켓플레이스 추가:
 - `php-lsp` - PHP
 - `lua-lsp` - Lua
 
+## 변경 이력
+
+플러그인 추가/변경 이력 및 사용법은 [CHANGELOG.md](./CHANGELOG.md)를 참고하세요.
+
 ## 관리자
 
 - **deekee** (burlesquer@yonsei.ac.kr)
