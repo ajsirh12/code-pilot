@@ -643,6 +643,16 @@
       },
       "source": "./plugins/firebase",
       "category": "development"
+    },
+    {
+      "name": "figma",
+      "description": "Figma MCP server integration for design-to-code workflows. Extract design context, implement pixel-perfect designs, create design system rules, and connect Figma components to code.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Figma"
+      },
+      "source": "./plugins/figma",
+      "category": "design"
     }
   ]
 }

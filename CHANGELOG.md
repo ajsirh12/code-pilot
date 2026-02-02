@@ -2,6 +2,44 @@
 
 All notable changes to Code Pilot plugins will be documented in this file.
 
+## [2026-02-02] - Figma Integration
+
+### Added
+
+#### figma
+Figma MCP 서버 통합 - 디자인을 코드로 변환하는 워크플로우
+
+**출처:** [figma/mcp-server-guide](https://github.com/figma/mcp-server-guide)
+
+**MCP 서버:**
+| 서버 | URL |
+|------|-----|
+| `figma` | `https://mcp.figma.com/mcp` |
+| `figma-desktop` | `http://127.0.0.1:3845/mcp` |
+
+**Skills:**
+- `/implement-design` - Figma 디자인을 pixel-perfect 코드로 변환
+- `/create-design-system-rules` - 프로젝트별 디자인 시스템 규칙 생성
+- `/code-connect-components` - Figma 컴포넌트와 코드 컴포넌트 연결
+
+**사용법:**
+```
+# Figma 디자인 구현
+"Implement this Figma design: https://figma.com/design/.../...?node-id=42-15"
+
+# 디자인 시스템 규칙 생성
+"Create design system rules for my React project"
+
+# Code Connect 설정
+"Connect this Figma component to code: [URL]"
+```
+
+**사전 설정:**
+- Remote 서버: 별도 설정 없음 (OAuth 인증)
+- Desktop 서버: Figma 데스크톱 앱에서 Dev Mode > MCP server 활성화
+
+---
+
 ## [2026-02-02] - Plugin Expansion
 
 ### Added - 9 New Plugins from Official Repository

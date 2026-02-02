@@ -68,6 +68,7 @@ GitLab에서 플러그인 마켓플레이스 추가:
 - `xlsx` - Excel 생성/편집
 
 ### Design
+- `figma` - Figma MCP 서버 (디자인 추출, 코드 변환, Code Connect)
 - `brand-guidelines` - TePS'EG 브랜드 가이드라인
 - `canvas-design` - 캔버스 디자인
 - `theme-factory` - 테마 스타일링
