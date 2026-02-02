@@ -46,6 +46,15 @@ Claude Code 플러그인은 커스텀 슬래시 명령어, 전문 에이전트, 
 | [typescript-lsp](./typescript-lsp/) | TypeScript/JavaScript language server | LSP integration for `.ts`, `.tsx`, `.js`, `.jsx` files |
 | [playwright](./playwright/) | Browser automation and E2E testing MCP server by Microsoft | MCP server for web interaction, screenshots, form filling, automated testing |
 | [gitlab](./gitlab/) | GitLab MCP server for full API integration | MCP server for issues, MRs, pipelines, wikis, milestones (requires `GITLAB_PERSONAL_ACCESS_TOKEN` env var) |
+| [claude-code-setup](./claude-code-setup/) | Analyze codebases and recommend tailored Claude Code automations | **Skill:** Recommends hooks, skills, MCP servers, subagents, and slash commands based on codebase analysis |
+| [claude-md-management](./claude-md-management/) | Tools to maintain and improve CLAUDE.md files | **Command:** `/revise-claude-md` - Capture session learnings<br>**Skill:** `claude-md-improver` - Audit CLAUDE.md quality |
+| [playground](./playground/) | Creates interactive HTML playgrounds with visual controls and live preview | **Skill:** Templates for design-playground, data-explorer, concept-map, document-critique |
+| [asana](./asana/) | Asana project management integration | MCP server (SSE) for task management, project search, assignments |
+| [context7](./context7/) | Upstash Context7 for up-to-date documentation lookup | MCP server for version-specific docs and code examples from source repos |
+| [slack](./slack/) | Slack workspace integration | MCP server (SSE) for message search, channel access, thread reading |
+| [supabase](./supabase/) | Supabase MCP integration for database operations | MCP server for Firestore, auth, storage, real-time subscriptions |
+| [greptile](./greptile/) | AI code review agent for GitHub and GitLab | MCP server for PR review comments (requires `GREPTILE_API_KEY` env var) |
+| [firebase](./firebase/) | Google Firebase MCP integration | MCP server for Firestore, auth, cloud functions, hosting, storage |
 
 ## 설치
 

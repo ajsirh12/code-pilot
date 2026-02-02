@@ -201,7 +201,7 @@ This plugin is included in the Claude Code repository. To use it:
 
 ## Author
 
-Ashwin Bhat (ashwin@anthropic.com)
+deekee (burlesquer@yonsei.ac.kr)
 
 ## Version
 

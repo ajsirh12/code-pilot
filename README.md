@@ -21,6 +21,7 @@ GitLab에서 플러그인 마켓플레이스 추가:
 자세한 내용은 [plugins 디렉토리](./plugins/README.md)를 참고하세요.
 
 ### Development
+- `tdd` - Test-Driven Development (테스트 우선 개발, 레드-그린-리팩터)
 - `feature-dev` - 기능 개발 워크플로우
 - `frontend-design` - 프론트엔드 디자인 스킬
 - `plugin-dev` - 플러그인 개발 도구 (스킬 생성 가이드 포함)
@@ -32,6 +33,10 @@ GitLab에서 플러그인 마켓플레이스 추가:
 - `refactoring` - 코드 리팩토링 (패턴, 전략, 안전한 변환)
 - `debug-helper` - 디버그 도우미 (에러 분석, 로그 파싱)
 - `dependency-check` - 의존성 검사 (취약점 체크, 업데이트 추천)
+- `playground` - 인터랙티브 HTML 플레이그라운드 생성
+- `context7` - Upstash Context7 문서 조회 MCP 서버
+- `supabase` - Supabase MCP 서버 (DB, 인증, 스토리지)
+- `firebase` - Google Firebase MCP 서버 (Firestore, 인증, 호스팅)
 
 ### DevOps
 - `gitlab` - GitLab MCP 서버 (이슈, MR, 파이프라인, 위키, 마일스톤)
@@ -45,6 +50,11 @@ GitLab에서 플러그인 마켓플레이스 추가:
 - `hookify` - 커스텀 훅 생성
 - `doc-coauthoring` - 문서 공동 작성
 - `project-context` - 프로젝트 컨텍스트 (CLAUDE.md 템플릿 관리)
+- `claude-code-setup` - Claude Code 자동화 추천 (훅, 스킬, MCP 등)
+- `claude-md-management` - CLAUDE.md 파일 관리 및 세션 학습 캡처
+- `asana` - Asana 프로젝트 관리 MCP 서버
+- `slack` - Slack 워크스페이스 연동 MCP 서버
+- `greptile` - AI 코드 리뷰 에이전트 (GitHub/GitLab)
 
 ### Architecture
 - `api-designer` - API 아키텍트 (OpenAPI, 엔드포인트 설계, 문서화)
