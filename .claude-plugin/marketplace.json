@@ -653,6 +653,17 @@
       },
       "source": "./plugins/figma",
       "category": "design"
+    },
+    {
+      "name": "chrome-devtools",
+      "description": "Chrome DevTools MCP server for reliable browser automation, in-depth debugging, and performance analysis using Puppeteer.",
+      "version": "0.16.0",
+      "author": {
+        "name": "deekee",
+        "email": "burlesquer@yonsei.ac.kr"
+      },
+      "source": "./plugins/chrome-devtools",
+      "category": "development"
     }
   ]
 }
