@@ -1,0 +1,25 @@
+{
+  "name": "chrome-devtools",
+  "version": "0.16.0",
+  "description": "Chrome DevTools MCP server for browser automation, debugging, and performance analysis via Chrome DevTools Protocol",
+  "author": {
+    "name": "Google (forked by TePS'EG)",
+    "url": "https://github.com/ChromeDevTools/chrome-devtools-mcp"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "chrome",
+    "devtools",
+    "browser",
+    "automation",
+    "debugging",
+    "performance",
+    "puppeteer"
+  ],
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/build/src/index.js", "--no-usage-statistics"]
+    }
+  }
+}

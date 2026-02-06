@@ -2,6 +2,55 @@
 
 All notable changes to Code Pilot plugins will be documented in this file.
 
+## [2026-02-06] - Chrome DevTools Integration
+
+### Added
+
+#### chrome-devtools
+Chrome DevTools MCP 서버 - AI 코딩 어시스턴트가 Chrome 브라우저를 제어하고 검사
+
+**출처:** [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) (Google 공식)
+
+**버전:** 0.16.0
+
+**주요 기능:**
+- **성능 인사이트**: Chrome DevTools를 사용해 성능 트레이스 기록 및 분석
+- **고급 브라우저 디버깅**: 네트워크 요청 분석, 스크린샷, 콘솔 메시지 (소스맵 스택 트레이스)
+- **신뢰성 있는 자동화**: Puppeteer 기반 브라우저 제어
+
+**도구 (26개):**
+| 카테고리 | 도구 |
+|----------|------|
+| Input automation (8) | `click`, `drag`, `fill`, `fill_form`, `handle_dialog`, `hover`, `press_key`, `upload_file` |
+| Navigation (6) | `close_page`, `list_pages`, `navigate_page`, `new_page`, `select_page`, `wait_for` |
+| Emulation (2) | `emulate`, `resize_page` |
+| Performance (3) | `performance_analyze_insight`, `performance_start_trace`, `performance_stop_trace` |
+| Network (2) | `get_network_request`, `list_network_requests` |
+| Debugging (5) | `evaluate_script`, `get_console_message`, `list_console_messages`, `take_screenshot`, `take_snapshot` |
+
+**사용법:**
+```
+# 성능 분석
+"Check the performance of https://example.com"
+
+# 스크린샷 촬영
+"Take a screenshot of the current page"
+
+# 네트워크 요청 분석
+"List all network requests on this page"
+
+# 콘솔 메시지 확인
+"Show me the console messages"
+```
+
+**설정 옵션:**
+- `--headless` - 헤드리스 모드 (UI 없음)
+- `--browser-url` - 실행 중인 Chrome 인스턴스에 연결
+- `--autoConnect` - Chrome 144+ 자동 연결
+- `--isolated` - 임시 사용자 데이터 디렉토리 사용
+
+---
+
 ## [2026-02-02] - Figma Integration
 
 ### Added
